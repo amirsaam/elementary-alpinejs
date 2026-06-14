@@ -14,4 +14,8 @@ extension HTMLAttribute.x {
     public static func `init`(_ value: String) -> HTMLAttribute {
         .init(name: "x-init", value: value)
     }
+
+    public static func show(_ value: String) -> HTMLAttribute {
+        .init(name: "x-show", value: value)
+    }
 }
