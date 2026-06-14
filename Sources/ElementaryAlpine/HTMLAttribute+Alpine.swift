@@ -34,4 +34,12 @@ extension HTMLAttribute.x {
     public static func bindStyle(_ value: HTMLAttributeValue.Alpine.BindStyle) -> HTMLAttribute {
         .init(name: "x-bind:style", value: value.rawValue)
     }
+
+    public static func on(_ modifier: HTMLAttributeValue.Alpine.OnModifier, _ value: String) -> HTMLAttribute {
+        .init(name: "x-on:\(modifier.rawValue)", value: value)
+    }
+
+    public static func on(_ event: String, _ value: String) -> HTMLAttribute {
+        .init(name: "x-on:\(event)", value: value)
+    }
 }
