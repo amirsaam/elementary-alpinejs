@@ -25,16 +25,16 @@ div(.x.bindStyle("{ color: 'red' }"))
 ```
 
 ```swift
-// event modifiers
-form(.x.on(HTMLAttributeValue.Alpine.OnModifier(event: "submit").prevent(), "...")) {
+// event modifiers (passed as a modifiers array)
+form(.x.on("submit", "...", modifiers: [.prevent])) {
     button { "Submit" }
 }
 
 // keyboard modifiers
-input(.x.on(HTMLAttributeValue.Alpine.OnModifier(event: "keyup").enter(), "submit()"))
+input(.x.on("keyup", "submit()", modifiers: [.enter]))
 
-// debounce / throttle
-input(.x.on(HTMLAttributeValue.Alpine.OnModifier(event: "input").debounce("500ms"), "fetchResults()"))
+// debounce / throttle (ms)
+input(.x.on("input", "fetchResults()", modifiers: [.debounce(500)]))
 ```
 
 ```swift
@@ -42,22 +42,24 @@ input(.x.on(HTMLAttributeValue.Alpine.OnModifier(event: "input").debounce("500ms
 input(.x.model("search"))
 
 // model with modifiers
-input(.x.model(HTMLAttributeValue.Alpine.ModelModifier(property: "search").number().debounce("300ms")))
+input(.x.model("search", modifiers: [.number, .debounce(300)]))
 ```
 
 ```swift
-// loops
-template(.x.`for`("item in items")) {
+// loops (semantic name for x-for)
+template(.x.loop("item in items")) {
     li(.x.text("item")) { "" }
 }
 
-// conditional rendering
-template(.x.`if`("open")) {
+// conditional rendering (semantic name for x-if)
+template(.x.when("open")) {
     div { "Content" }
 }
 
-// transitions
-div(.x.show("open"), .x.transition) { "Content" }
+// transitions with modifiers
+div(.x.show("open"), .x.transition(modifiers: [.scale(80), .origin(.top)])) {
+    "Content"
+}
 ```
 
 ## Including Alpine.js
@@ -98,6 +100,29 @@ For Hummingbird/Vapor examples, add the file as a resource in your `Package.swif
 )
 ```
 
+## Modifiers
+
+Directives that support modifiers take a `modifiers:` array parameter with a typed enum value:
+
+```swift
+// x-show
+.x.show("open", modifiers: [.important])              // → x-show.important="open"
+
+// x-on
+.x.on("click", "...", modifiers: [.prevent, .stop])  // → x-on:click.prevent.stop="..."
+.x.on("keyup", "...", modifiers: [.enter])            // → x-on:keyup.enter="..."
+.x.on("input", "...", modifiers: [.debounce(500)])    // → x-on:input.debounce.500ms="..."
+.x.on("click", "...", modifiers: [.selfTarget])       // → x-on:click.self="..."
+
+// x-model
+.x.model("search", modifiers: [.number, .change, .blur, .enter])
+
+// x-transition
+.x.transition(modifiers: [.opacity])
+.x.transition(modifiers: [.scale(80), .origin(.topRight)])
+.x.transition(modifiers: [.duration(500), .delay(50)])
+```
+
 ## Play with it
 
 Example apps will be added in a future release.
@@ -106,12 +131,12 @@ Example apps will be added in a future release.
 
 The package brings the `.x` syntax to all `HTMLElements` — providing a rich API for all 17 core [AlpineJS directives](https://alpinejs.dev/directives):
 
-- `x-data`, `x-init`, `x-show`
+- `x-data`, `x-init` (`.setup`), `x-show`
 - `x-bind` / `x-bind:class` / `x-bind:style`
 - `x-on` with modifiers (base, keyboard, mouse, advanced)
 - `x-text`, `x-html`, `x-model` with modifiers, `x-modelable`
-- `x-for`, `x-transition` (all phases), `x-effect`, `x-ignore`, `x-ref`, `x-cloak`
-- `x-teleport`, `x-if`, `x-id`
+- `x-for` (`.loop`), `x-transition` (all phases), `x-effect`, `x-ignore`, `x-ref`, `x-cloak`
+- `x-teleport`, `x-if` (`.when`), `x-id`
 
 ## Future directions
 

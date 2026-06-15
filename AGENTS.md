@@ -26,25 +26,63 @@ The package currently ships:
 - **No comments** in code unless documenting non-obvious behavior
 - Use `public` for all public API surface
 - Prefer `RawRepresentable` + `ExpressibleByStringLiteral` for attribute value types
-- Use `consuming` methods for modifier chaining (see `HTMLAttributeValue.HTMX` in elementary-htmx)
+- Use enums (not structs) for modifier values — e.g. `OnModifier`, `ModelModifier`
+- Use array parameters for modifiers: `modifiers: [.prevent, .stop]`
 - Match the coding style of `elementary` and `elementary-htmx`
 
 ## Architecture
 
-The core target follows a two-file pattern:
+The core target follows a three-file pattern:
 
 ```
 Sources/ElementaryAlpine/
-├── HTMLAttribute+Alpine.swift   # Attribute factory functions (e.g., `.x.data("...")`)
-└── HTMLAttributeValue+Alpine.swift  # Value types (e.g., `OnModifier`, `ModelModifier`)
+├── HTMLAttribute+Alpine.swift       # Attribute factory functions (e.g., `.x.data("...")`)
+├── HTMLAttributeValue+Alpine.swift  # Value types (e.g., `BindClass`, `BindStyle`)
+└── AlpineModifier.swift             # Modifier enums (e.g., `OnModifier`, `ModelModifier`)
 ```
 
 All 17 core AlpineJS directives are implemented under `HTMLAttribute.x`:
-- `x-data`, `x-init`, `x-show`, `x-bind`/`x-bind:class`/`x-bind:style`
+- `x-data`, `x-init` (`.setup`), `x-show`, `x-bind`/`x-bind:class`/`x-bind:style`
 - `x-on` with modifiers (base, keyboard, mouse, advanced)
 - `x-text`, `x-html`, `x-model` with modifiers, `x-modelable`
-- `x-for`, `x-transition` (all phases), `x-effect`, `x-ignore`, `x-ref`, `x-cloak`
-- `x-teleport`, `x-if`, `x-id`
+- `x-for` (`.loop`), `x-transition` (all phases), `x-effect`, `x-ignore`, `x-ref`, `x-cloak`
+- `x-teleport`, `x-if` (`.when`), `x-id`
+
+## Modifier API
+
+Modifiers use a uniform pattern: an enum with `rawValue: String` and a `modifiers:` array parameter:
+
+```swift
+public enum OnModifier {
+    case prevent
+    case stop
+    // ...
+    case selfTarget          // rawValue: "self"
+    case debounce(Int)       // rawValue: "debounce.{ms}ms"
+    // ...
+}
+```
+
+Directives accepting modifiers:
+
+| Directive | Function | Modifier enum |
+|-----------|----------|---------------|
+| `x-show` | `.show(_:modifiers:)` | `ShowModifier` (`.important`) |
+| `x-on` | `.on(_:_:modifiers:)` | `OnModifier` (30+ cases) |
+| `x-model` | `.model(_:modifiers:)` | `ModelModifier` (`.lazy`, `.change`, `.blur`, `.enter`, `.number`, `.boolean`, `.fill`) |
+| `x-transition` | `.transition(modifiers:)` | `TransitionModifier` (`.opacity`, `.scale(Int?)`, `.origin(Origin)`, `.duration(Int)`, `.delay(Int)`) |
+
+## Swift Keyword Escapes
+
+To avoid backticks in user code, reserved Swift keywords are renamed:
+
+| HTML | Swift | Raw value |
+|------|-------|-----------|
+| `x-init` | `.setup` | `x-init` |
+| `x-for` | `.loop` | `x-for` |
+| `x-if` | `.when` | `x-if` |
+
+The HTML output is unchanged — only the Swift function names differ.
 
 ## Testing
 
