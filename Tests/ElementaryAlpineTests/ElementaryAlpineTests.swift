@@ -9,11 +9,19 @@ final class ElementaryAlpineTests: XCTestCase {
     }
 
     func testInit() {
-        HTMLAttributeAssertEqual(.x.`init`("count = 1"), "x-init", "count = 1")
+        HTMLAttributeAssertEqual(.x.setup("count = 1"), "x-init", "count = 1")
     }
 
     func testShow() {
         HTMLAttributeAssertEqual(.x.show("open"), "x-show", "open")
+    }
+
+    func testShowImportant() {
+        HTMLAttributeAssertEqual(
+            .x.show("open", modifiers: [.important]),
+            "x-show.important",
+            "open"
+        )
     }
 
     func testBind() {
@@ -35,27 +43,27 @@ final class ElementaryAlpineTests: XCTestCase {
 
     func testOnBaseModifiers() {
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "click").prevent(), "alert('hi')"),
+            .x.on("click", "alert('hi')", modifiers: [.prevent]),
             "x-on:click.prevent",
             "alert('hi')"
         )
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "click").stop(), "alert('hi')"),
+            .x.on("click", "alert('hi')", modifiers: [.stop]),
             "x-on:click.stop",
             "alert('hi')"
         )
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "click").once(), "alert('hi')"),
+            .x.on("click", "alert('hi')", modifiers: [.once]),
             "x-on:click.once",
             "alert('hi')"
         )
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "click").`self`(), "alert('hi')"),
+            .x.on("click", "alert('hi')", modifiers: [.selfTarget]),
             "x-on:click.self",
             "alert('hi')"
         )
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "click").capture(), "alert('hi')"),
+            .x.on("click", "alert('hi')", modifiers: [.capture]),
             "x-on:click.capture",
             "alert('hi')"
         )
@@ -63,7 +71,7 @@ final class ElementaryAlpineTests: XCTestCase {
 
     func testOnChainedModifiers() {
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "click").prevent().stop(), "alert('hi')"),
+            .x.on("click", "alert('hi')", modifiers: [.prevent, .stop]),
             "x-on:click.prevent.stop",
             "alert('hi')"
         )
@@ -71,45 +79,65 @@ final class ElementaryAlpineTests: XCTestCase {
 
     func testOnKeyboardModifiers() {
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "keyup").enter(), "submit()"),
+            .x.on("keyup", "submit()", modifiers: [.enter]),
             "x-on:keyup.enter",
             "submit()"
         )
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "keyup").escape(), "close()"),
+            .x.on("keyup", "close()", modifiers: [.escape]),
             "x-on:keyup.escape",
             "close()"
         )
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "keyup").tab(), "next()"),
+            .x.on("keyup", "next()", modifiers: [.tab]),
             "x-on:keyup.tab",
             "next()"
         )
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "keyup").capsLock(), "..."),
+            .x.on("keyup", "...", modifiers: [.capsLock]),
             "x-on:keyup.caps-lock",
+            "..."
+        )
+        HTMLAttributeAssertEqual(
+            .x.on("keyup", "...", modifiers: [.equal]),
+            "x-on:keyup.equal",
+            "..."
+        )
+        HTMLAttributeAssertEqual(
+            .x.on("keyup", "...", modifiers: [.period]),
+            "x-on:keyup.period",
+            "..."
+        )
+        HTMLAttributeAssertEqual(
+            .x.on("keyup", "...", modifiers: [.comma]),
+            "x-on:keyup.comma",
+            "..."
+        )
+        HTMLAttributeAssertEqual(
+            .x.on("keyup", "...", modifiers: [.slash]),
+            "x-on:keyup.slash",
             "..."
         )
     }
 
     func testOnArrowKeys() {
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "keyup").up(), "..."),
+            .x.on("keyup", "...", modifiers: [.up]),
             "x-on:keyup.up",
             "..."
         )
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "keyup").down(), "..."),
+            .x.on("keyup", "...", modifiers: [.down]),
             "x-on:keyup.down",
             "..."
         )
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "keyup").left(), "..."),
+            .x.on("keyup", "...", modifiers: [.left]),
             "x-on:keyup.left",
             "..."
         )
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "keyup").right(), "..."),
+            .x.on("keyup", "...", modifiers: [.right]),
             "x-on:keyup.right",
             "..."
         )
@@ -117,27 +145,27 @@ final class ElementaryAlpineTests: XCTestCase {
 
     func testOnMouseModifiers() {
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "click").shift(), "..."),
+            .x.on("click", "...", modifiers: [.shift]),
             "x-on:click.shift",
             "..."
         )
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "click").ctrl(), "..."),
+            .x.on("click", "...", modifiers: [.ctrl]),
             "x-on:click.ctrl",
             "..."
         )
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "click").alt(), "..."),
+            .x.on("click", "...", modifiers: [.alt]),
             "x-on:click.alt",
             "..."
         )
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "click").meta(), "..."),
+            .x.on("click", "...", modifiers: [.meta]),
             "x-on:click.meta",
             "..."
         )
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "click").cmd(), "..."),
+            .x.on("click", "...", modifiers: [.cmd]),
             "x-on:click.cmd",
             "..."
         )
@@ -145,17 +173,17 @@ final class ElementaryAlpineTests: XCTestCase {
 
     func testOnScopeModifiers() {
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "keyup").escape().window(), "..."),
+            .x.on("keyup", "...", modifiers: [.escape, .window]),
             "x-on:keyup.escape.window",
             "..."
         )
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "click").document(), "..."),
+            .x.on("click", "...", modifiers: [.document]),
             "x-on:click.document",
             "..."
         )
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "click").outside(), "..."),
+            .x.on("click", "...", modifiers: [.outside]),
             "x-on:click.outside",
             "..."
         )
@@ -163,12 +191,12 @@ final class ElementaryAlpineTests: XCTestCase {
 
     func testOnPassiveModifiers() {
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "touchstart").passive(), "..."),
+            .x.on("touchstart", "...", modifiers: [.passive]),
             "x-on:touchstart.passive",
             "..."
         )
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "touchmove").passiveFalse(), "..."),
+            .x.on("touchmove", "...", modifiers: [.passiveFalse]),
             "x-on:touchmove.passive.false",
             "..."
         )
@@ -176,12 +204,12 @@ final class ElementaryAlpineTests: XCTestCase {
 
     func testOnEventNameHelpers() {
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "custom-event").camel(), "..."),
+            .x.on("custom-event", "...", modifiers: [.camel]),
             "x-on:custom-event.camel",
             "..."
         )
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "custom-event").dot(), "..."),
+            .x.on("custom-event", "...", modifiers: [.dot]),
             "x-on:custom-event.dot",
             "..."
         )
@@ -189,12 +217,7 @@ final class ElementaryAlpineTests: XCTestCase {
 
     func testOnDebounce() {
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "input").debounce(), "fetch()"),
-            "x-on:input.debounce",
-            "fetch()"
-        )
-        HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "input").debounce("500ms"), "fetch()"),
+            .x.on("input", "fetch()", modifiers: [.debounce(500)]),
             "x-on:input.debounce.500ms",
             "fetch()"
         )
@@ -202,12 +225,7 @@ final class ElementaryAlpineTests: XCTestCase {
 
     func testOnThrottle() {
         HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "scroll").throttle(), "handle()"),
-            "x-on:scroll.throttle",
-            "handle()"
-        )
-        HTMLAttributeAssertEqual(
-            .x.on(HTMLAttributeValue.Alpine.OnModifier(event: "scroll").throttle("750ms"), "handle()"),
+            .x.on("scroll", "handle()", modifiers: [.throttle(750)]),
             "x-on:scroll.throttle.750ms",
             "handle()"
         )
@@ -227,32 +245,37 @@ final class ElementaryAlpineTests: XCTestCase {
 
     func testModelModifiers() {
         HTMLAttributeAssertEqual(
-            .x.model(HTMLAttributeValue.Alpine.ModelModifier(property: "search").number()),
+            .x.model("search", modifiers: [.number]),
             "x-model.number",
             "search"
         )
         HTMLAttributeAssertEqual(
-            .x.model(HTMLAttributeValue.Alpine.ModelModifier(property: "search").debounce()),
-            "x-model.debounce",
-            "search"
-        )
-        HTMLAttributeAssertEqual(
-            .x.model(HTMLAttributeValue.Alpine.ModelModifier(property: "search").debounce("300ms")),
-            "x-model.debounce.300ms",
-            "search"
-        )
-        HTMLAttributeAssertEqual(
-            .x.model(HTMLAttributeValue.Alpine.ModelModifier(property: "search").`defer`()),
-            "x-model.defer",
-            "search"
-        )
-        HTMLAttributeAssertEqual(
-            .x.model(HTMLAttributeValue.Alpine.ModelModifier(property: "search").lazy()),
+            .x.model("search", modifiers: [.lazy]),
             "x-model.lazy",
             "search"
         )
         HTMLAttributeAssertEqual(
-            .x.model(HTMLAttributeValue.Alpine.ModelModifier(property: "search").fill()),
+            .x.model("search", modifiers: [.change]),
+            "x-model.change",
+            "search"
+        )
+        HTMLAttributeAssertEqual(
+            .x.model("search", modifiers: [.blur]),
+            "x-model.blur",
+            "search"
+        )
+        HTMLAttributeAssertEqual(
+            .x.model("search", modifiers: [.enter]),
+            "x-model.enter",
+            "search"
+        )
+        HTMLAttributeAssertEqual(
+            .x.model("search", modifiers: [.boolean]),
+            "x-model.boolean",
+            "search"
+        )
+        HTMLAttributeAssertEqual(
+            .x.model("search", modifiers: [.fill]),
             "x-model.fill",
             "search"
         )
@@ -260,18 +283,18 @@ final class ElementaryAlpineTests: XCTestCase {
 
     func testModelChainedModifiers() {
         HTMLAttributeAssertEqual(
-            .x.model(HTMLAttributeValue.Alpine.ModelModifier(property: "search").number().debounce("300ms")),
-            "x-model.number.debounce.300ms",
+            .x.model("search", modifiers: [.change, .blur, .enter]),
+            "x-model.change.blur.enter",
             "search"
         )
     }
 
     func testFor() {
-        HTMLAttributeAssertEqual(.x.`for`("item in items"), "x-for", "item in items")
+        HTMLAttributeAssertEqual(.x.loop("item in items"), "x-for", "item in items")
     }
 
     func testTransition() {
-        HTMLAttributeAssertEqual(.x.transition, "x-transition", nil)
+        HTMLAttributeAssertEqual(.x.transition(), "x-transition", nil)
     }
 
     func testTransitionEnter() {
@@ -322,12 +345,42 @@ final class ElementaryAlpineTests: XCTestCase {
         )
     }
 
-    func testTransitionScale() {
-        HTMLAttributeAssertEqual(.x.transitionScale, "x-transition.scale", nil)
-    }
-
-    func testTransitionOpacity() {
-        HTMLAttributeAssertEqual(.x.transitionOpacity, "x-transition.opacity", nil)
+    func testTransitionModifiers() {
+        HTMLAttributeAssertEqual(
+            .x.transition(modifiers: [.opacity]),
+            "x-transition.opacity",
+            nil
+        )
+        HTMLAttributeAssertEqual(
+            .x.transition(modifiers: [.scale()]),
+            "x-transition.scale",
+            nil
+        )
+        HTMLAttributeAssertEqual(
+            .x.transition(modifiers: [.scale(80)]),
+            "x-transition.scale.80",
+            nil
+        )
+        HTMLAttributeAssertEqual(
+            .x.transition(modifiers: [.duration(500)]),
+            "x-transition.duration.500ms",
+            nil
+        )
+        HTMLAttributeAssertEqual(
+            .x.transition(modifiers: [.delay(50)]),
+            "x-transition.delay.50ms",
+            nil
+        )
+        HTMLAttributeAssertEqual(
+            .x.transition(modifiers: [.scale(), .origin(.top)]),
+            "x-transition.scale.origin.top",
+            nil
+        )
+        HTMLAttributeAssertEqual(
+            .x.transition(modifiers: [.scale(80), .origin(.topRight)]),
+            "x-transition.scale.80.origin.top.right",
+            nil
+        )
     }
 
     func testEffect() {
@@ -351,7 +404,7 @@ final class ElementaryAlpineTests: XCTestCase {
     }
 
     func testIf() {
-        HTMLAttributeAssertEqual(.x.`if`("open"), "x-if", "open")
+        HTMLAttributeAssertEqual(.x.when("open"), "x-if", "open")
     }
 
     func testId() {

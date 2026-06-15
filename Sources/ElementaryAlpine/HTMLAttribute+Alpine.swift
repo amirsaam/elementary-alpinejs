@@ -11,12 +11,15 @@ extension HTMLAttribute.x {
         .init(name: "x-data", value: value)
     }
 
-    public static func `init`(_ value: String) -> HTMLAttribute {
+    public static func setup(_ value: String) -> HTMLAttribute {
         .init(name: "x-init", value: value)
     }
 
-    public static func show(_ value: String) -> HTMLAttribute {
-        .init(name: "x-show", value: value)
+    public static func show(_ value: String, modifiers: [ShowModifier] = []) -> HTMLAttribute {
+        if modifiers.isEmpty {
+            return .init(name: "x-show", value: value)
+        }
+        return .init(name: "x-show.\(modifiers.map(\.rawValue).joined(separator: "."))", value: value)
     }
 
     public static func bind(_ attribute: String, _ value: String) -> HTMLAttribute {
@@ -35,12 +38,11 @@ extension HTMLAttribute.x {
         .init(name: "x-bind:style", value: value.rawValue)
     }
 
-    public static func on(_ modifier: HTMLAttributeValue.Alpine.OnModifier, _ value: String) -> HTMLAttribute {
-        .init(name: "x-on:\(modifier.rawValue)", value: value)
-    }
-
-    public static func on(_ event: String, _ value: String) -> HTMLAttribute {
-        .init(name: "x-on:\(event)", value: value)
+    public static func on(_ event: String, _ value: String, modifiers: [OnModifier] = []) -> HTMLAttribute {
+        if modifiers.isEmpty {
+            return .init(name: "x-on:\(event)", value: value)
+        }
+        return .init(name: "x-on:\(event).\(modifiers.map(\.rawValue).joined(separator: "."))", value: value)
     }
 
     public static func text(_ value: String) -> HTMLAttribute {
@@ -51,24 +53,22 @@ extension HTMLAttribute.x {
         .init(name: "x-html", value: value)
     }
 
-    public static func model(_ value: String) -> HTMLAttribute {
-        .init(name: "x-model", value: value)
-    }
-
-    public static func model(_ modifier: HTMLAttributeValue.Alpine.ModelModifier) -> HTMLAttribute {
-        if modifier.modifiers.isEmpty {
-            return .init(name: "x-model", value: modifier.property)
-        } else {
-            return .init(name: "x-model.\(modifier.modifiers)", value: modifier.property)
+    public static func model(_ value: String, modifiers: [ModelModifier] = []) -> HTMLAttribute {
+        if modifiers.isEmpty {
+            return .init(name: "x-model", value: value)
         }
+        return .init(name: "x-model.\(modifiers.map(\.rawValue).joined(separator: "."))", value: value)
     }
 
-    public static func `for`(_ value: String) -> HTMLAttribute {
+    public static func loop(_ value: String) -> HTMLAttribute {
         .init(name: "x-for", value: value)
     }
 
-    public static var transition: HTMLAttribute {
-        .init(name: "x-transition", value: nil)
+    public static func transition(modifiers: [TransitionModifier] = []) -> HTMLAttribute {
+        if modifiers.isEmpty {
+            return .init(name: "x-transition", value: nil)
+        }
+        return .init(name: "x-transition.\(modifiers.map(\.rawValue).joined(separator: "."))", value: nil)
     }
 
     public static func transitionEnter(_ value: String) -> HTMLAttribute {
@@ -95,14 +95,6 @@ extension HTMLAttribute.x {
         .init(name: "x-transition:leave-end", value: value)
     }
 
-    public static var transitionScale: HTMLAttribute {
-        .init(name: "x-transition.scale", value: nil)
-    }
-
-    public static var transitionOpacity: HTMLAttribute {
-        .init(name: "x-transition.opacity", value: nil)
-    }
-
     public static func effect(_ value: String) -> HTMLAttribute {
         .init(name: "x-effect", value: value)
     }
@@ -123,7 +115,7 @@ extension HTMLAttribute.x {
         .init(name: "x-teleport", value: value)
     }
 
-    public static func `if`(_ value: String) -> HTMLAttribute {
+    public static func when(_ value: String) -> HTMLAttribute {
         .init(name: "x-if", value: value)
     }
 
