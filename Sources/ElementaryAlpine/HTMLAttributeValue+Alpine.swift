@@ -42,6 +42,18 @@ public extension HTMLAttributeValue.Alpine {
             rawValue = event
         }
     }
+
+    struct ModelModifier: RawRepresentable {
+        public var rawValue: String
+
+        public init(rawValue: String) {
+            self.rawValue = rawValue
+        }
+
+        public init(property: String) {
+            rawValue = property
+        }
+    }
 }
 
 public extension HTMLAttributeValue.Alpine.OnModifier {
@@ -155,6 +167,38 @@ public extension HTMLAttributeValue.Alpine.OnModifier {
 
     consuming func throttle(_ duration: String? = nil) -> Self {
         appending(modifier: "throttle", value: duration)
+    }
+
+    internal consuming func appending(modifier: String, value: String? = nil) -> Self {
+        rawValue += "."
+        rawValue += modifier
+        if let value {
+            rawValue += "."
+            rawValue += value
+        }
+        return self
+    }
+}
+
+public extension HTMLAttributeValue.Alpine.ModelModifier {
+    consuming func debounce(_ duration: String? = nil) -> Self {
+        appending(modifier: "debounce", value: duration)
+    }
+
+    consuming func number() -> Self {
+        appending(modifier: "number")
+    }
+
+    consuming func `defer`() -> Self {
+        appending(modifier: "defer")
+    }
+
+    consuming func lazy() -> Self {
+        appending(modifier: "lazy")
+    }
+
+    consuming func fill() -> Self {
+        appending(modifier: "fill")
     }
 
     internal consuming func appending(modifier: String, value: String? = nil) -> Self {
