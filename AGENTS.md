@@ -8,7 +8,7 @@ AI contribution guidelines for `elementary-alpine`.
 
 The package currently ships:
 
-- **`ElementaryAlpine`** — core AlpineJS directives
+- **`ElementaryAlpine`** — core AlpineJS directives + globals (`registerGlobal` for `Alpine.data()`, `Alpine.store()`, `Alpine.bind()`)
 
 ## Versioning
 
@@ -32,21 +32,24 @@ The package currently ships:
 
 ## Architecture
 
-The core target follows a three-file pattern:
+The target follows a four-file pattern:
 
 ```
 Sources/ElementaryAlpine/
 ├── HTMLAttribute+Alpine.swift       # Attribute factory functions (e.g., `.x.data("...")`)
 ├── HTMLAttributeValue+Alpine.swift  # Value types (e.g., `BindClass`, `BindStyle`)
-└── AlpineModifier.swift             # Modifier enums (e.g., `OnModifier`, `ModelModifier`)
+├── AlpineModifier.swift             # Modifier enums (e.g., `OnModifier`, `ModelModifier`)
+└── AlpineGlobals.swift              # `AlpineGlobals` enum + `registerGlobal` function
 ```
 
-All 17 core AlpineJS directives are implemented under `HTMLAttribute.x`:
+**Core (17 directives) under `HTMLAttribute.x`:**
 - `x-data`, `x-init` (`.setup`), `x-show`, `x-bind`/`x-bind:class`/`x-bind:style`
 - `x-on` with modifiers (base, keyboard, mouse, advanced)
 - `x-text`, `x-html`, `x-model` with modifiers, `x-modelable`
 - `x-for` (`.loop`), `x-transition` (all phases), `x-effect`, `x-ignore`, `x-ref`, `x-cloak`
 - `x-teleport`, `x-if` (`.when`), `x-id`
+
+**Globals:** `registerGlobal(_:on:action:)` with `AlpineGlobals` enum (`.data`/`.store`/`.bind`)
 
 ## Modifier API
 
@@ -71,6 +74,32 @@ Directives accepting modifiers:
 | `x-on` | `.on(_:_:modifiers:)` | `OnModifier` (30+ cases) |
 | `x-model` | `.model(_:modifiers:)` | `ModelModifier` (`.lazy`, `.change`, `.blur`, `.enter`, `.number`, `.boolean`, `.fill`) |
 | `x-transition` | `.transition(modifiers:)` | `TransitionModifier` (`.opacity`, `.scale(Int?)`, `.origin(Origin)`, `.duration(Int)`, `.delay(Int)`) |
+
+## Globals API
+
+`ElementaryAlpine` provides a free `registerGlobal` function for registering Alpine.js global APIs. All globals are wrapped in `document.addEventListener('alpine:init', ...)` per the Alpine.js CDN pattern:
+
+```swift
+public enum AlpineGlobals {
+    case data    // → Alpine.data(name, factory)
+    case store   // → Alpine.store(name, value)
+    case bind    // → Alpine.bind(name, factory)
+}
+
+public func registerGlobal(_ kind: AlpineGlobals, on: String, action: String) -> some HTML
+```
+
+**Usage in head:**
+
+```swift
+var head: some HTML {
+    meta(.charset(.utf8))
+    script(.src("https://cdn.jsdelivr.net/npm/alpinejs@3.15.12/dist/cdn.min.js"), .defer) {}
+    registerGlobal(.data, on: "dropdown", action: "() => ({ open: false })")
+    registerGlobal(.store, on: "notifications", action: "{ items: [] }")
+    registerGlobal(.bind, on: "myButton", action: "() => ({ type: 'button' })")
+}
+```
 
 ## Swift Keyword Escapes
 

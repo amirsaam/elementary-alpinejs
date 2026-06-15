@@ -123,24 +123,54 @@ Directives that support modifiers take a `modifiers:` array parameter with a typ
 .x.transition(modifiers: [.duration(500), .delay(50)])
 ```
 
+## Globals
+
+Alpine.js global APIs (`Alpine.data`, `Alpine.store`, `Alpine.bind`) are available as `registerGlobal` for registering reusable components, stores, and bound directives:
+
+```swift
+import ElementaryAlpine
+
+// In your head:
+registerGlobal(.data, on: "dropdown", action: "() => ({ open: false, toggle() { this.open = !this.open } })")
+registerGlobal(.store, on: "notifications", action: "{ items: [] }")
+registerGlobal(.bind, on: "myButton", action: "() => ({ type: 'button' })")
+```
+
+**Generated HTML:**
+
+```html
+<script>document.addEventListener('alpine:init', () => { Alpine.data('dropdown', () => ({ open: false, toggle() { this.open = !this.open } })) })</script>
+<script>document.addEventListener('alpine:init', () => { Alpine.store('notifications', { items: [] }) })</script>
+<script>document.addEventListener('alpine:init', () => { Alpine.bind('myButton', () => ({ type: 'button' })) })</script>
+```
+
+**API:**
+
+| Function | Alpine.js call | Use case |
+|----------|---------------|----------|
+| `registerGlobal(.data, on:, action:)` | `Alpine.data(name, factory)` | Reusable component data (factory function) |
+| `registerGlobal(.store, on:, action:)` | `Alpine.store(name, value)` | Global reactive store (direct object) |
+| `registerGlobal(.bind, on:, action:)` | `Alpine.bind(name, factory)` | Reusable x-bind object (factory function) |
+
 ## Play with it
 
 Example apps will be added in a future release.
 
 ## Documentation
 
-The package brings the `.x` syntax to all `HTMLElements` — providing a rich API for all 17 core [AlpineJS directives](https://alpinejs.dev/directives):
+The package ships one library, **`ElementaryAlpine`**, which provides:
 
-- `x-data`, `x-init` (`.setup`), `x-show`
-- `x-bind` / `x-bind:class` / `x-bind:style`
-- `x-on` with modifiers (base, keyboard, mouse, advanced)
-- `x-text`, `x-html`, `x-model` with modifiers, `x-modelable`
-- `x-for` (`.loop`), `x-transition` (all phases), `x-effect`, `x-ignore`, `x-ref`, `x-cloak`
-- `x-teleport`, `x-if` (`.when`), `x-id`
+- **Attribute helpers** via the `.x` syntax on all `HTMLElements` for all 17 core [AlpineJS directives](https://alpinejs.dev/directives):
+  - `x-data`, `x-init` (`.setup`), `x-show`
+  - `x-bind` / `x-bind:class` / `x-bind:style`
+  - `x-on` with modifiers (base, keyboard, mouse, advanced)
+  - `x-text`, `x-html`, `x-model` with modifiers, `x-modelable`
+  - `x-for` (`.loop`), `x-transition` (all phases), `x-effect`, `x-ignore`, `x-ref`, `x-cloak`
+  - `x-teleport`, `x-if` (`.when`), `x-id`
+- **Global helpers** — `registerGlobal(_:on:action:)` for `Alpine.data()`, `Alpine.store()`, `Alpine.bind()` (see [Globals](#globals))
 
 ## Future directions
 
-- `Alpine.data()` / `Alpine.store()` / `Alpine.bind()` runtime helpers
 - Plugin wrappers (Mask, Intersect, Resize, Persist, Focus, Collapse, Anchor, Morph, Sort)
 
 PRs welcome.
