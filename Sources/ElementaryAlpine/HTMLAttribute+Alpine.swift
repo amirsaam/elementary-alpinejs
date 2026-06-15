@@ -114,4 +114,20 @@ extension HTMLAttribute.x {
     public static var cloak: HTMLAttribute {
         .init(name: "x-cloak", value: nil)
     }
+
+    public static func teleport(_ value: String) -> HTMLAttribute {
+        .init(name: "x-teleport", value: value)
+    }
+
+    public static func `if`(_ value: String) -> HTMLAttribute {
+        .init(name: "x-if", value: value)
+    }
+
+    public static func id(_ value: String) -> HTMLAttribute {
+        .init(name: "x-id", value: value)
+    }
+
+    public static func modelable(_ value: String) -> HTMLAttribute {
+        .init(name: "x-modelable", value: value)
+    }
 }
