@@ -121,9 +121,49 @@ public extension HTMLAttributeValue.Alpine.OnModifier {
         appending(modifier: "right")
     }
 
-    internal consuming func appending(modifier: String) -> Self {
+    consuming func window() -> Self {
+        appending(modifier: "window")
+    }
+
+    consuming func document() -> Self {
+        appending(modifier: "document")
+    }
+
+    consuming func outside() -> Self {
+        appending(modifier: "outside")
+    }
+
+    consuming func passive() -> Self {
+        appending(modifier: "passive")
+    }
+
+    consuming func `passiveFalse`() -> Self {
+        appending(modifier: "passive.false")
+    }
+
+    consuming func camel() -> Self {
+        appending(modifier: "camel")
+    }
+
+    consuming func dot() -> Self {
+        appending(modifier: "dot")
+    }
+
+    consuming func debounce(_ duration: String? = nil) -> Self {
+        appending(modifier: "debounce", value: duration)
+    }
+
+    consuming func throttle(_ duration: String? = nil) -> Self {
+        appending(modifier: "throttle", value: duration)
+    }
+
+    internal consuming func appending(modifier: String, value: String? = nil) -> Self {
         rawValue += "."
         rawValue += modifier
+        if let value {
+            rawValue += "."
+            rawValue += value
+        }
         return self
     }
 }
