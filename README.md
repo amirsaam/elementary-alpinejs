@@ -152,6 +152,35 @@ registerGlobal(.bind, on: "myButton", action: "() => ({ type: 'button' })")
 | `registerGlobal(.store, on:, action:)` | `Alpine.store(name, value)` | Global reactive store (direct object) |
 | `registerGlobal(.bind, on:, action:)` | `Alpine.bind(name, factory)` | Reusable x-bind object (factory function) |
 
+## Magics
+
+Alpine.js [magics](https://alpinejs.dev/magics) are JS-side helpers that exist inside Alpine expressions. They don't generate HTML attributes or scripts — they appear as **string literals** in directive values:
+
+```swift
+// $dispatch — dispatch a custom event
+button(.x.on("click", "$dispatch('notify')")) { "Notify" }
+
+// $store — access a global store
+div(.x.text("$store.user.name"))
+
+// $refs — reference an element by key
+input(.x.ref("myInput"), .type(.text))
+button(.x.on("click", "$refs.myInput.focus()")) { "Focus" }
+
+// $watch — reactively watch a property
+div(.x.setup("count = 0; $watch('count', value => console.log(value))"))
+
+// $nextTick — wait for next DOM update
+div(.x.setup("$nextTick(() => console.log('mounted')"))
+
+// $el, $root, $data, $id — context accessors
+div(.x.data("{ open: false }"), .x.text("$el.tagName"))
+```
+
+**Available magics:** `$el`, `$refs`, `$store`, `$watch`, `$dispatch`, `$nextTick`, `$root`, `$data`, `$id`
+
+> No code or attributes are needed for magics — just use the magic name as a string in any Alpine expression.
+
 ## Play with it
 
 Example apps will be added in a future release.
