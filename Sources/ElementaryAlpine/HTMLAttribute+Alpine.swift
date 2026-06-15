@@ -58,4 +58,8 @@ extension HTMLAttribute.x {
     public static func model(_ modifier: HTMLAttributeValue.Alpine.ModelModifier) -> HTMLAttribute {
         .init(name: "x-model", value: modifier.rawValue)
     }
+
+    public static func `for`(_ value: String) -> HTMLAttribute {
+        .init(name: "x-for", value: value)
+    }
 }
