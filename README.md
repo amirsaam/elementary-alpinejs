@@ -1,4 +1,4 @@
-# ElementaryAlpine: Alpine.js web apps with Swift
+# ElementaryAlpine: Reactive web apps with Swift
 
 **Ergonomic [AlpineJS](https://alpinejs.dev/) extensions for [Elementary](https://github.com/elementary-swift/elementary)**
 
