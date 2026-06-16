@@ -16,7 +16,7 @@ let package = Package(
     ],
     products: [
         .library(name: "ElementaryAlpine", targets: ["ElementaryAlpine"]),
-        .library(name: "ElementaryAlpinePlugins", targets: ["ElementaryAlpinePlugins"])
+        .library(name: "ElementaryAlpinePlugins", targets: ["ElementaryAlpinePlugins"]),
     ],
     dependencies: [
         .package(url: "https://github.com/elementary-swift/elementary.git", from: "0.6.0")
