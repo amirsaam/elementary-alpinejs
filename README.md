@@ -206,6 +206,8 @@ var head: some HTML {
     script(.src("https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.15.12/dist/cdn.min.js"), .defer) {}
     // Anchor
     script(.src("https://cdn.jsdelivr.net/npm/@alpinejs/anchor@3.15.12/dist/cdn.min.js"), .defer) {}
+    // Sort
+    script(.src("https://cdn.jsdelivr.net/npm/@alpinejs/sort@3.15.12/dist/cdn.min.js"), .defer) {}
     // Alpine core (must come after all plugin scripts)
     script(.src("https://cdn.jsdelivr.net/npm/alpinejs@3.15.12/dist/cdn.min.js"), .defer) {}
 }
@@ -625,6 +627,142 @@ div(.x.show("open"), .xAnchor.anchor("document.getElementById('trigger')")) {
 - `x-anchor` is a thin wrapper around [Floating UI](https://floating-ui.com/). For advanced configuration not exposed by the modifiers, use `x-anchor.noStyle` and apply styles yourself via `x-bind:style` and the `$anchor` magic.
 - A `transform`, `filter`, `perspective`, `backdrop-filter`, `will-change`, or `contain` on any ancestor creates a new containing block for `position: fixed` descendants. `.fixed` will behave like `position: absolute` relative to that ancestor.
 
+### Sort
+
+[Sort](https://alpinejs.dev/plugins/sort) lets you re-order elements by dragging them with your mouse. Built on top of [SortableJS](https://github.com/SortableJS/Sortable), it powers Kanban boards, to-do lists, sortable table columns, and more.
+
+**Usage:**
+
+```swift
+import Elementary
+import ElementaryAlpine
+import ElementaryAlpinePlugins
+
+// Basic sortable list
+ul(.xSort.sort) {
+    li(.xSort.item("1")) { "foo" }
+    li(.xSort.item("2")) { "bar" }
+    li(.xSort.item("3")) { "baz" }
+}
+
+// Sort with a handler that runs on every reorder
+ul(.xSort.sort("alert($item + ' - ' + $position)")) {
+    li(.xSort.item("1")) { "foo" }
+    li(.xSort.item("2")) { "bar" }
+    li(.xSort.item("3")) { "baz" }
+}
+
+// Group sortable lists — items can be dragged between lists with the same group
+ul(.xSort.sort("handle"), .xSort.group("todos")) {
+    li(.xSort.item("1")) { "foo" }
+    li(.xSort.item("2")) { "bar" }
+    li(.xSort.item("3")) { "baz" }
+}
+
+ol(.xSort.sort("handle"), .xSort.group("todos")) {
+    li(.xSort.item("4")) { "foo" }
+    li(.xSort.item("5")) { "bar" }
+    li(.xSort.item("6")) { "baz" }
+}
+
+// Drag handles — only the handle initiates drag
+ul(.xSort.sort) {
+    li(.xSort.item("1")) {
+        span(.xSort.handle) { " - " }
+        "foo"
+    }
+    li(.xSort.item("2")) {
+        span(.xSort.handle) { " - " }
+        "bar"
+    }
+}
+
+// Ignore elements — buttons inside items stay clickable
+ul(.xSort.sort) {
+    li(.xSort.item("1")) {
+        "foo"
+        button(.xSort.ignore) { "Edit" }
+    }
+}
+
+// Show a ghost of the dragged element instead of an empty space
+ul(.xSort.sort(modifiers: [.ghost])) {
+    li(.xSort.item("1")) { "foo" }
+    li(.xSort.item("2")) { "bar" }
+}
+
+// Pass custom SortableJS options
+ul(.xSort.sort, .xSort.config("{ animation: 0 }")) {
+    li(.xSort.item("1")) { "foo" }
+}
+```
+
+**Generated HTML:**
+
+```html
+<ul x-sort>
+    <li x-sort:item="1">foo</li>
+    <li x-sort:item="2">bar</li>
+    <li x-sort:item="3">baz</li>
+</ul>
+
+<ul x-sort="alert($item + ' - ' + $position)">
+    <li x-sort:item="1">foo</li>
+    <li x-sort:item="2">bar</li>
+    <li x-sort:item="3">baz</li>
+</ul>
+
+<ul x-sort="handle" x-sort:group="todos">
+    <li x-sort:item="1">foo</li>
+    <li x-sort:item="2">bar</li>
+    <li x-sort:item="3">baz</li>
+</ul>
+
+<ol x-sort="handle" x-sort:group="todos">
+    <li x-sort:item="4">foo</li>
+    <li x-sort:item="5">bar</li>
+    <li x-sort:item="6">baz</li>
+</ol>
+
+<ul x-sort>
+    <li x-sort:item="1">
+        <span x-sort:handle> - </span>foo
+    </li>
+    <li x-sort:item="2">
+        <span x-sort:handle> - </span>bar
+    </li>
+</ul>
+
+<ul x-sort>
+    <li x-sort:item="1">
+        foo
+        <button x-sort:ignore>Edit</button>
+    </li>
+</ul>
+
+<ul x-sort.ghost>
+    <li x-sort:item="1">foo</li>
+    <li x-sort:item="2">bar</li>
+</ul>
+
+<ul x-sort x-sort:config="{ animation: 0 }">
+    <li x-sort:item="1">foo</li>
+</ul>
+```
+
+**Modifier reference:**
+
+| Modifier | Raw value | Notes |
+|----------|-----------|-------|
+| `.ghost` | `ghost` | Show a ghost of the dragged element in its place (default: empty hole) |
+
+**Notes:**
+- The Sort handler is called every time sort order changes. Inside the handler, `$item` is the moved item's key (from `x-sort:item`) and `$position` is its new index (starting at `0`). The handler can also be a function reference that receives `(item, position)` as arguments.
+- `x-sort:item` keys are typically numeric (`"1"`, `"2"`, …) but can be any string used to identify the item.
+- `x-sort:group` lets you drag items between lists. When using `.as` handlers with cross-group drag, only the destination list's handler is called.
+- `x-sort:config` accepts any [SortableJS options](https://github.com/SortableJS/Sortable?tab=readme-ov-file#options). Be aware that overwriting `handle`, `group`, `filter`, `onSort`, `onStart`, or `onEnd` may break functionality.
+- While dragging, Alpine adds a `.sorting` class to `<body>` — useful for conditional CSS like `body.sorting #warning { display: block; }`.
+
 ## Play with it
 
 Example apps will be added in a future release.
@@ -642,11 +780,11 @@ The package ships two libraries:
     - `x-for` (`.loop`), `x-transition` (all phases), `x-effect`, `x-ignore`, `x-ref`, `x-cloak`
     - `x-teleport`, `x-if` (`.when`), `x-id`
   - **Global helpers** — `registerGlobal(_:on:action:)` for `Alpine.data()`, `Alpine.store()`, `Alpine.bind()` (see [Globals](#globals))
-- **`ElementaryAlpinePlugins`** — Alpine.js plugin wrappers (see [Plugins](#plugins)). Currently ships **Mask** (`.xMask.pattern` / `.xMask.dynamic`), **Intersect** (`.xIntersect.intersect` / `.enter` / `.leave`), **Resize** (`.xResize.resize`), **Persist** (the `$persist` magic — no directive surface), **Focus** (`.xFocus.trap`), **Collapse** (`.xCollapse.collapse`), and **Anchor** (`.xAnchor.anchor`).
+- **`ElementaryAlpinePlugins`** — Alpine.js plugin wrappers (see [Plugins](#plugins)). Currently ships **Mask** (`.xMask.pattern` / `.xMask.dynamic`), **Intersect** (`.xIntersect.intersect` / `.enter` / `.leave`), **Resize** (`.xResize.resize`), **Persist** (the `$persist` magic — no directive surface), **Focus** (`.xFocus.trap`), **Collapse** (`.xCollapse.collapse`), **Anchor** (`.xAnchor.anchor`), and **Sort** (`.xSort.sort` / `.item` / `.group` / `.handle` / `.ignore` / `.config`).
 
 ## Future directions
 
-- Remaining plugin wrappers: Sort, Morph
+- Remaining plugin wrapper: Morph (Alpine.morph() global — no directive surface)
 
 PRs welcome.
 

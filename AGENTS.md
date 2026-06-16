@@ -9,7 +9,7 @@ AI contribution guidelines for `elementary-alpine`.
 The package currently ships:
 
 - **`ElementaryAlpine`** — core AlpineJS directives + globals (`registerGlobal` for `Alpine.data()`, `Alpine.store()`, `Alpine.bind()`)
-- **`ElementaryAlpinePlugins`** — Alpine.js plugin wrappers (currently: Mask, Intersect, Resize, Persist, Focus, Collapse, Anchor)
+- **`ElementaryAlpinePlugins`** — Alpine.js plugin wrappers (currently: Mask, Intersect, Resize, Persist, Focus, Collapse, Anchor, Sort)
 
 ## Versioning
 
@@ -56,6 +56,8 @@ Sources/ElementaryAlpinePlugins/
 ├── AlpineCollapseModifier.swift           # `CollapseModifier` enum
 ├── HTMLAttribute+AlpineAnchor.swift       # `.xAnchor.anchor(_:modifiers:)`
 ├── AlpineAnchorModifier.swift             # `AnchorModifier` enum
+├── HTMLAttribute+AlpineSort.swift         # `.xSort.sort(_:modifiers:)`, `.item(...)`, `.group(...)`, `.handle`, `.ignore`, `.config(...)`
+├── AlpineSortModifier.swift               # `SortModifier` enum
 └── (per-plugin file per Alpine.js plugin)
 ```
 
@@ -105,6 +107,12 @@ Directives accepting modifiers:
 | `x-trap` | `.xFocus.trap(_:modifiers:)` | `FocusModifier` (`.inert`, `.noscroll`, `.noreturn`, `.noautofocus`) |
 | `x-collapse` | `.xCollapse.collapse(modifiers:)` | `CollapseModifier` (`.duration(Int)`, `.min(Int)`) |
 | `x-anchor` | `.xAnchor.anchor(_:modifiers:)` | `AnchorModifier` (12 positioning + `.fixed`, `.offset(Int)`, `.noflip`, `.noStyle`) |
+| `x-sort` | `.xSort.sort(_:modifiers:)` | `SortModifier` (`.ghost`) |
+| `x-sort:item` | `.xSort.item(_:)` | — (no modifiers) |
+| `x-sort:group` | `.xSort.group(_:)` | — (no modifiers) |
+| `x-sort:handle` | `.xSort.handle` | — (no value, no modifiers) |
+| `x-sort:ignore` | `.xSort.ignore` | — (no value, no modifiers) |
+| `x-sort:config` | `.xSort.config(_:)` | — (no modifiers) |
 
 ## Globals API
 
