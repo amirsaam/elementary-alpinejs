@@ -9,7 +9,7 @@ AI contribution guidelines for `elementary-alpine`.
 The package currently ships:
 
 - **`ElementaryAlpine`** — core AlpineJS directives + globals (`registerGlobal` for `Alpine.data()`, `Alpine.store()`, `Alpine.bind()`)
-- **`ElementaryAlpinePlugins`** — Alpine.js plugin wrappers (currently: Mask, Intersect, Resize, Persist)
+- **`ElementaryAlpinePlugins`** — Alpine.js plugin wrappers (currently: Mask, Intersect, Resize, Persist, Focus, Collapse, Anchor)
 
 ## Versioning
 
@@ -50,6 +50,12 @@ Sources/ElementaryAlpinePlugins/
 ├── AlpineIntersectModifier.swift          # `IntersectModifier` enum
 ├── HTMLAttribute+AlpineResize.swift       # `.xResize.resize(_:modifiers:)`
 ├── AlpineResizeModifier.swift             # `ResizeModifier` enum
+├── HTMLAttribute+AlpineFocus.swift        # `.xFocus.trap(_:modifiers:)`
+├── AlpineFocusModifier.swift              # `FocusModifier` enum
+├── HTMLAttribute+AlpineCollapse.swift     # `.xCollapse.collapse(modifiers:)`
+├── AlpineCollapseModifier.swift           # `CollapseModifier` enum
+├── HTMLAttribute+AlpineAnchor.swift       # `.xAnchor.anchor(_:modifiers:)`
+├── AlpineAnchorModifier.swift             # `AnchorModifier` enum
 └── (per-plugin file per Alpine.js plugin)
 ```
 
@@ -96,6 +102,9 @@ Directives accepting modifiers:
 | `x-intersect:leave` | `.xIntersect.leave(_:modifiers:)` | `IntersectModifier` |
 | `x-resize` | `.xResize.resize(_:modifiers:)` | `ResizeModifier` (`.document`) |
 | `x-persist` | — (magic only, no directive) | `$persist(...)` used as JS string in `x-data` value |
+| `x-trap` | `.xFocus.trap(_:modifiers:)` | `FocusModifier` (`.inert`, `.noscroll`, `.noreturn`, `.noautofocus`) |
+| `x-collapse` | `.xCollapse.collapse(modifiers:)` | `CollapseModifier` (`.duration(Int)`, `.min(Int)`) |
+| `x-anchor` | `.xAnchor.anchor(_:modifiers:)` | `AnchorModifier` (12 positioning + `.fixed`, `.offset(Int)`, `.noflip`, `.noStyle`) |
 
 ## Globals API
 

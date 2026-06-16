@@ -200,6 +200,12 @@ var head: some HTML {
     script(.src("https://cdn.jsdelivr.net/npm/@alpinejs/resize@3.15.12/dist/cdn.min.js"), .defer) {}
     // Persist
     script(.src("https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.15.12/dist/cdn.min.js"), .defer) {}
+    // Focus
+    script(.src("https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.15.12/dist/cdn.min.js"), .defer) {}
+    // Collapse
+    script(.src("https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.15.12/dist/cdn.min.js"), .defer) {}
+    // Anchor
+    script(.src("https://cdn.jsdelivr.net/npm/@alpinejs/anchor@3.15.12/dist/cdn.min.js"), .defer) {}
     // Alpine core (must come after all plugin scripts)
     script(.src("https://cdn.jsdelivr.net/npm/alpinejs@3.15.12/dist/cdn.min.js"), .defer) {}
 }
@@ -409,6 +415,216 @@ div(.x.data("{ count: $persist(0).using(sessionStorage) }")) {
 - `.as(...)` and `.using(...)` are **JavaScript method calls** on the `$persist(...)` return value, not HTML modifiers — they cannot be type-safe in Swift.
 - `$persist` works with primitives, arrays, and objects. If you change the type of a persisted value, clear its localStorage entry first.
 
+### Focus
+
+[Focus](https://alpinejs.dev/plugins/focus) lets you manage focus on a page, including trapping focus within an element (for modals/dialogs), navigating focus with arrow keys, and more.
+
+**Usage:**
+
+```swift
+import Elementary
+import ElementaryAlpine
+import ElementaryAlpinePlugins
+
+// Trap focus inside an element while `open` is true
+div(.x.data("{ open: false }")) {
+    button(.x.on("click", "open = true")) { "Open Dialog" }
+    span(.x.show("open"), .xFocus.trap("open")) {
+        p { "..." }
+        input(.type(.text), .placeholder("Some input..."))
+        input(.type(.text), .placeholder("Some other input..."))
+        button(.x.on("click", "open = false")) { "Close Dialog" }
+    }
+}
+
+// Hide all other elements from screen readers while trapped
+div(.xFocus.trap("open", modifiers: [.inert])) { ... }
+
+// Disable page scroll while trapped
+div(.xFocus.trap("open", modifiers: [.noscroll])) { ... }
+
+// Don't return focus to the previous element on untrap
+div(.xFocus.trap("open", modifiers: [.noreturn])) { ... }
+
+// Don't auto-focus the first focusable element on trap
+div(.xFocus.trap("open", modifiers: [.noautofocus])) { ... }
+
+// Chained modifiers
+div(.xFocus.trap("open", modifiers: [.inert, .noscroll, .noreturn])) { ... }
+```
+
+**Generated HTML:**
+
+```html
+<div x-trap="open">...</div>
+<div x-trap.inert="open">...</div>
+<div x-trap.noscroll="open">...</div>
+<div x-trap.noreturn="open">...</div>
+<div x-trap.noautofocus="open">...</div>
+<div x-trap.inert.noscroll.noreturn="open">...</div>
+```
+
+**Modifier reference:**
+
+| Modifier | Raw value | Notes |
+|----------|-----------|-------|
+| `.inert` | `inert` | Mark other page elements `aria-hidden="true"` while trapped |
+| `.noscroll` | `noscroll` | Block page scrolling while trapped |
+| `.noreturn` | `noreturn` | Don't return focus on untrap |
+| `.noautofocus` | `noautofocus` | Don't auto-focus the first focusable element |
+
+**Notes:**
+- The Focus plugin also provides a `$focus` magic (`.next()`, `.previous()`, `.wrap()`, `.first()`, `.last()`, etc.) used as JS strings inside `x-on` handlers — no Swift helper needed.
+- The Focus plugin was previously called "Trap" — `x-trap` and its modifiers are unchanged.
+
+### Collapse
+
+[Collapse](https://alpinejs.dev/plugins/collapse) expands and collapses elements with smooth height animations. Unlike `x-transition`, `x-collapse` is dedicated to height-based collapse and works alongside `x-show`.
+
+**Usage:**
+
+```swift
+import Elementary
+import ElementaryAlpine
+import ElementaryAlpinePlugins
+
+// Basic collapse (works with x-show)
+p(.x.show("expanded"), .xCollapse.collapse()) {
+    "..."
+}
+
+// Custom duration (ms)
+p(.x.show("expanded"), .xCollapse.collapse(modifiers: [.duration(1000)])) {
+    "..."
+}
+
+// Minimum collapsed height (px) — useful for "cut-off" instead of full hide
+p(.x.show("expanded"), .xCollapse.collapse(modifiers: [.min(50)])) {
+    "..."
+}
+
+// Chained modifiers
+p(.x.show("expanded"), .xCollapse.collapse(modifiers: [.duration(500), .min(50)])) {
+    "..."
+}
+```
+
+**Generated HTML:**
+
+```html
+<p x-show="expanded" x-collapse>...</p>
+<p x-show="expanded" x-collapse.duration.1000ms>...</p>
+<p x-show="expanded" x-collapse.min.50px>...</p>
+<p x-show="expanded" x-collapse.duration.500ms.min.50px>...</p>
+```
+
+**Modifier reference:**
+
+| Modifier | Raw value | Notes |
+|----------|-----------|-------|
+| `.duration(Int)` | `duration.Nms` | Animation duration in milliseconds |
+| `.min(Int)` | `min.Npx` | Minimum collapsed height in pixels (cuts off rather than fully hides) |
+
+**Notes:**
+- `x-collapse` can only exist on an element that already has `x-show`. It animates the height property when `x-show` toggles visibility.
+- `x-collapse` has no value — it only accepts modifiers.
+
+### Anchor
+
+[Anchor](https://alpinejs.dev/plugins/anchor) anchors an element's positioning to another element on the page. Built on top of [Floating UI](https://floating-ui.com/), it powers dropdowns, popovers, tooltips, and dialogs.
+
+**Usage:**
+
+```swift
+import Elementary
+import ElementaryAlpine
+import ElementaryAlpinePlugins
+
+// Anchor below the button (default positioning)
+div(.x.data("{ open: false }")) {
+    button(.x.ref("button"), .x.on("click", "open = ! open")) { "Toggle" }
+    div(.x.show("open"), .xAnchor.anchor("$refs.button")) {
+        "Dropdown content"
+    }
+}
+
+// Anchor below-right of the button
+div(.x.show("open"), .xAnchor.anchor("$refs.button", modifiers: [.bottomStart])) {
+    "Dropdown content"
+}
+
+// Use fixed positioning (escapes overflow:hidden containers)
+div(.x.show("open"), .xAnchor.anchor("$refs.button", modifiers: [.fixed])) {
+    "Dropdown content"
+}
+
+// Add an offset (px)
+div(.x.show("open"), .xAnchor.anchor("$refs.button", modifiers: [.offset(10)])) {
+    "Dropdown content"
+}
+
+// Prevent auto-flip when there's no room below
+div(.x.show("open"), .xAnchor.anchor("$refs.button", modifiers: [.noflip])) {
+    "Dropdown content"
+}
+
+// Apply positioning yourself via $anchor.x/$anchor.y in x-bind:style
+div(
+    .x.show("open"),
+    .xAnchor.anchor("$refs.button", modifiers: [.noStyle]),
+    .x.bindStyle("{ position: 'absolute', top: $anchor.y+'px', left: $anchor.x+'px' }")
+) {
+    "Dropdown content"
+}
+
+// Anchor to an element by id
+div(.x.show("open"), .xAnchor.anchor("document.getElementById('trigger')")) {
+    "Dropdown content"
+}
+```
+
+**Generated HTML:**
+
+```html
+<div x-anchor="$refs.button">Dropdown content</div>
+<div x-anchor.bottom-start="$refs.button">Dropdown content</div>
+<div x-anchor.fixed="$refs.button">Dropdown content</div>
+<div x-anchor.offset.10="$refs.button">Dropdown content</div>
+<div x-anchor.noflip="$refs.button">Dropdown content</div>
+<div x-anchor.no-style="$refs.button" x-bind:style="...">Dropdown content</div>
+<div x-anchor="document.getElementById('trigger')">Dropdown content</div>
+```
+
+**Positioning modifiers:**
+
+| Modifier | Raw value | Notes |
+|----------|-----------|-------|
+| `.top` | `top` | Above the reference, centered |
+| `.topStart` | `top-start` | Above the reference, aligned to the start |
+| `.topEnd` | `top-end` | Above the reference, aligned to the end |
+| `.bottom` | `bottom` | Below the reference, centered |
+| `.bottomStart` | `bottom-start` | Below the reference, aligned to the start |
+| `.bottomEnd` | `bottom-end` | Below the reference, aligned to the end |
+| `.left` | `left` | Left of the reference, centered |
+| `.leftStart` | `left-start` | Left of the reference, aligned to the start |
+| `.leftEnd` | `left-end` | Left of the reference, aligned to the end |
+| `.right` | `right` | Right of the reference, centered |
+| `.rightStart` | `right-start` | Right of the reference, aligned to the start |
+| `.rightEnd` | `right-end` | Right of the reference, aligned to the end |
+
+**Other modifiers:**
+
+| Modifier | Raw value | Notes |
+|----------|-----------|-------|
+| `.fixed` | `fixed` | Use `position: fixed` (escapes `overflow: hidden` containers) |
+| `.offset(Int)` | `offset.N` | Spacing in pixels between anchored and reference element |
+| `.noflip` | `noflip` | Don't auto-flip when there's no room in the chosen direction |
+| `.noStyle` | `no-style` | Don't apply positioning styles; access them via `$anchor.x` / `$anchor.y` in `x-bind:style` |
+
+**Notes:**
+- `x-anchor` is a thin wrapper around [Floating UI](https://floating-ui.com/). For advanced configuration not exposed by the modifiers, use `x-anchor.noStyle` and apply styles yourself via `x-bind:style` and the `$anchor` magic.
+- A `transform`, `filter`, `perspective`, `backdrop-filter`, `will-change`, or `contain` on any ancestor creates a new containing block for `position: fixed` descendants. `.fixed` will behave like `position: absolute` relative to that ancestor.
+
 ## Play with it
 
 Example apps will be added in a future release.
@@ -426,11 +642,11 @@ The package ships two libraries:
     - `x-for` (`.loop`), `x-transition` (all phases), `x-effect`, `x-ignore`, `x-ref`, `x-cloak`
     - `x-teleport`, `x-if` (`.when`), `x-id`
   - **Global helpers** — `registerGlobal(_:on:action:)` for `Alpine.data()`, `Alpine.store()`, `Alpine.bind()` (see [Globals](#globals))
-- **`ElementaryAlpinePlugins`** — Alpine.js plugin wrappers (see [Plugins](#plugins)). Currently ships **Mask** (`.xMask.pattern` / `.xMask.dynamic`), **Intersect** (`.xIntersect.intersect` / `.enter` / `.leave`), **Resize** (`.xResize.resize`), and **Persist** (the `$persist` magic — no directive surface).
+- **`ElementaryAlpinePlugins`** — Alpine.js plugin wrappers (see [Plugins](#plugins)). Currently ships **Mask** (`.xMask.pattern` / `.xMask.dynamic`), **Intersect** (`.xIntersect.intersect` / `.enter` / `.leave`), **Resize** (`.xResize.resize`), **Persist** (the `$persist` magic — no directive surface), **Focus** (`.xFocus.trap`), **Collapse** (`.xCollapse.collapse`), and **Anchor** (`.xAnchor.anchor`).
 
 ## Future directions
 
-- Remaining plugin wrappers: Focus, Collapse, Anchor, Morph, Sort
+- Remaining plugin wrappers: Sort, Morph
 
 PRs welcome.
 
