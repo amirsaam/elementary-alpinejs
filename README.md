@@ -177,7 +177,7 @@ div(.x.setup("$nextTick(() => console.log('mounted')"))
 div(.x.data("{ open: false }"), .x.text("$el.tagName"))
 ```
 
-**Available magics:** `$el`, `$refs`, `$store`, `$watch`, `$dispatch`, `$nextTick`, `$root`, `$data`, `$id`
+**Available magics:** `$el`, `$refs`, `$store`, `$watch`, `$dispatch`, `$nextTick`, `$root`, `$data`, `$id`, `$persist` (requires the [Persist plugin](#persist))
 
 > No code or attributes are needed for magics — just use the magic name as a string in any Alpine expression.
 
@@ -198,6 +198,8 @@ var head: some HTML {
     script(.src("https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.15.12/dist/cdn.min.js"), .defer) {}
     // Resize
     script(.src("https://cdn.jsdelivr.net/npm/@alpinejs/resize@3.15.12/dist/cdn.min.js"), .defer) {}
+    // Persist
+    script(.src("https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.15.12/dist/cdn.min.js"), .defer) {}
     // Alpine core (must come after all plugin scripts)
     script(.src("https://cdn.jsdelivr.net/npm/alpinejs@3.15.12/dist/cdn.min.js"), .defer) {}
 }
@@ -353,6 +355,60 @@ div(.xResize.resize("width = $width; height = $height", modifiers: [.document]))
 |----------|-----------|-------|
 | `.document` | `document` | Observe the document instead of a specific element |
 
+### Persist
+
+[Persist](https://alpinejs.dev/plugins/persist) saves Alpine state to `localStorage` (or `sessionStorage`) so values persist across page loads. Useful for search filters, active tabs, theme preferences, and other state that users expect to survive a refresh.
+
+Unlike the other plugins, Persist is a **magic**, not a directive — there is no `x-persist` HTML attribute. The API is the `$persist(...)` function used inside `x-data` values.
+
+**Usage:**
+
+```swift
+import Elementary
+import ElementaryAlpine
+import ElementaryAlpinePlugins
+
+// Persist a counter to localStorage
+div(.x.data("{ count: $persist(0) }")) {
+    button(.x.on("click", "count++")) { "Increment" }
+    span(.x.text("count")) { "" }
+}
+
+// Use a custom localStorage key
+div(.x.data("{ count: $persist(0).as('my-count') }")) {
+    button(.x.on("click", "count++")) { "Increment" }
+    span(.x.text("count")) { "" }
+}
+
+// Use sessionStorage instead (cleared when the tab closes)
+div(.x.data("{ count: $persist(0).using(sessionStorage) }")) {
+    button(.x.on("click", "count++")) { "Increment" }
+    span(.x.text("count")) { "" }
+}
+```
+
+**Generated HTML:**
+
+```html
+<div x-data="{ count: $persist(0) }">
+    <button x-on:click="count++">Increment</button>
+    <span x-text="count"></span>
+</div>
+<div x-data="{ count: $persist(0).as('my-count') }">
+    <button x-on:click="count++">Increment</button>
+    <span x-text="count"></span>
+</div>
+<div x-data="{ count: $persist(0).using(sessionStorage) }">
+    <button x-on:click="count++">Increment</button>
+    <span x-text="count"></span>
+</div>
+```
+
+**Notes:**
+- Persist is **not a directive**, so there is no `HTMLAttribute` helper. Write `$persist(...)` as a JS string in your `x-data` value.
+- `.as(...)` and `.using(...)` are **JavaScript method calls** on the `$persist(...)` return value, not HTML modifiers — they cannot be type-safe in Swift.
+- `$persist` works with primitives, arrays, and objects. If you change the type of a persisted value, clear its localStorage entry first.
+
 ## Play with it
 
 Example apps will be added in a future release.
@@ -370,11 +426,11 @@ The package ships two libraries:
     - `x-for` (`.loop`), `x-transition` (all phases), `x-effect`, `x-ignore`, `x-ref`, `x-cloak`
     - `x-teleport`, `x-if` (`.when`), `x-id`
   - **Global helpers** — `registerGlobal(_:on:action:)` for `Alpine.data()`, `Alpine.store()`, `Alpine.bind()` (see [Globals](#globals))
-- **`ElementaryAlpinePlugins`** — Alpine.js plugin wrappers (see [Plugins](#plugins)). Currently ships **Mask** (`.xMask.pattern` / `.xMask.dynamic`), **Intersect** (`.xIntersect.intersect` / `.enter` / `.leave`), and **Resize** (`.xResize.resize`).
+- **`ElementaryAlpinePlugins`** — Alpine.js plugin wrappers (see [Plugins](#plugins)). Currently ships **Mask** (`.xMask.pattern` / `.xMask.dynamic`), **Intersect** (`.xIntersect.intersect` / `.enter` / `.leave`), **Resize** (`.xResize.resize`), and **Persist** (the `$persist` magic — no directive surface).
 
 ## Future directions
 
-- Remaining plugin wrappers: Persist, Focus, Collapse, Anchor, Morph, Sort
+- Remaining plugin wrappers: Focus, Collapse, Anchor, Morph, Sort
 
 PRs welcome.
 

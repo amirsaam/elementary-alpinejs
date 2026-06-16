@@ -9,7 +9,7 @@ AI contribution guidelines for `elementary-alpine`.
 The package currently ships:
 
 - **`ElementaryAlpine`** — core AlpineJS directives + globals (`registerGlobal` for `Alpine.data()`, `Alpine.store()`, `Alpine.bind()`)
-- **`ElementaryAlpinePlugins`** — Alpine.js plugin wrappers (currently: Mask, Intersect, Resize)
+- **`ElementaryAlpinePlugins`** — Alpine.js plugin wrappers (currently: Mask, Intersect, Resize, Persist)
 
 ## Versioning
 
@@ -53,6 +53,8 @@ Sources/ElementaryAlpinePlugins/
 └── (per-plugin file per Alpine.js plugin)
 ```
 
+> **Plugins with no directive surface** (e.g. Persist, Morph) ship as docs only — no Swift source, no `HTMLAttribute` helper. Persist's API is the `$persist(...)` magic, used as a JS string in `x-data` values.
+
 **Core (17 directives) under `HTMLAttribute.x`:**
 - `x-data`, `x-init` (`.setup`), `x-show`, `x-bind`/`x-bind:class`/`x-bind:style`
 - `x-on` with modifiers (base, keyboard, mouse, advanced)
@@ -93,6 +95,7 @@ Directives accepting modifiers:
 | `x-intersect:enter` | `.xIntersect.enter(_:modifiers:)` | `IntersectModifier` |
 | `x-intersect:leave` | `.xIntersect.leave(_:modifiers:)` | `IntersectModifier` |
 | `x-resize` | `.xResize.resize(_:modifiers:)` | `ResizeModifier` (`.document`) |
+| `x-persist` | — (magic only, no directive) | `$persist(...)` used as JS string in `x-data` value |
 
 ## Globals API
 
