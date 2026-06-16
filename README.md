@@ -181,26 +181,80 @@ div(.x.data("{ open: false }"), .x.text("$el.tagName"))
 
 > No code or attributes are needed for magics — just use the magic name as a string in any Alpine expression.
 
+## Plugins
+
+[Alpine.js plugins](https://alpinejs.dev/plugins) extend the runtime with additional directives. This package ships a separate library, **`ElementaryAlpinePlugins`**, that exposes them as Swift attribute helpers.
+
+> **Alpine.js plugin scripts depend on Alpine.js core.** At the Swift level, `ElementaryAlpinePlugins` has no compile-time dependency on `ElementaryAlpine` — both libraries only depend on `Elementary`. The dependency exists at the **JavaScript runtime** level: plugin CDN scripts hook into the core Alpine instance, so the plugin script tag must be present in your page (and load after Alpine core, per the Alpine.js docs).
+
+### Mask
+
+[Mask](https://alpinejs.dev/plugins/mask) formats text input as the user types. Useful for phone numbers, credit cards, dates, account numbers, etc.
+
+**Add the plugin script to your `<head>` (BEFORE Alpine core, per Alpine.js docs):**
+
+```swift
+var head: some HTML {
+    meta(.charset(.utf8))
+    script(.src("https://cdn.jsdelivr.net/npm/@alpinejs/mask@3.15.12/dist/cdn.min.js"), .defer) {}
+    script(.src("https://cdn.jsdelivr.net/npm/alpinejs@3.15.12/dist/cdn.min.js"), .defer) {}
+}
+```
+
+**Usage:**
+
+```swift
+import Elementary
+import ElementaryAlpine
+import ElementaryAlpinePlugins
+
+// Static pattern — wildcards: 9 (numeric), a (alpha), * (any)
+input(.xMask.pattern("99/99/9999"), .x.model("date"))
+input(.xMask.pattern("(999) 999-9999"), .x.model("phone"))
+
+// Dynamic mask — expression receives $input
+input(.xMask.dynamic("$money($input)"), .x.model("amount"))
+
+// Dynamic mask — function reference
+input(.xMask.dynamic("creditCardMask"), .x.model("card"))
+```
+
+**Generated HTML:**
+
+```html
+<input x-mask="99/99/9999" x-model="date">
+<input x-mask="(999) 999-9999" x-model="phone">
+<input x-mask:dynamic="$money($input)" x-model="amount">
+<input x-mask:dynamic="creditCardMask" x-model="card">
+```
+
+**Notes:**
+- `x-mask:dynamic` accepts a JavaScript expression or a function name. The expression receives `$input` (the current input value) as a magic.
+- The built-in `$money($input, '.', ',', 4)` helper handles currency formatting with optional custom decimal/thousands separators and precision. Pass it as the directive value — no Swift modifier is needed.
+- The Mask plugin has **no HTML modifiers** in Alpine.js, so `MaskDynamicModifier` does not exist. All configuration happens in the value string.
+
 ## Play with it
 
 Example apps will be added in a future release.
 
 ## Documentation
 
-The package ships one library, **`ElementaryAlpine`**, which provides:
+The package ships two libraries:
 
-- **Attribute helpers** via the `.x` syntax on all `HTMLElements` for all 17 core [AlpineJS directives](https://alpinejs.dev/directives):
-  - `x-data`, `x-init` (`.setup`), `x-show`
-  - `x-bind` / `x-bind:class` / `x-bind:style`
-  - `x-on` with modifiers (base, keyboard, mouse, advanced)
-  - `x-text`, `x-html`, `x-model` with modifiers, `x-modelable`
-  - `x-for` (`.loop`), `x-transition` (all phases), `x-effect`, `x-ignore`, `x-ref`, `x-cloak`
-  - `x-teleport`, `x-if` (`.when`), `x-id`
-- **Global helpers** — `registerGlobal(_:on:action:)` for `Alpine.data()`, `Alpine.store()`, `Alpine.bind()` (see [Globals](#globals))
+- **`ElementaryAlpine`** — core:
+  - **Attribute helpers** via the `.x` syntax on all `HTMLElements` for all 17 core [AlpineJS directives](https://alpinejs.dev/directives):
+    - `x-data`, `x-init` (`.setup`), `x-show`
+    - `x-bind` / `x-bind:class` / `x-bind:style`
+    - `x-on` with modifiers (base, keyboard, mouse, advanced)
+    - `x-text`, `x-html`, `x-model` with modifiers, `x-modelable`
+    - `x-for` (`.loop`), `x-transition` (all phases), `x-effect`, `x-ignore`, `x-ref`, `x-cloak`
+    - `x-teleport`, `x-if` (`.when`), `x-id`
+  - **Global helpers** — `registerGlobal(_:on:action:)` for `Alpine.data()`, `Alpine.store()`, `Alpine.bind()` (see [Globals](#globals))
+- **`ElementaryAlpinePlugins`** — Alpine.js plugin wrappers (see [Plugins](#plugins)). Currently ships **Mask** (`.xMask.pattern` / `.xMask.dynamic`).
 
 ## Future directions
 
-- Plugin wrappers (Mask, Intersect, Resize, Persist, Focus, Collapse, Anchor, Morph, Sort)
+- Remaining plugin wrappers: Intersect, Resize, Persist, Focus, Collapse, Anchor, Morph, Sort
 
 PRs welcome.
 

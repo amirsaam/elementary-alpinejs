@@ -9,6 +9,7 @@ AI contribution guidelines for `elementary-alpine`.
 The package currently ships:
 
 - **`ElementaryAlpine`** — core AlpineJS directives + globals (`registerGlobal` for `Alpine.data()`, `Alpine.store()`, `Alpine.bind()`)
+- **`ElementaryAlpinePlugins`** — Alpine.js plugin wrappers (currently: Mask)
 
 ## Versioning
 
@@ -42,6 +43,12 @@ Sources/ElementaryAlpine/
 └── AlpineGlobals.swift              # `AlpineGlobals` enum + `registerGlobal` function
 ```
 
+```
+Sources/ElementaryAlpinePlugins/
+├── HTMLAttribute+AlpineMask.swift   # `.xMask.pattern(_:)`, `.xMask.dynamic(_:)`
+└── (per-plugin file per Alpine.js plugin)
+```
+
 **Core (17 directives) under `HTMLAttribute.x`:**
 - `x-data`, `x-init` (`.setup`), `x-show`, `x-bind`/`x-bind:class`/`x-bind:style`
 - `x-on` with modifiers (base, keyboard, mouse, advanced)
@@ -50,6 +57,8 @@ Sources/ElementaryAlpine/
 - `x-teleport`, `x-if` (`.when`), `x-id`
 
 **Globals:** `registerGlobal(_:on:action:)` with `AlpineGlobals` enum (`.data`/`.store`/`.bind`)
+
+**Plugins** ship under `HTMLAttribute.<pluginName>` namespaces (e.g., `HTMLAttribute.xMask`). The `ElementaryAlpinePlugins` SwiftPM target has **no compile-time dependency on `ElementaryAlpine`** — both libraries depend only on `Elementary`. The plugin dependency on core exists at the **Alpine.js runtime** level (plugin CDN scripts hook into Alpine core).
 
 ## Modifier API
 
@@ -74,6 +83,8 @@ Directives accepting modifiers:
 | `x-on` | `.on(_:_:modifiers:)` | `OnModifier` (30+ cases) |
 | `x-model` | `.model(_:modifiers:)` | `ModelModifier` (`.lazy`, `.change`, `.blur`, `.enter`, `.number`, `.boolean`, `.fill`) |
 | `x-transition` | `.transition(modifiers:)` | `TransitionModifier` (`.opacity`, `.scale(Int?)`, `.origin(Origin)`, `.duration(Int)`, `.delay(Int)`) |
+| `x-mask` | `.xMask.pattern(_:)` | — (no modifiers in Alpine.js) |
+| `x-mask:dynamic` | `.xMask.dynamic(_:)` | — (no modifiers in Alpine.js) |
 
 ## Globals API
 
