@@ -9,7 +9,7 @@ AI contribution guidelines for `elementary-alpine`.
 The package currently ships:
 
 - **`ElementaryAlpine`** — core AlpineJS directives + globals (`registerGlobal` for `Alpine.data()`, `Alpine.store()`, `Alpine.bind()`)
-- **`ElementaryAlpinePlugins`** — Alpine.js plugin wrappers (currently: Mask)
+- **`ElementaryAlpinePlugins`** — Alpine.js plugin wrappers (currently: Mask, Intersect, Resize)
 
 ## Versioning
 
@@ -45,7 +45,11 @@ Sources/ElementaryAlpine/
 
 ```
 Sources/ElementaryAlpinePlugins/
-├── HTMLAttribute+AlpineMask.swift   # `.xMask.pattern(_:)`, `.xMask.dynamic(_:)`
+├── HTMLAttribute+AlpineMask.swift         # `.xMask.pattern(_:)`, `.xMask.dynamic(_:)`
+├── HTMLAttribute+AlpineIntersect.swift    # `.xIntersect.intersect(_:modifiers:)`, `.enter(...)`, `.leave(...)`
+├── AlpineIntersectModifier.swift          # `IntersectModifier` enum
+├── HTMLAttribute+AlpineResize.swift       # `.xResize.resize(_:modifiers:)`
+├── AlpineResizeModifier.swift             # `ResizeModifier` enum
 └── (per-plugin file per Alpine.js plugin)
 ```
 
@@ -85,6 +89,10 @@ Directives accepting modifiers:
 | `x-transition` | `.transition(modifiers:)` | `TransitionModifier` (`.opacity`, `.scale(Int?)`, `.origin(Origin)`, `.duration(Int)`, `.delay(Int)`) |
 | `x-mask` | `.xMask.pattern(_:)` | — (no modifiers in Alpine.js) |
 | `x-mask:dynamic` | `.xMask.dynamic(_:)` | — (no modifiers in Alpine.js) |
+| `x-intersect` | `.xIntersect.intersect(_:modifiers:)` | `IntersectModifier` (`.once`, `.half`, `.full`, `.threshold(Int)`, `.margin(String)`) |
+| `x-intersect:enter` | `.xIntersect.enter(_:modifiers:)` | `IntersectModifier` |
+| `x-intersect:leave` | `.xIntersect.leave(_:modifiers:)` | `IntersectModifier` |
+| `x-resize` | `.xResize.resize(_:modifiers:)` | `ResizeModifier` (`.document`) |
 
 ## Globals API
 

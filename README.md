@@ -185,21 +185,27 @@ div(.x.data("{ open: false }"), .x.text("$el.tagName"))
 
 [Alpine.js plugins](https://alpinejs.dev/plugins) extend the runtime with additional directives. This package ships a separate library, **`ElementaryAlpinePlugins`**, that exposes them as Swift attribute helpers.
 
-> **Alpine.js plugin scripts depend on Alpine.js core.** At the Swift level, `ElementaryAlpinePlugins` has no compile-time dependency on `ElementaryAlpine` — both libraries only depend on `Elementary`. The dependency exists at the **JavaScript runtime** level: plugin CDN scripts hook into the core Alpine instance, so the plugin script tag must be present in your page (and load after Alpine core, per the Alpine.js docs).
+> **Alpine.js plugin scripts depend on Alpine.js core.** At the Swift level, `ElementaryAlpinePlugins` has no compile-time dependency on `ElementaryAlpine` — both libraries only depend on `Elementary`. The dependency exists at the **JavaScript runtime** level: plugin CDN scripts hook into the core Alpine instance, so the plugin script tag must be present in your page (and load before Alpine core, per the Alpine.js docs).
 
-### Mask
-
-[Mask](https://alpinejs.dev/plugins/mask) formats text input as the user types. Useful for phone numbers, credit cards, dates, account numbers, etc.
-
-**Add the plugin script to your `<head>` (BEFORE Alpine core, per Alpine.js docs):**
+**Install plugin scripts** in your `<head>` (BEFORE Alpine core, per Alpine.js docs). Add only the scripts for the plugins you use:
 
 ```swift
 var head: some HTML {
     meta(.charset(.utf8))
+    // Mask
     script(.src("https://cdn.jsdelivr.net/npm/@alpinejs/mask@3.15.12/dist/cdn.min.js"), .defer) {}
+    // Intersect
+    script(.src("https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.15.12/dist/cdn.min.js"), .defer) {}
+    // Resize
+    script(.src("https://cdn.jsdelivr.net/npm/@alpinejs/resize@3.15.12/dist/cdn.min.js"), .defer) {}
+    // Alpine core (must come after all plugin scripts)
     script(.src("https://cdn.jsdelivr.net/npm/alpinejs@3.15.12/dist/cdn.min.js"), .defer) {}
 }
 ```
+
+### Mask
+
+[Mask](https://alpinejs.dev/plugins/mask) formats text input as the user types. Useful for phone numbers, credit cards, dates, account numbers, etc.
 
 **Usage:**
 
@@ -233,6 +239,120 @@ input(.xMask.dynamic("creditCardMask"), .x.model("card"))
 - The built-in `$money($input, '.', ',', 4)` helper handles currency formatting with optional custom decimal/thousands separators and precision. Pass it as the directive value — no Swift modifier is needed.
 - The Mask plugin has **no HTML modifiers** in Alpine.js, so `MaskDynamicModifier` does not exist. All configuration happens in the value string.
 
+### Intersect
+
+[Intersect](https://alpinejs.dev/plugins/intersect) is a convenience wrapper for the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API). It runs an expression when an element enters or leaves the viewport — useful for lazy loading, infinite scroll, "view" tracking, etc.
+
+**Usage:**
+
+```swift
+import Elementary
+import ElementaryAlpine
+import ElementaryAlpinePlugins
+
+// Trigger when the element enters the viewport
+div(.xIntersect.intersect("shown = true")) {
+    "I'm in the viewport!"
+}
+
+// Trigger only the first time
+div(.xIntersect.intersect("loaded = true", modifiers: [.once])) {
+    "..."
+}
+
+// Trigger when at least half of the element is visible
+div(.xIntersect.intersect("loaded = true", modifiers: [.half])) {
+    "..."
+}
+
+// Trigger when the whole element is visible
+div(.xIntersect.intersect("loaded = true", modifiers: [.full])) {
+    "..."
+}
+
+// Custom threshold (0–100, percentage of element visible)
+div(.xIntersect.intersect("loaded = true", modifiers: [.threshold(50)])) {
+    "..."
+}
+
+// Expand the viewport boundary (CSS-margin syntax)
+div(.xIntersect.intersect("loaded = true", modifiers: [.margin("200px")])) {
+    "..."
+}
+
+// Trigger on enter (alias of x-intersect)
+div(.xIntersect.enter("shown = true")) { "..." }
+
+// Trigger on leave
+div(.xIntersect.leave("shown = false")) { "..." }
+
+// Chained modifiers
+div(.xIntersect.intersect("loaded = true", modifiers: [.threshold(50), .full])) {
+    "..."
+}
+```
+
+**Generated HTML:**
+
+```html
+<div x-intersect="shown = true">I'm in the viewport!</div>
+<div x-intersect.once="loaded = true">...</div>
+<div x-intersect.half="loaded = true">...</div>
+<div x-intersect.full="loaded = true">...</div>
+<div x-intersect.threshold.50="loaded = true">...</div>
+<div x-intersect.margin.200px="loaded = true">...</div>
+<div x-intersect:enter="shown = true">...</div>
+<div x-intersect:leave="shown = false">...</div>
+<div x-intersect.threshold.50.full="loaded = true">...</div>
+```
+
+**Modifier reference:**
+
+| Modifier | Raw value | Notes |
+|----------|-----------|-------|
+| `.once` | `once` | Fire only the first time |
+| `.half` | `half` | Fire at 50% visibility |
+| `.full` | `full` | Fire at 99% visibility |
+| `.threshold(Int)` | `threshold.N` | Custom percentage (0–100) |
+| `.margin(String)` | `margin.<css-margin>` | Expand/contract viewport boundary (CSS-margin syntax) |
+
+### Resize
+
+[Resize](https://alpinejs.dev/plugins/resize) is a convenience wrapper for the [Resize Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Resize_Observer_API). It exposes `$width` and `$height` magics whenever an element changes size.
+
+**Usage:**
+
+```swift
+import Elementary
+import ElementaryAlpine
+import ElementaryAlpinePlugins
+
+// Track an element's size
+div(.xResize.resize("width = $width; height = $height")) {
+    p(.x.text("'Width: ' + width + 'px'")) { "" }
+    p(.x.text("'Height: ' + height + 'px'")) { "" }
+}
+
+// Track the entire document
+div(.xResize.resize("width = $width; height = $height", modifiers: [.document])) { ... }
+```
+
+**Generated HTML:**
+
+```html
+<div x-resize="width = $width; height = $height">
+    <p x-text="'Width: ' + width + 'px'"></p>
+    <p x-text="'Height: ' + height + 'px'"></p>
+</div>
+<div x-resize.document="width = $width; height = $height">...</div>
+```
+
+**Modifier reference:**
+
+| Modifier | Raw value | Notes |
+|----------|-----------|-------|
+| `.document` | `document` | Observe the document instead of a specific element |
+
 ## Play with it
 
 Example apps will be added in a future release.
@@ -250,11 +370,11 @@ The package ships two libraries:
     - `x-for` (`.loop`), `x-transition` (all phases), `x-effect`, `x-ignore`, `x-ref`, `x-cloak`
     - `x-teleport`, `x-if` (`.when`), `x-id`
   - **Global helpers** — `registerGlobal(_:on:action:)` for `Alpine.data()`, `Alpine.store()`, `Alpine.bind()` (see [Globals](#globals))
-- **`ElementaryAlpinePlugins`** — Alpine.js plugin wrappers (see [Plugins](#plugins)). Currently ships **Mask** (`.xMask.pattern` / `.xMask.dynamic`).
+- **`ElementaryAlpinePlugins`** — Alpine.js plugin wrappers (see [Plugins](#plugins)). Currently ships **Mask** (`.xMask.pattern` / `.xMask.dynamic`), **Intersect** (`.xIntersect.intersect` / `.enter` / `.leave`), and **Resize** (`.xResize.resize`).
 
 ## Future directions
 
-- Remaining plugin wrappers: Intersect, Resize, Persist, Focus, Collapse, Anchor, Morph, Sort
+- Remaining plugin wrappers: Persist, Focus, Collapse, Anchor, Morph, Sort
 
 PRs welcome.
 
