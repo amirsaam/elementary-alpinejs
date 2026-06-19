@@ -419,7 +419,9 @@ final class ElementaryAlpineTests: XCTestCase {
 final class ElementaryAlpineGlobalsTests: XCTestCase {
     func testData() {
         let html = renderToString {
-            registerGlobal(.data, on: "dropdown", action: "() => ({ open: false })")
+            registerGlobal(.data, on: "dropdown") {
+                "() => ({ open: false })"
+            }
         }
         XCTAssertEqual(
             html,
@@ -429,7 +431,9 @@ final class ElementaryAlpineGlobalsTests: XCTestCase {
 
     func testStore() {
         let html = renderToString {
-            registerGlobal(.store, on: "notifications", action: "{ items: [] }")
+            registerGlobal(.store, on: "notifications") {
+                "{ items: [] }"
+            }
         }
         XCTAssertEqual(
             html,
@@ -439,7 +443,9 @@ final class ElementaryAlpineGlobalsTests: XCTestCase {
 
     func testBind() {
         let html = renderToString {
-            registerGlobal(.bind, on: "SomeButton", action: "() => ({ type: 'button' })")
+            registerGlobal(.bind, on: "SomeButton") {
+                "() => ({ type: 'button' })"
+            }
         }
         XCTAssertEqual(
             html,

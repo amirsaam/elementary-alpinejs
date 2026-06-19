@@ -6,7 +6,7 @@ public enum AlpineGlobals {
     case bind
 }
 
-public func registerGlobal(_ kind: AlpineGlobals, on: String, action: String) -> some HTML {
+public func registerGlobal(_ kind: AlpineGlobals, on: String, action: () -> String) -> some HTML {
     let method: String
     switch kind {
     case .data: method = "data"
@@ -14,6 +14,6 @@ public func registerGlobal(_ kind: AlpineGlobals, on: String, action: String) ->
     case .bind: method = "bind"
     }
     return script {
-        HTMLRaw("document.addEventListener('alpine:init', () => { Alpine.\(method)('\(on)', \(action)) })")
+        HTMLRaw("document.addEventListener('alpine:init', () => { Alpine.\(method)('\(on)', \(action())) })")
     }
 }
