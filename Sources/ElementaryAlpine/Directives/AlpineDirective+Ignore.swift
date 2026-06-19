@@ -1,0 +1,13 @@
+import Elementary
+
+extension HTMLAttribute.x {
+    /// Generates an `x-ignore` attribute that opts an element (and its subtree) out of Alpine initialization.
+    ///
+    /// **Generated HTML:**
+    /// ```html
+    /// <div x-ignore></div>
+    /// ```
+    public static var ignore: HTMLAttribute {
+        .init(name: "x-ignore", value: nil)
+    }
+}
