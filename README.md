@@ -322,6 +322,25 @@ Directives that support modifiers take a `modifiers:` array parameter with a typ
 .x.transition(modifiers: [.duration(500), .delay(50)])
 ```
 
+### Custom multi-phase transitions
+
+For full control over the `x-transition:phase` classes (e.g., Tailwind utilities in a Pines-style component), use the per-phase functions. Each takes a `String` of CSS classes and returns a single `HTMLAttribute` that can be passed inline with other attributes:
+
+```swift
+div(.x.show("open"),
+    .x.transitionEnter("transition ease-out duration-50"),
+    .x.transitionEnterStart("opacity-0 -translate-y-1"),
+    .x.transitionEnterEnd("opacity-100 translate-y-0"),
+    .x.transitionLeave("transition ease-in duration-100"),
+    .x.transitionLeaveStart("opacity-100"),
+    .x.transitionLeaveEnd("opacity-0 -translate-y-1")
+) {
+    "Content"
+}
+```
+
+Available per-phase functions: `.x.transitionEnter`, `.x.transitionEnterStart`, `.x.transitionEnterEnd`, `.x.transitionLeave`, `.x.transitionLeaveStart`, `.x.transitionLeaveEnd`. Only include the phases you need.
+
 ## Magics
 
 Alpine.js [magics](https://alpinejs.dev/magics) are JS-side helpers that exist inside Alpine expressions. They don't generate HTML attributes or scripts — they appear as **string literals** in directive values:
