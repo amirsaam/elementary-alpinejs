@@ -15,12 +15,7 @@ private func generateMorphScript(
     @HTMLBuilder returning: () -> some HTML
 ) -> some HTML {
     let rawHtml: String = returning().render()
-    let escaped =
-        rawHtml
-        .replacingOccurrences(of: "\\", with: "\\\\")
-        .replacingOccurrences(of: "`", with: "\\`")
-        .replacingOccurrences(of: "${", with: "\\${")
-        .replacingOccurrences(of: "</script>", with: "<\\/script>")
+    let escaped = escapeForTemplateLiteral(rawHtml)
 
     let optionsJS = options().toJS()
     let optionsPart: String = optionsJS.isEmpty ? "" : ", \(optionsJS)"
