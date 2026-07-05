@@ -1,4 +1,5 @@
 import Elementary
+import Foundation
 
 /// The kind of Alpine.js global to register. Maps to the corresponding `Alpine.GLOBAL` JavaScript method.
 public enum AlpineGlobals: String {
@@ -59,7 +60,9 @@ public enum AlpineGlobals: String {
 /// }
 /// ```
 public func registerGlobal(_ kind: AlpineGlobals, on: String, action: () -> String) -> some HTML {
-    script {
-        HTMLRaw("document.addEventListener('alpine:init', () => { Alpine.\(kind.rawValue)('\(on)', \(action())) })")
+    let escapedOn = on.replacingOccurrences(of: "\\", with: "\\\\")
+        .replacingOccurrences(of: "'", with: "\\'")
+    return script {
+        HTMLRaw("document.addEventListener('alpine:init', () => { Alpine.\(kind.rawValue)('\(escapedOn)', \(action())) })")
     }
 }
