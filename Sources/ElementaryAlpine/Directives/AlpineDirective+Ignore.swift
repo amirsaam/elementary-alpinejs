@@ -7,6 +7,11 @@ extension HTMLAttribute.x {
     /// ```html
     /// <div x-ignore></div>
     /// ```
+    ///
+    /// **Example:**
+    /// ```swift
+    /// div(.x.ignore) { "unchanged by Alpine" }
+    /// ```
     public static var ignore: HTMLAttribute {
         .init(name: "x-ignore", value: nil)
     }

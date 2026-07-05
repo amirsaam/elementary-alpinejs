@@ -9,6 +9,14 @@ extension HTMLAttribute.x {
     /// ```html
     /// <div x-id="['input-id']"></div>
     /// ```
+    ///
+    /// **Example:**
+    /// ```swift
+    /// div(.x.id("['input-id']")) {
+    ///     label(.x.bind("for", "$id('input-id')")) { "Name" }
+    ///     input(.x.bind("id", "$id('input-id')"), .type(.text))
+    /// }
+    /// ```
     public static func id(_ value: String) -> HTMLAttribute {
         .init(name: "x-id", value: value)
     }

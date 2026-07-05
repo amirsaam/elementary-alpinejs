@@ -9,6 +9,11 @@ extension HTMLAttribute.x {
     /// ```html
     /// <div x-modelable="value"></div>
     /// ```
+    ///
+    /// **Example:**
+    /// ```swift
+    /// div(.x.modelable("value")) { ... }
+    /// ```
     public static func modelable(_ value: String) -> HTMLAttribute {
         .init(name: "x-modelable", value: value)
     }

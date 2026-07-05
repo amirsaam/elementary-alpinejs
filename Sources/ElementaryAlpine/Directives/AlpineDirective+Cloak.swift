@@ -8,6 +8,11 @@ extension HTMLAttribute.x {
     /// ```html
     /// <div x-data="{}" x-cloak></div>
     /// ```
+    ///
+    /// **Example:**
+    /// ```swift
+    /// div(.x.data("{}"), .x.cloak) { ... }
+    /// ```
     public static var cloak: HTMLAttribute {
         .init(name: "x-cloak", value: nil)
     }
