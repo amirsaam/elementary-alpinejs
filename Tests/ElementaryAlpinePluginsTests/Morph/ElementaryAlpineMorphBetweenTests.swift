@@ -232,6 +232,83 @@ final class ElementaryAlpineMorphBetweenTests: XCTestCase {
         XCTAssertTrue(html.contains(expected))
         XCTAssertFalse(html.contains("addEventListener"))
     }
+
+    func testHTMLEscapingBacktick() {
+        let html = renderToString {
+            setupMorphBetween(
+                trigger: "#btn",
+                startMarker: "<!--start-->",
+                endMarker: "<!--end-->",
+                event: "click"
+            ) {
+                li { "with `backtick`" }
+            }
+        }
+        XCTAssertTrue(html.contains(#"\`backtick\`"#))
+    }
+
+    func testHTMLEscapingDollarBrace() {
+        let html = renderToString {
+            setupMorphBetween(
+                trigger: "#btn",
+                startMarker: "<!--start-->",
+                endMarker: "<!--end-->",
+                event: "click"
+            ) {
+                li { "${var}" }
+            }
+        }
+        XCTAssertTrue(html.contains(#"\${var}"#))
+    }
+
+    func testHTMLEscapingBackslash() {
+        let html = renderToString {
+            setupMorphBetween(
+                trigger: "#btn",
+                startMarker: "<!--start-->",
+                endMarker: "<!--end-->",
+                event: "click"
+            ) {
+                li { "back\\slash" }
+            }
+        }
+        XCTAssertTrue(html.contains("back\\\\slash"))
+    }
+
+    func testScriptTagEscaping() {
+        let html = renderToString {
+            setupMorphBetween(
+                trigger: "#btn",
+                startMarker: "<!--start-->",
+                endMarker: "<!--end-->",
+                event: "click"
+            ) {
+                li { "safe content" }
+            }
+        }
+        let outerScriptTags = html.components(separatedBy: "</script>").count - 1
+        XCTAssertEqual(outerScriptTags, 1, "Should have exactly one outer </script> tag, not multiple")
+    }
+
+    func testScriptTagEscapingInContent() {
+        let html = renderToString {
+            setupMorphBetween(
+                trigger: "#btn",
+                startMarker: "<!--start-->",
+                endMarker: "<!--end-->",
+                event: "click"
+            ) {
+                li {
+                    script { "evil()" }
+                    "extra"
+                }
+            }
+        }
+        XCTAssertTrue(html.contains("<\\/script>"), "Inner </script> in content must be escaped to <\\/script>")
+        let outerScriptTags = html.components(separatedBy: "</script>").count - 1
+        XCTAssertEqual(outerScriptTags, 1, "Only the outer script tag's </script> should remain unescaped")
+        XCTAssertTrue(html.contains("evil()"), "Inner script body should be preserved verbatim")
+    }
 }
 
 private func renderToString(@HTMLBuilder _ content: () -> some HTML) -> String {
