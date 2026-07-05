@@ -66,12 +66,21 @@ private func generateMorphBetweenScript(
 /// **Generated HTML:**
 /// ```html
 /// <script>
-/// document.querySelector(trigger).addEventListener(event, async () => {
-///     Alpine.morphBetween(
-///         document.querySelector(startMarker),
-///         document.querySelector(endMarker),
-///         `<html>`
-///     )
+/// const findMorphMarker = (marker) => {
+///     let el = document.querySelector(marker);
+///     if (el) return el;
+///     if (marker.startsWith('<!--') && marker.endsWith('-->')) {
+///         const text = marker.slice(4, -3).trim();
+///         const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_COMMENT);
+///         let node;
+///         while ((node = walker.nextNode())) {
+///             if (node.nodeValue && node.nodeValue.trim() === text) return node;
+///         }
+///     }
+///     return null;
+/// };
+/// document.querySelector('#refresh').addEventListener('click', async () => {
+///     Alpine.morphBetween(findMorphMarker('<!--list-start-->'), findMorphMarker('<!--list-end-->'), `<li>new item</li>`)
 /// })
 /// </script>
 /// ```
@@ -106,18 +115,39 @@ public func setupMorphBetween(
 /// Generates a `<script>` that morphs the content between two marker
 /// elements with lifecycle hook options when the trigger fires.
 ///
+/// Use this overload when you need to hook into the morph lifecycle
+/// (`.updating`, `.updated`, `.removing`, `.removed`, `.adding`, `.added`),
+/// configure element identity with `.key`, or enable `.lookahead`.
+///
 /// **Generated HTML:**
 /// ```html
 /// <script>
-/// document.querySelector(trigger).addEventListener(event, async () => {
+/// const findMorphMarker = (marker) => { ... /* helper body — see first overload for full definition */ };
+/// document.querySelector('#refresh').addEventListener('click', async () => {
 ///     Alpine.morphBetween(
-///         document.querySelector(startMarker),
-///         document.querySelector(endMarker),
-///         `<html>`,
+///         findMorphMarker('<!--list-start-->'),
+///         findMorphMarker('<!--list-end-->'),
+///         `<li>new item</li>`,
 ///         { ...options }
 ///     )
 /// })
 /// </script>
+/// ```
+///
+/// **Example:**
+/// ```swift
+/// setupMorphBetween(
+///     trigger: "#refresh",
+///     startMarker: "<!--list-start-->",
+///     endMarker: "<!--list-end-->",
+///     event: "click"
+/// ) {
+///     .updating { "console.log('patching', el)" }
+///         .key { "(el) => el.id" }
+///         .lookahead()
+/// } returning: {
+///     li { "new item" }
+/// }
 /// ```
 public func setupMorphBetween(
     trigger: String,
@@ -140,7 +170,38 @@ public func setupMorphBetween(
 /// Generates a `<script>` that fetches HTML dynamically and morphs the
 /// content between two marker elements when the trigger fires.
 ///
-/// The `jsCommand` closure must assign the HTML string to a variable named `html`.
+/// Use this overload when the new HTML depends on runtime data — typically
+/// fetched from a server. The `jsCommand` closure must assign the HTML string
+/// to a variable named `html` (the morph call uses it).
+///
+/// **Generated HTML:**
+/// ```html
+/// <script>
+/// const findMorphMarker = (marker) => { ... /* helper body — see first overload for full definition */ };
+/// document.querySelector('#refresh').addEventListener('click', async () => {
+///     <jsCommand body, must assign to `html`>
+///     Alpine.morphBetween(
+///         findMorphMarker('<!--list-start-->'),
+///         findMorphMarker('<!--list-end-->'),
+///         html
+///     )
+/// })
+/// </script>
+/// ```
+///
+/// **Example:**
+/// ```swift
+/// setupMorphBetween(
+///     trigger: "#refresh",
+///     startMarker: "<!--list-start-->",
+///     endMarker: "<!--list-end-->",
+///     event: "click"
+/// ) {
+///     "const html = await fetch('/api/list').then(r => r.text())"
+/// } returning: {
+///     li { "default" }
+/// }
+/// ```
 public func setupMorphBetween(
     trigger: String,
     startMarker: String,
@@ -161,6 +222,41 @@ public func setupMorphBetween(
 
 /// Generates a `<script>` with the full set of options: lifecycle hooks,
 /// element identity (`.key`), `.lookahead`, and a dynamic JS pre-command.
+///
+/// This is the most complete form. Use it when you need everything at once.
+///
+/// **Generated HTML:**
+/// ```html
+/// <script>
+/// const findMorphMarker = (marker) => { ... /* helper body — see first overload for full definition */ };
+/// document.querySelector('#refresh').addEventListener('click', async () => {
+///     <jsCommand body>
+///     Alpine.morphBetween(
+///         findMorphMarker('<!--list-start-->'),
+///         findMorphMarker('<!--list-end-->'),
+///         html,
+///         { ...options }
+///     )
+/// })
+/// </script>
+/// ```
+///
+/// **Example:**
+/// ```swift
+/// setupMorphBetween(
+///     trigger: "#refresh",
+///     startMarker: "<!--list-start-->",
+///     endMarker: "<!--list-end-->",
+///     event: "click"
+/// ) {
+///     .key { "(el) => el.id" }
+///         .lookahead()
+/// } jsCommand: {
+///     "const html = await fetch('/api/list').then(r => r.text())"
+/// } returning: {
+///     li { "fallback" }
+/// }
+/// ```
 public func setupMorphBetween(
     trigger: String,
     startMarker: String,
@@ -195,7 +291,7 @@ public func setupMorphBetween(
 /// **Generated HTML:**
 /// ```html
 /// <script>
-/// const findMorphMarker = (marker) => { ... };
+/// const findMorphMarker = (marker) => { ... /* helper body — see first overload for full definition */ };
 /// Alpine.morphBetween(findMorphMarker('<!--start-->'), findMorphMarker('<!--end-->'), `<li>new</li>`)
 /// </script>
 /// ```
@@ -223,13 +319,27 @@ public func setupMorphBetween(
 
 /// Generates a `<script>` that calls `Alpine.morphBetween` with lifecycle hook options once on page load.
 ///
+/// **Generated HTML:**
+/// ```html
+/// <script>
+/// const findMorphMarker = (marker) => { ... /* helper body — see first overload for full definition */ };
+/// Alpine.morphBetween(
+///     findMorphMarker('<!--start-->'),
+///     findMorphMarker('<!--end-->'),
+///     `<html>`,
+///     { ...options }
+/// )
+/// </script>
+/// ```
+///
 /// **Example:**
 /// ```swift
 /// setupMorphBetween(
 ///     startMarker: "<!--start-->",
-///     endMarker: "<!--end-->",
-///     options: { .added { "console.log('added', el)" } }
+///     endMarker: "<!--end-->"
 /// ) {
+///     .added { "console.log('added', el)" }
+/// } returning: {
 ///     li { "initial" }
 /// }
 /// ```
@@ -252,13 +362,27 @@ public func setupMorphBetween(
 ///
 /// The `jsCommand` closure must assign the resulting HTML string to a variable named `html`.
 ///
+/// **Generated HTML:**
+/// ```html
+/// <script>
+/// const findMorphMarker = (marker) => { ... /* helper body — see first overload for full definition */ };
+/// <jsCommand body, must assign to `html`>
+/// Alpine.morphBetween(
+///     findMorphMarker('<!--start-->'),
+///     findMorphMarker('<!--end-->'),
+///     html
+/// )
+/// </script>
+/// ```
+///
 /// **Example:**
 /// ```swift
 /// setupMorphBetween(
 ///     startMarker: "<!--start-->",
-///     endMarker: "<!--end-->",
-///     jsCommand: { "const html = await fetch('/api/initial').then(r => r.text())" }
+///     endMarker: "<!--end-->"
 /// ) {
+///     "const html = await fetch('/api/initial').then(r => r.text())"
+/// } returning: {
 ///     li { "loading..." }
 /// }
 /// ```
@@ -278,6 +402,34 @@ public func setupMorphBetween(
 
 /// Generates a `<script>` that runs a dynamic JS pre-command and calls `Alpine.morphBetween` with
 /// lifecycle hook options once on page load. The most complete imperative form.
+///
+/// **Generated HTML:**
+/// ```html
+/// <script>
+/// const findMorphMarker = (marker) => { ... /* helper body — see first overload for full definition */ };
+/// <jsCommand body>
+/// Alpine.morphBetween(
+///     findMorphMarker('<!--start-->'),
+///     findMorphMarker('<!--end-->'),
+///     html,
+///     { ...options }
+/// )
+/// </script>
+/// ```
+///
+/// **Example:**
+/// ```swift
+/// setupMorphBetween(
+///     startMarker: "<!--start-->",
+///     endMarker: "<!--end-->"
+/// ) {
+///     .key { "(el) => el.id" }
+/// } jsCommand: {
+///     "const html = await fetch('/api/initial').then(r => r.text())"
+/// } returning: {
+///     li { "loading..." }
+/// }
+/// ```
 public func setupMorphBetween(
     startMarker: String,
     endMarker: String,
