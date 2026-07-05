@@ -11,3 +11,7 @@ public func HTMLAttributeAssertEqual(
     XCTAssertEqual(name, attribute.name, file: file, line: line)
     XCTAssertEqual(value, attribute.value, file: file, line: line)
 }
+
+public func renderToString(@HTMLBuilder _ content: () -> some HTML) -> String {
+    content().render()
+}

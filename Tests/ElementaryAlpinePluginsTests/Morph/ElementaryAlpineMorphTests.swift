@@ -1,5 +1,6 @@
 import Elementary
 import ElementaryAlpinePlugins
+import TestUtilities
 import XCTest
 
 final class ElementaryAlpineMorphTests: XCTestCase {
@@ -361,8 +362,4 @@ final class ElementaryAlpineMorphTests: XCTestCase {
         XCTAssertTrue(html.contains("Alpine.morph(document.querySelector('#list'), html, { lookahead: true })"))
         XCTAssertFalse(html.contains("addEventListener"))
     }
-}
-
-private func renderToString(@HTMLBuilder _ content: () -> some HTML) -> String {
-    content().render()
 }

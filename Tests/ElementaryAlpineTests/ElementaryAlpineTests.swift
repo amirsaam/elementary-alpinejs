@@ -529,7 +529,3 @@ final class ElementaryAlpineSetupTests: XCTestCase {
         XCTAssertTrue(html.contains(#"alpinejs@3.14.0/dist/cdn.min.js"#))
     }
 }
-
-private func renderToString(@HTMLBuilder _ content: () -> some HTML) -> String {
-    content().render()
-}

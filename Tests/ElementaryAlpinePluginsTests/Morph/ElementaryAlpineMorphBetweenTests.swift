@@ -1,5 +1,6 @@
 import Elementary
 import ElementaryAlpinePlugins
+import TestUtilities
 import XCTest
 
 final class ElementaryAlpineMorphBetweenTests: XCTestCase {
@@ -309,8 +310,4 @@ final class ElementaryAlpineMorphBetweenTests: XCTestCase {
         XCTAssertEqual(outerScriptTags, 1, "Only the outer script tag's </script> should remain unescaped")
         XCTAssertTrue(html.contains("evil()"), "Inner script body should be preserved verbatim")
     }
-}
-
-private func renderToString(@HTMLBuilder _ content: () -> some HTML) -> String {
-    content().render()
 }
