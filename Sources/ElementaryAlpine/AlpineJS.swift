@@ -56,8 +56,11 @@ public func setupAlpine(
     version: String = "3.15.12",
     plugins: [AlpinePlugin] = []
 ) -> some HTML {
-    Group {
-        for plugin in plugins {
+    let deduped = plugins.reduce(into: [AlpinePlugin]()) { result, plugin in
+        if !result.contains(plugin) { result.append(plugin) }
+    }
+    return Group {
+        for plugin in deduped {
             script(
                 .src("https://cdn.jsdelivr.net/npm/@alpinejs/\(plugin.rawValue)@\(version)/dist/cdn.min.js"),
                 .defer

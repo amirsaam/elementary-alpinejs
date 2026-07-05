@@ -521,6 +521,17 @@ final class ElementaryAlpineSetupTests: XCTestCase {
         XCTAssertLessThan(focusRange!.lowerBound, alpineRange!.lowerBound, "focus script must come before Alpine core")
     }
 
+    func testSetupAlpineDeduplicatesPlugins() {
+        let html = renderToString {
+            setupAlpine(plugins: [.mask, .focus, .mask, .focus, .mask])
+        }
+        let maskCount = html.components(separatedBy: "@alpinejs/mask@").count - 1
+        let focusCount = html.components(separatedBy: "@alpinejs/focus@").count - 1
+        XCTAssertEqual(maskCount, 1, "mask should appear once after dedup")
+        XCTAssertEqual(focusCount, 1, "focus should appear once after dedup")
+        XCTAssertTrue(html.contains("alpinejs@3.15.12/dist/cdn.min.js"))
+    }
+
     func testSetupAlpineCustomVersionWithPlugins() {
         let html = renderToString {
             setupAlpine(version: "3.14.0", plugins: [.morph])
