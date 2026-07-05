@@ -1,7 +1,7 @@
 import Elementary
 
 /// The kind of Alpine.js global to register. Maps to the corresponding `Alpine.GLOBAL` JavaScript method.
-public enum AlpineGlobals {
+public enum AlpineGlobals: String {
     /// `Alpine.data(name, factory)` — registers a reusable component data factory.
     case data
     /// `Alpine.store(name, value)` — registers a global reactive store accessible as `$store.name`.
@@ -59,13 +59,7 @@ public enum AlpineGlobals {
 /// }
 /// ```
 public func registerGlobal(_ kind: AlpineGlobals, on: String, action: () -> String) -> some HTML {
-    let method: String
-    switch kind {
-    case .data: method = "data"
-    case .store: method = "store"
-    case .bind: method = "bind"
-    }
-    return script {
-        HTMLRaw("document.addEventListener('alpine:init', () => { Alpine.\(method)('\(on)', \(action())) })")
+    script {
+        HTMLRaw("document.addEventListener('alpine:init', () => { Alpine.\(kind.rawValue)('\(on)', \(action())) })")
     }
 }
