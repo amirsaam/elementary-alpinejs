@@ -1,7 +1,7 @@
 import Elementary
 
 extension HTMLAttribute where Tag: HTMLTrait.Attributes.Global {
-    /// A namespace for the 17 core AlpineJS directives.
+    /// A namespace for the 18 core AlpineJS directives.
     /// See the [AlpineJS reference](https://alpinejs.dev/directives) for more information.
     public enum x {}
 }
