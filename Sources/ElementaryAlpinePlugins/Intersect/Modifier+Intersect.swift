@@ -1,6 +1,6 @@
 /// Modifiers for the `x-intersect` directive.
 /// See the [AlpineJS Intersect plugin docs](https://alpinejs.dev/plugins/intersect#modifiers) for the full reference.
-public enum IntersectModifier {
+public enum IntersectModifier: AlpinePluginDirectiveModifier {
     /// `.once` — fires the handler only the first time the element enters the viewport.
     case once
     /// `.half` — fires when at least 50% of the element is visible.

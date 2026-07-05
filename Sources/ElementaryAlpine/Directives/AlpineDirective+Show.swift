@@ -2,7 +2,7 @@ import Elementary
 
 /// Modifiers for the `x-show` directive.
 /// See the [AlpineJS x-show modifier docs](https://alpinejs.dev/directives/show#modifiers) for the full reference.
-public enum ShowModifier {
+public enum ShowModifier: AlpineDirectiveModifier {
     /// `.important` — sets `display` with `!important` so the element stays visible regardless of CSS.
     case important
 
@@ -32,9 +32,6 @@ extension HTMLAttribute.x {
     /// div(.x.show("open", modifiers: [.important])) { ... }
     /// ```
     public static func show(_ value: String, modifiers: [ShowModifier] = []) -> HTMLAttribute {
-        if modifiers.isEmpty {
-            return .init(name: "x-show", value: value)
-        }
-        return .init(name: "x-show.\(modifiers.map(\.rawValue).joined(separator: "."))", value: value)
+        alpineDirective("x-show", modifiers: modifiers, value: value)
     }
 }

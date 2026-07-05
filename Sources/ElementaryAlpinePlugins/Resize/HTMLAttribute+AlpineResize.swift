@@ -31,12 +31,6 @@ extension HTMLAttribute.xResize {
         _ value: String,
         modifiers: [ResizeModifier] = []
     ) -> HTMLAttribute {
-        if modifiers.isEmpty {
-            return .init(name: "x-resize", value: value)
-        }
-        return .init(
-            name: "x-resize.\(modifiers.map(\.rawValue).joined(separator: "."))",
-            value: value
-        )
+        alpinePluginDirective("x-resize", modifiers: modifiers, value: value)
     }
 }

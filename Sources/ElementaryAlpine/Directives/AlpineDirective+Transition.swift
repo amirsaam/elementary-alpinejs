@@ -2,7 +2,7 @@ import Elementary
 
 /// Modifiers for the `x-transition` directive.
 /// See the [AlpineJS x-transition modifier docs](https://alpinejs.dev/directives/transition#modifiers) for the full reference.
-public enum TransitionModifier {
+public enum TransitionModifier: AlpineDirectiveModifier {
     /// A position enum used by `.origin(...)` to specify the transform origin.
     public enum Origin {
         /// `top` — origin at the top center.
@@ -77,10 +77,7 @@ extension HTMLAttribute.x {
     /// div(.x.show("open"), .x.transition(modifiers: [.scale(80), .origin(.top)])) { ... }
     /// ```
     public static func transition(modifiers: [TransitionModifier] = []) -> HTMLAttribute {
-        if modifiers.isEmpty {
-            return .init(name: "x-transition", value: nil)
-        }
-        return .init(name: "x-transition.\(modifiers.map(\.rawValue).joined(separator: "."))", value: nil)
+        alpineDirective("x-transition", modifiers: modifiers, value: nil)
     }
 
     /// Generates an `x-transition:enter` attribute that applies a CSS class during the enter phase.

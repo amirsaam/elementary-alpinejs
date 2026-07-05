@@ -29,12 +29,6 @@ extension HTMLAttribute.xFocus {
         _ value: String,
         modifiers: [FocusModifier] = []
     ) -> HTMLAttribute {
-        if modifiers.isEmpty {
-            return .init(name: "x-trap", value: value)
-        }
-        return .init(
-            name: "x-trap.\(modifiers.map(\.rawValue).joined(separator: "."))",
-            value: value
-        )
+        alpinePluginDirective("x-trap", modifiers: modifiers, value: value)
     }
 }

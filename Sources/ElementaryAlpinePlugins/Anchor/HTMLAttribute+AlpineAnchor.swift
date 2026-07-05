@@ -36,12 +36,6 @@ extension HTMLAttribute.xAnchor {
         _ value: String,
         modifiers: [AnchorModifier] = []
     ) -> HTMLAttribute {
-        if modifiers.isEmpty {
-            return .init(name: "x-anchor", value: value)
-        }
-        return .init(
-            name: "x-anchor.\(modifiers.map(\.rawValue).joined(separator: "."))",
-            value: value
-        )
+        alpinePluginDirective("x-anchor", modifiers: modifiers, value: value)
     }
 }

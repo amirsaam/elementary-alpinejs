@@ -1,6 +1,6 @@
 /// Modifiers for the `x-anchor` directive.
 /// See the [AlpineJS Anchor plugin docs](https://alpinejs.dev/plugins/anchor#modifiers) for the full reference.
-public enum AnchorModifier {
+public enum AnchorModifier: AlpinePluginDirectiveModifier {
     /// `top` — position above the reference, centered.
     case top
     /// `top-start` — position above the reference, aligned to the start.

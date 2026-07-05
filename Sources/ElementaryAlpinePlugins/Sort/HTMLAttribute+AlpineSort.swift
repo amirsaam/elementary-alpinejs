@@ -38,13 +38,7 @@ extension HTMLAttribute.xSort {
         _ value: String,
         modifiers: [SortModifier] = []
     ) -> HTMLAttribute {
-        if modifiers.isEmpty {
-            return .init(name: "x-sort", value: value)
-        }
-        return .init(
-            name: "x-sort.\(modifiers.map(\.rawValue).joined(separator: "."))",
-            value: value
-        )
+        alpinePluginDirective("x-sort", modifiers: modifiers, value: value)
     }
 
     /// Generates a bare `x-sort` attribute with no handler — items are draggable but no callback fires.
@@ -65,13 +59,7 @@ extension HTMLAttribute.xSort {
     public static func sort(
         modifiers: [SortModifier]
     ) -> HTMLAttribute {
-        if modifiers.isEmpty {
-            return .init(name: "x-sort", value: nil)
-        }
-        return .init(
-            name: "x-sort.\(modifiers.map(\.rawValue).joined(separator: "."))",
-            value: nil
-        )
+        alpinePluginDirective("x-sort", modifiers: modifiers, value: nil)
     }
 
     /// Generates an `x-sort:item` attribute that uniquely identifies a sortable item.

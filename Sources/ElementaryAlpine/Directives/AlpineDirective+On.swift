@@ -2,7 +2,7 @@ import Elementary
 
 /// Modifiers for the `x-on` directive.
 /// See the [AlpineJS x-on modifier docs](https://alpinejs.dev/directives/on#modifiers) for the full reference.
-public enum OnModifier {
+public enum OnModifier: AlpineDirectiveModifier {
     /// `.prevent` — calls `event.preventDefault()` before the handler runs.
     case prevent
     /// `.stop` — calls `event.stopPropagation()` before the handler runs.
@@ -129,9 +129,6 @@ extension HTMLAttribute.x {
     /// input(.x.on("keyup", "submit()", modifiers: [.enter]))
     /// ```
     public static func on(_ event: String, _ value: String, modifiers: [OnModifier] = []) -> HTMLAttribute {
-        if modifiers.isEmpty {
-            return .init(name: "x-on:\(event)", value: value)
-        }
-        return .init(name: "x-on:\(event).\(modifiers.map(\.rawValue).joined(separator: "."))", value: value)
+        alpineDirective("x-on:\(event)", modifiers: modifiers, value: value)
     }
 }

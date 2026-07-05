@@ -2,7 +2,7 @@ import Elementary
 
 /// Modifiers for the `x-model` directive.
 /// See the [AlpineJS x-model modifier docs](https://alpinejs.dev/directives/model#modifiers) for the full reference.
-public enum ModelModifier {
+public enum ModelModifier: AlpineDirectiveModifier {
     /// `.lazy` — syncs the input on the `change` event instead of `input`.
     case lazy
     /// `.change` — alias for `.lazy`.
@@ -61,9 +61,6 @@ extension HTMLAttribute.x {
     /// input(.x.model("search", modifiers: [.throttle(750)]))
     /// ```
     public static func model(_ value: String, modifiers: [ModelModifier] = []) -> HTMLAttribute {
-        if modifiers.isEmpty {
-            return .init(name: "x-model", value: value)
-        }
-        return .init(name: "x-model.\(modifiers.map(\.rawValue).joined(separator: "."))", value: value)
+        alpineDirective("x-model", modifiers: modifiers, value: value)
     }
 }

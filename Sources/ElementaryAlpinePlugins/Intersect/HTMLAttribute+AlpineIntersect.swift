@@ -29,13 +29,7 @@ extension HTMLAttribute.xIntersect {
         _ value: String,
         modifiers: [IntersectModifier] = []
     ) -> HTMLAttribute {
-        if modifiers.isEmpty {
-            return .init(name: "x-intersect", value: value)
-        }
-        return .init(
-            name: "x-intersect.\(modifiers.map(\.rawValue).joined(separator: "."))",
-            value: value
-        )
+        alpinePluginDirective("x-intersect", modifiers: modifiers, value: value)
     }
 
     /// Generates an `x-intersect:enter` attribute — an alias of `x-intersect`.
@@ -52,13 +46,7 @@ extension HTMLAttribute.xIntersect {
         _ value: String,
         modifiers: [IntersectModifier] = []
     ) -> HTMLAttribute {
-        if modifiers.isEmpty {
-            return .init(name: "x-intersect:enter", value: value)
-        }
-        return .init(
-            name: "x-intersect:enter.\(modifiers.map(\.rawValue).joined(separator: "."))",
-            value: value
-        )
+        alpinePluginDirective("x-intersect:enter", modifiers: modifiers, value: value)
     }
 
     /// Generates an `x-intersect:leave` attribute that runs a JavaScript expression when the element leaves the viewport.
@@ -75,12 +63,6 @@ extension HTMLAttribute.xIntersect {
         _ value: String,
         modifiers: [IntersectModifier] = []
     ) -> HTMLAttribute {
-        if modifiers.isEmpty {
-            return .init(name: "x-intersect:leave", value: value)
-        }
-        return .init(
-            name: "x-intersect:leave.\(modifiers.map(\.rawValue).joined(separator: "."))",
-            value: value
-        )
+        alpinePluginDirective("x-intersect:leave", modifiers: modifiers, value: value)
     }
 }

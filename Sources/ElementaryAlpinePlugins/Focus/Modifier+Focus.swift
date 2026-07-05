@@ -1,6 +1,6 @@
 /// Modifiers for the `x-trap` directive.
 /// See the [AlpineJS Focus plugin docs](https://alpinejs.dev/plugins/focus#x-trap) for the full reference.
-public enum FocusModifier {
+public enum FocusModifier: AlpinePluginDirectiveModifier {
     /// `.inert` — mark other page elements `aria-hidden="true"` while focus is trapped.
     case inert
     /// `.noscroll` — block page scrolling while focus is trapped.
