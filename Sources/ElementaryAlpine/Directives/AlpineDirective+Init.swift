@@ -14,6 +14,9 @@ extension HTMLAttribute.x {
     /// ```swift
     /// div(.x.setup("console.log('mounted')")) { ... }
     /// ```
+    ///
+    /// **Notes:**
+    /// Named `.setup` because `init` is a Swift keyword.
     public static func setup(_ value: String) -> HTMLAttribute {
         .init(name: "x-init", value: value)
     }

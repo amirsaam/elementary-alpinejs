@@ -16,6 +16,9 @@ extension HTMLAttribute.x {
     ///     div { "Content" }
     /// }
     /// ```
+    ///
+    /// **Notes:**
+    /// Named `.when` because `if` is a Swift keyword.
     public static func when(_ value: String) -> HTMLAttribute {
         .init(name: "x-if", value: value)
     }
