@@ -93,7 +93,9 @@ public struct MorphOptions {
         return copy
     }
 
-    /// Sets the `lookahead` flag. Default: `true` (enabled).
+    /// Sets the `lookahead` flag. Calling `.lookahead()` with no argument enables it
+    /// (`enabled` defaults to `true`). The struct field itself defaults to `false`,
+    /// so this method must be called to turn lookahead on.
     /// - Parameter enabled: Pass `false` to explicitly disable lookahead.
     public func lookahead(_ enabled: Bool = true) -> MorphOptions {
         var copy = self
