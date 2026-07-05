@@ -1130,7 +1130,7 @@ For contribution guidelines and architecture details, see [`AGENTS.md`](./AGENTS
 
 ## Future directions
 
-- All 9 official Alpine.js plugins are now documented. Future work: example apps and ecosystem integrations.
+- All 9 official Alpine.js plugins are now documented (8 with source packages; Persist is CDN-only — `$persist(...)` is used inline in JS strings). Future work: example apps and ecosystem integrations.
 
 PRs welcome.
 

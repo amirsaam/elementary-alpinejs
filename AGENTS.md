@@ -8,7 +8,7 @@ AI contribution guidelines for `elementary-alpine`.
 
 Two products:
 - `ElementaryAlpine` — 18 core directives, `registerGlobal`, `setupAlpine`
-- `ElementaryAlpinePlugins` — 9 official plugins (Mask, Intersect, Resize, Persist, Focus, Collapse, Anchor, Sort, Morph)
+- `ElementaryAlpinePlugins` — 9 official plugins (Mask, Intersect, Resize, Persist, Focus, Collapse, Anchor, Sort, Morph; 8 with source packages, Persist is CDN-only — `$persist(...)` is used inline in JS strings)
 
 ## Commands
 
