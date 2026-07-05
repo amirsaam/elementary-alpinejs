@@ -17,6 +17,10 @@ public enum ModelModifier {
     case boolean
     /// `.fill` — preserves `false` / `null` instead of removing the bound property.
     case fill
+    /// `.debounce.MSms` — debounces the input sync by the given number of milliseconds.
+    case debounce(Int)
+    /// `.throttle.MSms` — throttles the input sync to fire at most once per the given number of milliseconds.
+    case throttle(Int)
 
     var rawValue: String {
         switch self {
@@ -27,6 +31,8 @@ public enum ModelModifier {
         case .number: "number"
         case .boolean: "boolean"
         case .fill: "fill"
+        case .debounce(let ms): "debounce.\(ms)ms"
+        case .throttle(let ms): "throttle.\(ms)ms"
         }
     }
 }
@@ -36,7 +42,7 @@ extension HTMLAttribute.x {
     ///
     /// - Parameters:
     ///   - value: A JavaScript expression identifying the state property to bind to.
-    ///   - modifiers: Optional modifiers (e.g., `.lazy`, `.number`, `.debounce(300)`).
+    ///   - modifiers: Optional modifiers (e.g., `.lazy`, `.number`, `.debounce(300)`, `.throttle(750)`).
     ///
     /// **Generated HTML:**
     /// ```html
@@ -44,6 +50,7 @@ extension HTMLAttribute.x {
     /// <input x-model.number="age">
     /// <input x-model.lazy="form.message">
     /// <input x-model.number.debounce.300ms="query">
+    /// <input x-model.throttle.750ms="search">
     /// ```
     ///
     /// **Example:**
@@ -51,6 +58,7 @@ extension HTMLAttribute.x {
     /// input(.x.model("search"))
     /// input(.x.model("age", modifiers: [.number]))
     /// input(.x.model("query", modifiers: [.number, .debounce(300)]))
+    /// input(.x.model("search", modifiers: [.throttle(750)]))
     /// ```
     public static func model(_ value: String, modifiers: [ModelModifier] = []) -> HTMLAttribute {
         if modifiers.isEmpty {

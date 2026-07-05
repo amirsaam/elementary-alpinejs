@@ -279,12 +279,22 @@ final class ElementaryAlpineTests: XCTestCase {
             "x-model.fill",
             "search"
         )
+        HTMLAttributeAssertEqual(
+            .x.model("search", modifiers: [.debounce(300)]),
+            "x-model.debounce.300ms",
+            "search"
+        )
+        HTMLAttributeAssertEqual(
+            .x.model("search", modifiers: [.throttle(750)]),
+            "x-model.throttle.750ms",
+            "search"
+        )
     }
 
     func testModelChainedModifiers() {
         HTMLAttributeAssertEqual(
-            .x.model("search", modifiers: [.change, .blur, .enter]),
-            "x-model.change.blur.enter",
+            .x.model("search", modifiers: [.change, .blur, .enter, .debounce(300), .throttle(750)]),
+            "x-model.change.blur.enter.debounce.300ms.throttle.750ms",
             "search"
         )
     }
