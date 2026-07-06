@@ -17,11 +17,9 @@ final class ElementaryAlpineMorphTests: XCTestCase {
         XCTAssertEqual(
             html,
             #"""
-            <script>
-            document.querySelector('#btn').addEventListener('click', async () => {
+            <script>document.querySelector('#btn').addEventListener('click', async () => {
                 Alpine.morph(document.querySelector('#target'), `<div>new</div>`)
-            })
-            </script>
+            })</script>
             """#
         )
     }
@@ -40,11 +38,9 @@ final class ElementaryAlpineMorphTests: XCTestCase {
         XCTAssertEqual(
             html,
             #"""
-            <script>
-            document.querySelector('#btn').addEventListener('click', async () => {
+            <script>document.querySelector('#btn').addEventListener('click', async () => {
                 Alpine.morph(document.querySelector('#target'), `<div>new</div>`, { updating(el, toEl, childrenOnly, skip) { console.log(el) } })
-            })
-            </script>
+            })</script>
             """#
         )
     }
@@ -245,11 +241,9 @@ final class ElementaryAlpineMorphTests: XCTestCase {
         XCTAssertEqual(
             html,
             #"""
-            <script>
-            document.querySelector('#btn').addEventListener('click', async () => {
+            <script>document.querySelector('#btn').addEventListener('click', async () => {
                 Alpine.morph(document.querySelector('#target'), `<div>minimal</div>`)
-            })
-            </script>
+            })</script>
             """#
         )
     }
@@ -310,9 +304,7 @@ final class ElementaryAlpineMorphTests: XCTestCase {
         XCTAssertEqual(
             html,
             #"""
-            <script>
-            Alpine.morph(document.querySelector('#target'), `<div>new</div>`)
-            </script>
+            <script>Alpine.morph(document.querySelector('#target'), `<div>new</div>`)</script>
             """#
         )
     }

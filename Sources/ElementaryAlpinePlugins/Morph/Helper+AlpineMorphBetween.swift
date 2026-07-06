@@ -46,10 +46,10 @@ private func generateMorphBetweenScript(
         };
         """
     if trigger.isEmpty {
-        return HTMLRaw("<script>\n\(helper)\n\(morphCall)\n</script>")
+        return script { HTMLRaw("\(helper)\n\(morphCall)") }
     }
     let handler = "document.querySelector('\(trigger)').addEventListener('\(event)', async () => {\n    \(morphCall)\n})"
-    return HTMLRaw("<script>\n\(helper)\n\(handler)\n</script>")
+    return script { HTMLRaw("\(helper)\n\(handler)") }
 }
 
 /// Generates a `<script>` that morphs the content between two marker

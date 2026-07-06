@@ -27,10 +27,10 @@ private func generateMorphScript(
         morphCall = "\(command)\nAlpine.morph(document.querySelector('\(target)'), html\(optionsPart))"
     }
     if trigger.isEmpty {
-        return HTMLRaw("<script>\n\(morphCall)\n</script>")
+        return script { HTMLRaw(morphCall) }
     }
     let handler = "document.querySelector('\(trigger)').addEventListener('\(event)', async () => {\n    \(morphCall)\n})"
-    return HTMLRaw("<script>\n\(handler)\n</script>")
+    return script { HTMLRaw(handler) }
 }
 
 /// Generates a `<script>` that morphs a static HTML template into the target
