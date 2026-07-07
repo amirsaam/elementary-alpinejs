@@ -4,143 +4,147 @@ import TestUtilities
 import XCTest
 
 final class ElementaryAlpineAnchorTests: XCTestCase {
-    func testAnchor() {
-        HTMLAttributeAssertEqual(.xAnchor.anchor("$refs.button"), "x-anchor", "$refs.button")
-    }
-
-    func testAnchorTop() {
-        HTMLAttributeAssertEqual(
-            .xAnchor.anchor("$refs.button", modifiers: [.top]),
-            "x-anchor.top",
-            "$refs.button"
+    func testAnchor() throws {
+        let expected = try String(contentsOf: fixtureURL("anchor-basic.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xAnchor.anchor("$refs.button")) {},
+            expected
         )
     }
 
-    func testAnchorTopStart() {
-        HTMLAttributeAssertEqual(
-            .xAnchor.anchor("$refs.button", modifiers: [.topStart]),
-            "x-anchor.top-start",
-            "$refs.button"
+    func testAnchorTop() throws {
+        let expected = try String(contentsOf: fixtureURL("anchor-top.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xAnchor.anchor("$refs.button", modifiers: [.top])) {},
+            expected
         )
     }
 
-    func testAnchorTopEnd() {
-        HTMLAttributeAssertEqual(
-            .xAnchor.anchor("$refs.button", modifiers: [.topEnd]),
-            "x-anchor.top-end",
-            "$refs.button"
+    func testAnchorTopStart() throws {
+        let expected = try String(contentsOf: fixtureURL("anchor-top-start.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xAnchor.anchor("$refs.button", modifiers: [.topStart])) {},
+            expected
         )
     }
 
-    func testAnchorBottom() {
-        HTMLAttributeAssertEqual(
-            .xAnchor.anchor("$refs.button", modifiers: [.bottom]),
-            "x-anchor.bottom",
-            "$refs.button"
+    func testAnchorTopEnd() throws {
+        let expected = try String(contentsOf: fixtureURL("anchor-top-end.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xAnchor.anchor("$refs.button", modifiers: [.topEnd])) {},
+            expected
         )
     }
 
-    func testAnchorBottomStart() {
-        HTMLAttributeAssertEqual(
-            .xAnchor.anchor("$refs.button", modifiers: [.bottomStart]),
-            "x-anchor.bottom-start",
-            "$refs.button"
+    func testAnchorBottom() throws {
+        let expected = try String(contentsOf: fixtureURL("anchor-bottom.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xAnchor.anchor("$refs.button", modifiers: [.bottom])) {},
+            expected
         )
     }
 
-    func testAnchorBottomEnd() {
-        HTMLAttributeAssertEqual(
-            .xAnchor.anchor("$refs.button", modifiers: [.bottomEnd]),
-            "x-anchor.bottom-end",
-            "$refs.button"
+    func testAnchorBottomStart() throws {
+        let expected = try String(contentsOf: fixtureURL("anchor-bottom-start.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xAnchor.anchor("$refs.button", modifiers: [.bottomStart])) {},
+            expected
         )
     }
 
-    func testAnchorLeft() {
-        HTMLAttributeAssertEqual(
-            .xAnchor.anchor("$refs.button", modifiers: [.left]),
-            "x-anchor.left",
-            "$refs.button"
+    func testAnchorBottomEnd() throws {
+        let expected = try String(contentsOf: fixtureURL("anchor-bottom-end.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xAnchor.anchor("$refs.button", modifiers: [.bottomEnd])) {},
+            expected
         )
     }
 
-    func testAnchorLeftStart() {
-        HTMLAttributeAssertEqual(
-            .xAnchor.anchor("$refs.button", modifiers: [.leftStart]),
-            "x-anchor.left-start",
-            "$refs.button"
+    func testAnchorLeft() throws {
+        let expected = try String(contentsOf: fixtureURL("anchor-left.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xAnchor.anchor("$refs.button", modifiers: [.left])) {},
+            expected
         )
     }
 
-    func testAnchorLeftEnd() {
-        HTMLAttributeAssertEqual(
-            .xAnchor.anchor("$refs.button", modifiers: [.leftEnd]),
-            "x-anchor.left-end",
-            "$refs.button"
+    func testAnchorLeftStart() throws {
+        let expected = try String(contentsOf: fixtureURL("anchor-left-start.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xAnchor.anchor("$refs.button", modifiers: [.leftStart])) {},
+            expected
         )
     }
 
-    func testAnchorRight() {
-        HTMLAttributeAssertEqual(
-            .xAnchor.anchor("$refs.button", modifiers: [.right]),
-            "x-anchor.right",
-            "$refs.button"
+    func testAnchorLeftEnd() throws {
+        let expected = try String(contentsOf: fixtureURL("anchor-left-end.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xAnchor.anchor("$refs.button", modifiers: [.leftEnd])) {},
+            expected
         )
     }
 
-    func testAnchorRightStart() {
-        HTMLAttributeAssertEqual(
-            .xAnchor.anchor("$refs.button", modifiers: [.rightStart]),
-            "x-anchor.right-start",
-            "$refs.button"
+    func testAnchorRight() throws {
+        let expected = try String(contentsOf: fixtureURL("anchor-right.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xAnchor.anchor("$refs.button", modifiers: [.right])) {},
+            expected
         )
     }
 
-    func testAnchorRightEnd() {
-        HTMLAttributeAssertEqual(
-            .xAnchor.anchor("$refs.button", modifiers: [.rightEnd]),
-            "x-anchor.right-end",
-            "$refs.button"
+    func testAnchorRightStart() throws {
+        let expected = try String(contentsOf: fixtureURL("anchor-right-start.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xAnchor.anchor("$refs.button", modifiers: [.rightStart])) {},
+            expected
         )
     }
 
-    func testAnchorFixed() {
-        HTMLAttributeAssertEqual(
-            .xAnchor.anchor("$refs.button", modifiers: [.fixed]),
-            "x-anchor.fixed",
-            "$refs.button"
+    func testAnchorRightEnd() throws {
+        let expected = try String(contentsOf: fixtureURL("anchor-right-end.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xAnchor.anchor("$refs.button", modifiers: [.rightEnd])) {},
+            expected
         )
     }
 
-    func testAnchorOffset() {
-        HTMLAttributeAssertEqual(
-            .xAnchor.anchor("$refs.button", modifiers: [.offset(10)]),
-            "x-anchor.offset.10",
-            "$refs.button"
+    func testAnchorFixed() throws {
+        let expected = try String(contentsOf: fixtureURL("anchor-fixed.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xAnchor.anchor("$refs.button", modifiers: [.fixed])) {},
+            expected
         )
     }
 
-    func testAnchorNoflip() {
-        HTMLAttributeAssertEqual(
-            .xAnchor.anchor("$refs.button", modifiers: [.noflip]),
-            "x-anchor.noflip",
-            "$refs.button"
+    func testAnchorOffset() throws {
+        let expected = try String(contentsOf: fixtureURL("anchor-offset.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xAnchor.anchor("$refs.button", modifiers: [.offset(10)])) {},
+            expected
         )
     }
 
-    func testAnchorNoStyle() {
-        HTMLAttributeAssertEqual(
-            .xAnchor.anchor("$refs.button", modifiers: [.noStyle]),
-            "x-anchor.no-style",
-            "$refs.button"
+    func testAnchorNoflip() throws {
+        let expected = try String(contentsOf: fixtureURL("anchor-noflip.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xAnchor.anchor("$refs.button", modifiers: [.noflip])) {},
+            expected
         )
     }
 
-    func testAnchorChainedModifiers() {
-        HTMLAttributeAssertEqual(
-            .xAnchor.anchor("$refs.button", modifiers: [.noStyle, .fixed]),
-            "x-anchor.no-style.fixed",
-            "$refs.button"
+    func testAnchorNoStyle() throws {
+        let expected = try String(contentsOf: fixtureURL("anchor-no-style.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xAnchor.anchor("$refs.button", modifiers: [.noStyle])) {},
+            expected
+        )
+    }
+
+    func testAnchorChainedModifiers() throws {
+        let expected = try String(contentsOf: fixtureURL("anchor-chained.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xAnchor.anchor("$refs.button", modifiers: [.noStyle, .fixed])) {},
+            expected
         )
     }
 }

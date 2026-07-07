@@ -4,31 +4,35 @@ import TestUtilities
 import XCTest
 
 final class ElementaryAlpineCollapseTests: XCTestCase {
-    func testCollapse() {
-        HTMLAttributeAssertEqual(.xCollapse.collapse(), "x-collapse", nil)
-    }
-
-    func testCollapseDuration() {
-        HTMLAttributeAssertEqual(
-            .xCollapse.collapse(modifiers: [.duration(1000)]),
-            "x-collapse.duration.1000ms",
-            nil
+    func testCollapse() throws {
+        let expected = try String(contentsOf: fixtureURL("collapse-basic.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xCollapse.collapse()) {},
+            expected
         )
     }
 
-    func testCollapseMin() {
-        HTMLAttributeAssertEqual(
-            .xCollapse.collapse(modifiers: [.min(50)]),
-            "x-collapse.min.50px",
-            nil
+    func testCollapseDuration() throws {
+        let expected = try String(contentsOf: fixtureURL("collapse-duration.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xCollapse.collapse(modifiers: [.duration(1000)])) {},
+            expected
         )
     }
 
-    func testCollapseDurationAndMin() {
-        HTMLAttributeAssertEqual(
-            .xCollapse.collapse(modifiers: [.duration(500), .min(50)]),
-            "x-collapse.duration.500ms.min.50px",
-            nil
+    func testCollapseMin() throws {
+        let expected = try String(contentsOf: fixtureURL("collapse-min.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xCollapse.collapse(modifiers: [.min(50)])) {},
+            expected
+        )
+    }
+
+    func testCollapseDurationAndMin() throws {
+        let expected = try String(contentsOf: fixtureURL("collapse-duration-min.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xCollapse.collapse(modifiers: [.duration(500), .min(50)])) {},
+            expected
         )
     }
 }

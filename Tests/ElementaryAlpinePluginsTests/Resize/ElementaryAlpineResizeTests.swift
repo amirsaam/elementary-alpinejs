@@ -4,19 +4,19 @@ import TestUtilities
 import XCTest
 
 final class ElementaryAlpineResizeTests: XCTestCase {
-    func testResize() {
-        HTMLAttributeAssertEqual(
-            .xResize.resize("width = $width; height = $height"),
-            "x-resize",
-            "width = $width; height = $height"
+    func testResize() throws {
+        let expected = try String(contentsOf: fixtureURL("resize-basic.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xResize.resize("width = $width; height = $height")) {},
+            expected
         )
     }
 
-    func testResizeDocument() {
-        HTMLAttributeAssertEqual(
-            .xResize.resize("width = $width", modifiers: [.document]),
-            "x-resize.document",
-            "width = $width"
+    func testResizeDocument() throws {
+        let expected = try String(contentsOf: fixtureURL("resize-document.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xResize.resize("width = $width", modifiers: [.document])) {},
+            expected
         )
     }
 }

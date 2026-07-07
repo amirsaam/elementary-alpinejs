@@ -42,6 +42,7 @@ let package = Package(
                 .target(name: "ElementaryAlpine"),
                 .target(name: "TestUtilities"),
             ],
+            exclude: ["SnapshotFixtures"],
             swiftSettings: featureFlags
         ),
         .testTarget(
@@ -49,6 +50,16 @@ let package = Package(
             dependencies: [
                 .target(name: "ElementaryAlpinePlugins"),
                 .target(name: "TestUtilities"),
+            ],
+            exclude: [
+                "Anchor/SnapshotFixtures",
+                "Collapse/SnapshotFixtures",
+                "Focus/SnapshotFixtures",
+                "Intersect/SnapshotFixtures",
+                "Mask/SnapshotFixtures",
+                "Morph/SnapshotFixtures",
+                "Resize/SnapshotFixtures",
+                "Sort/SnapshotFixtures",
             ],
             swiftSettings: featureFlags
         ),

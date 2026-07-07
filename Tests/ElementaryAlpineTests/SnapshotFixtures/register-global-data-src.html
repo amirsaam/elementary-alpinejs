@@ -1,0 +1,9 @@
+<script>document.addEventListener('alpine:init', async () => {
+    const res = await fetch('/js/dropdown.js')
+    const code = await res.text()
+    const blob = new Blob([`export default ${code}`], { type: 'text/javascript' })
+    const url = URL.createObjectURL(blob)
+    const m = await import(url)
+    URL.revokeObjectURL(url)
+    Alpine.data('dropdown', m.default)
+})</script>

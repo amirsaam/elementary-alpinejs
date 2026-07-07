@@ -4,95 +4,91 @@ import TestUtilities
 import XCTest
 
 final class ElementaryAlpineIntersectTests: XCTestCase {
-    func testIntersect() {
-        HTMLAttributeAssertEqual(.xIntersect.intersect("loaded = true"), "x-intersect", "loaded = true")
-    }
-
-    func testIntersectOnce() {
-        HTMLAttributeAssertEqual(
-            .xIntersect.intersect("loaded = true", modifiers: [.once]),
-            "x-intersect.once",
-            "loaded = true"
+    func testIntersect() throws {
+        let expected = try String(contentsOf: fixtureURL("intersect-basic.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xIntersect.intersect("loaded = true")) {},
+            expected
         )
     }
 
-    func testIntersectHalf() {
-        HTMLAttributeAssertEqual(
-            .xIntersect.intersect("loaded = true", modifiers: [.half]),
-            "x-intersect.half",
-            "loaded = true"
+    func testIntersectOnce() throws {
+        let expected = try String(contentsOf: fixtureURL("intersect-once.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xIntersect.intersect("loaded = true", modifiers: [.once])) {},
+            expected
         )
     }
 
-    func testIntersectFull() {
-        HTMLAttributeAssertEqual(
-            .xIntersect.intersect("loaded = true", modifiers: [.full]),
-            "x-intersect.full",
-            "loaded = true"
+    func testIntersectHalf() throws {
+        let expected = try String(contentsOf: fixtureURL("intersect-half.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xIntersect.intersect("loaded = true", modifiers: [.half])) {},
+            expected
         )
     }
 
-    func testIntersectThreshold() {
-        HTMLAttributeAssertEqual(
-            .xIntersect.intersect("loaded = true", modifiers: [.threshold(50)]),
-            "x-intersect.threshold.50",
-            "loaded = true"
+    func testIntersectFull() throws {
+        let expected = try String(contentsOf: fixtureURL("intersect-full.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xIntersect.intersect("loaded = true", modifiers: [.full])) {},
+            expected
         )
     }
 
-    func testIntersectThresholdAndFull() {
-        HTMLAttributeAssertEqual(
-            .xIntersect.intersect("loaded = true", modifiers: [.threshold(50), .full]),
-            "x-intersect.threshold.50.full",
-            "loaded = true"
+    func testIntersectThreshold() throws {
+        let expected = try String(contentsOf: fixtureURL("intersect-threshold-50.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xIntersect.intersect("loaded = true", modifiers: [.threshold(50)])) {},
+            expected
         )
     }
 
-    func testIntersectMargin() {
-        HTMLAttributeAssertEqual(
-            .xIntersect.intersect("loaded = true", modifiers: [.margin("200px")]),
-            "x-intersect.margin.200px",
-            "loaded = true"
+    func testIntersectThresholdAndFull() throws {
+        let expected = try String(contentsOf: fixtureURL("intersect-threshold-50-full.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xIntersect.intersect("loaded = true", modifiers: [.threshold(50), .full])) {},
+            expected
         )
     }
 
-    func testIntersectMarginMulti() {
-        HTMLAttributeAssertEqual(
-            .xIntersect.intersect("loaded = true", modifiers: [.margin("10%.25px.25.25px")]),
-            "x-intersect.margin.10%.25px.25.25px",
-            "loaded = true"
+    func testIntersectMargin() throws {
+        let expected = try String(contentsOf: fixtureURL("intersect-margin.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xIntersect.intersect("loaded = true", modifiers: [.margin("200px")])) {},
+            expected
         )
     }
 
-    func testEnter() {
-        HTMLAttributeAssertEqual(
-            .xIntersect.enter("shown = true"),
-            "x-intersect:enter",
-            "shown = true"
+    func testEnter() throws {
+        let expected = try String(contentsOf: fixtureURL("intersect-enter.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xIntersect.enter("shown = true")) {},
+            expected
         )
     }
 
-    func testEnterWithModifier() {
-        HTMLAttributeAssertEqual(
-            .xIntersect.enter("shown = true", modifiers: [.once]),
-            "x-intersect:enter.once",
-            "shown = true"
+    func testEnterWithModifier() throws {
+        let expected = try String(contentsOf: fixtureURL("intersect-enter-once.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xIntersect.enter("shown = true", modifiers: [.once])) {},
+            expected
         )
     }
 
-    func testLeave() {
-        HTMLAttributeAssertEqual(
-            .xIntersect.leave("shown = false"),
-            "x-intersect:leave",
-            "shown = false"
+    func testLeave() throws {
+        let expected = try String(contentsOf: fixtureURL("intersect-leave.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xIntersect.leave("shown = false")) {},
+            expected
         )
     }
 
-    func testLeaveWithMargin() {
-        HTMLAttributeAssertEqual(
-            .xIntersect.leave("shown = false", modifiers: [.margin("10%")]),
-            "x-intersect:leave.margin.10%",
-            "shown = false"
+    func testLeaveWithMargin() throws {
+        let expected = try String(contentsOf: fixtureURL("intersect-leave-margin.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xIntersect.leave("shown = false", modifiers: [.margin("10%")])) {},
+            expected
         )
     }
 }

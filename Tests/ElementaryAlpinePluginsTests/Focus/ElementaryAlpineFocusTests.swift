@@ -4,47 +4,51 @@ import TestUtilities
 import XCTest
 
 final class ElementaryAlpineFocusTests: XCTestCase {
-    func testTrap() {
-        HTMLAttributeAssertEqual(.xFocus.trap("open"), "x-trap", "open")
-    }
-
-    func testTrapInert() {
-        HTMLAttributeAssertEqual(
-            .xFocus.trap("open", modifiers: [.inert]),
-            "x-trap.inert",
-            "open"
+    func testTrap() throws {
+        let expected = try String(contentsOf: fixtureURL("focus-trap-basic.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xFocus.trap("open")) {},
+            expected
         )
     }
 
-    func testTrapNoscroll() {
-        HTMLAttributeAssertEqual(
-            .xFocus.trap("open", modifiers: [.noscroll]),
-            "x-trap.noscroll",
-            "open"
+    func testTrapInert() throws {
+        let expected = try String(contentsOf: fixtureURL("focus-trap-inert.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xFocus.trap("open", modifiers: [.inert])) {},
+            expected
         )
     }
 
-    func testTrapNoreturn() {
-        HTMLAttributeAssertEqual(
-            .xFocus.trap("open", modifiers: [.noreturn]),
-            "x-trap.noreturn",
-            "open"
+    func testTrapNoscroll() throws {
+        let expected = try String(contentsOf: fixtureURL("focus-trap-noscroll.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xFocus.trap("open", modifiers: [.noscroll])) {},
+            expected
         )
     }
 
-    func testTrapNoautofocus() {
-        HTMLAttributeAssertEqual(
-            .xFocus.trap("open", modifiers: [.noautofocus]),
-            "x-trap.noautofocus",
-            "open"
+    func testTrapNoreturn() throws {
+        let expected = try String(contentsOf: fixtureURL("focus-trap-noreturn.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xFocus.trap("open", modifiers: [.noreturn])) {},
+            expected
         )
     }
 
-    func testTrapChainedModifiers() {
-        HTMLAttributeAssertEqual(
-            .xFocus.trap("open", modifiers: [.inert, .noscroll, .noreturn]),
-            "x-trap.inert.noscroll.noreturn",
-            "open"
+    func testTrapNoautofocus() throws {
+        let expected = try String(contentsOf: fixtureURL("focus-trap-noautofocus.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xFocus.trap("open", modifiers: [.noautofocus])) {},
+            expected
+        )
+    }
+
+    func testTrapChainedModifiers() throws {
+        let expected = try String(contentsOf: fixtureURL("focus-trap-chained.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            div(.xFocus.trap("open", modifiers: [.inert, .noscroll, .noreturn])) {},
+            expected
         )
     }
 }

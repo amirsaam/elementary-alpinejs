@@ -4,28 +4,19 @@ import TestUtilities
 import XCTest
 
 final class ElementaryAlpineMorphTests: XCTestCase {
-    func testBasicSetupMorph() {
-        let html = renderToString {
-            setupMorph(
-                trigger: "#btn",
-                target: "#target",
-                event: "click"
-            ) {
+    func testBasicSetupMorph() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-basic-setup.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            setupMorph(trigger: "#btn", target: "#target", event: "click") {
                 div { "new" }
-            }
-        }
-        XCTAssertEqual(
-            html,
-            #"""
-            <script>document.querySelector('#btn').addEventListener('click', async () => {
-                Alpine.morph(document.querySelector('#target'), `<div>new</div>`)
-            })</script>
-            """#
+            },
+            expected
         )
     }
 
-    func testWithSingleOption() {
-        let html = renderToString {
+    func testWithSingleOption() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-with-single-option.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorph(
                 trigger: "#btn",
                 target: "#target",
@@ -33,15 +24,8 @@ final class ElementaryAlpineMorphTests: XCTestCase {
                 options: { .updating { "console.log(el)" } }
             ) {
                 div { "new" }
-            }
-        }
-        XCTAssertEqual(
-            html,
-            #"""
-            <script>document.querySelector('#btn').addEventListener('click', async () => {
-                Alpine.morph(document.querySelector('#target'), `<div>new</div>`, { updating(el, toEl, childrenOnly, skip) { console.log(el) } })
-            })</script>
-            """#
+            },
+            expected
         )
     }
 
@@ -232,19 +216,13 @@ final class ElementaryAlpineMorphTests: XCTestCase {
         XCTAssertFalse(html.contains("lookahead"))
     }
 
-    func testMinimalOverload() {
-        let html = renderToString {
+    func testMinimalOverload() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-minimal-overload.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorph(trigger: "#btn", target: "#target", event: "click") {
                 div { "minimal" }
-            }
-        }
-        XCTAssertEqual(
-            html,
-            #"""
-            <script>document.querySelector('#btn').addEventListener('click', async () => {
-                Alpine.morph(document.querySelector('#target'), `<div>minimal</div>`)
-            })</script>
-            """#
+            },
+            expected
         )
     }
 
@@ -295,17 +273,13 @@ final class ElementaryAlpineMorphTests: XCTestCase {
         XCTAssertTrue(html.contains("Alpine.morph(document.querySelector('#list'), html, { lookahead: true })"))
     }
 
-    func testNoTriggerMinimalOverload() {
-        let html = renderToString {
+    func testNoTriggerMinimalOverload() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-no-trigger.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorph(target: "#target") {
                 div { "new" }
-            }
-        }
-        XCTAssertEqual(
-            html,
-            #"""
-            <script>Alpine.morph(document.querySelector('#target'), `<div>new</div>`)</script>
-            """#
+            },
+            expected
         )
     }
 
