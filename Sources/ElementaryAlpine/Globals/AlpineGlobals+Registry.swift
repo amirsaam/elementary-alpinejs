@@ -117,7 +117,10 @@ public func registerGlobal(_ kind: AlpineGlobals, on: String, src: String) -> so
 public func registerGlobal(_ kind: AlpineGlobals, on: String, action: () -> String) -> some HTML {
     let escapedOn = on.replacingOccurrences(of: "\\", with: "\\\\")
         .replacingOccurrences(of: "'", with: "\\'")
-    return script {
-        HTMLRaw("document.addEventListener('alpine:init', () => { Alpine.\(kind.rawValue)('\(escapedOn)', \(action())) })")
-    }
+    let body = """
+        document.addEventListener('alpine:init', () => {
+            Alpine.\(kind.rawValue)('\(escapedOn)', \(action()))
+        })
+        """.trimmingCharacters(in: .newlines)
+    return script { HTMLRaw(body) }
 }
