@@ -4,8 +4,9 @@ import TestUtilities
 import XCTest
 
 final class ElementaryAlpineMorphBetweenTests: XCTestCase {
-    func testBasicSetupMorphBetween() {
-        let html = renderToString {
+    func testBasicSetupMorphBetween() throws {
+        let expected = try String(contentsOf: fixtureURL("morphbetween-basic.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorphBetween(
                 trigger: "#btn",
                 startMarker: "<!--start-->",
@@ -13,18 +14,14 @@ final class ElementaryAlpineMorphBetweenTests: XCTestCase {
                 event: "click"
             ) {
                 li { "new" }
-            }
-        }
-        XCTAssertTrue(html.contains("const findMorphMarker = (marker) => {"))
-        XCTAssertTrue(html.contains("document.createTreeWalker"))
-        XCTAssertTrue(html.contains("NodeFilter.SHOW_COMMENT"))
-        XCTAssertTrue(html.contains("findMorphMarker('<!--start-->')"))
-        XCTAssertTrue(html.contains("findMorphMarker('<!--end-->')"))
-        XCTAssertTrue(html.contains("Alpine.morphBetween(findMorphMarker('<!--start-->'), findMorphMarker('<!--end-->'), `<li>new</li>`)"))
+            },
+            expected
+        )
     }
 
-    func testWithSingleOption() {
-        let html = renderToString {
+    func testWithSingleOption() throws {
+        let expected = try String(contentsOf: fixtureURL("morphbetween-single-option.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorphBetween(
                 trigger: "#btn",
                 startMarker: "<!--start-->",
@@ -33,13 +30,14 @@ final class ElementaryAlpineMorphBetweenTests: XCTestCase {
                 options: { .updating { "console.log(el)" } }
             ) {
                 li { "new" }
-            }
-        }
-        XCTAssertTrue(html.contains("updating(el, toEl, childrenOnly, skip) { console.log(el) }"))
+            },
+            expected
+        )
     }
 
-    func testLookaheadOption() {
-        let html = renderToString {
+    func testLookaheadOption() throws {
+        let expected = try String(contentsOf: fixtureURL("morphbetween-lookahead.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorphBetween(
                 trigger: "#btn",
                 startMarker: "<!--start-->",
@@ -48,13 +46,14 @@ final class ElementaryAlpineMorphBetweenTests: XCTestCase {
                 options: { .lookahead() }
             ) {
                 li { "new" }
-            }
-        }
-        XCTAssertTrue(html.contains("lookahead: true"))
+            },
+            expected
+        )
     }
 
-    func testKeyOption() {
-        let html = renderToString {
+    func testKeyOption() throws {
+        let expected = try String(contentsOf: fixtureURL("morphbetween-key.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorphBetween(
                 trigger: "#btn",
                 startMarker: "<!--start-->",
@@ -63,13 +62,14 @@ final class ElementaryAlpineMorphBetweenTests: XCTestCase {
                 options: { .key { "(el) => el.id" } }
             ) {
                 li { "new" }
-            }
-        }
-        XCTAssertTrue(html.contains("key: (el) => el.id"))
+            },
+            expected
+        )
     }
 
-    func testAllHooks() {
-        let html = renderToString {
+    func testAllHooks() throws {
+        let expected = try String(contentsOf: fixtureURL("morphbetween-all-hooks.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorphBetween(
                 trigger: "#btn",
                 startMarker: "<!--start-->",
@@ -87,22 +87,14 @@ final class ElementaryAlpineMorphBetweenTests: XCTestCase {
                 }
             ) {
                 li { "new" }
-            }
-        }
-        XCTAssertTrue(html.contains("updating(el, toEl, childrenOnly, skip) { console.log('u') }"))
-        XCTAssertTrue(html.contains("updated(el, toEl) { console.log('d') }"))
-        XCTAssertTrue(html.contains("removing(el, skip) { console.log('r') }"))
-        XCTAssertTrue(html.contains("removed(el) { console.log('rm') }"))
-        XCTAssertTrue(html.contains("adding(el, skip) { console.log('a') }"))
-        XCTAssertTrue(html.contains("added(el) { console.log('ad') }"))
-        XCTAssertTrue(html.contains("key: (el) => el.id"))
-        XCTAssertTrue(html.contains("lookahead: true"))
+            },
+            expected
+        )
     }
 
-    func testJsCommand() {
-        let expected =
-            "Alpine.morphBetween(findMorphMarker('<!--start-->'), findMorphMarker('<!--end-->'), html)"
-        let html = renderToString {
+    func testJsCommand() throws {
+        let expected = try String(contentsOf: fixtureURL("morphbetween-jscommand.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorphBetween(
                 trigger: "#btn",
                 startMarker: "<!--start-->",
@@ -111,16 +103,14 @@ final class ElementaryAlpineMorphBetweenTests: XCTestCase {
                 jsCommand: { "const html = await fetch('/api/list').then(r => r.text())" }
             ) {
                 li { "default" }
-            }
-        }
-        XCTAssertTrue(html.contains("const html = await fetch('/api/list').then(r => r.text())"))
-        XCTAssertTrue(html.contains(expected))
+            },
+            expected
+        )
     }
 
-    func testJsCommandWithOptions() {
-        let expected =
-            "Alpine.morphBetween(findMorphMarker('<!--start-->'), findMorphMarker('<!--end-->'), html, { lookahead: true })"
-        let html = renderToString {
+    func testJsCommandWithOptions() throws {
+        let expected = try String(contentsOf: fixtureURL("morphbetween-jscommand-options.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorphBetween(
                 trigger: "#btn",
                 startMarker: "<!--start-->",
@@ -130,14 +120,14 @@ final class ElementaryAlpineMorphBetweenTests: XCTestCase {
                 jsCommand: { "const html = await fetch('/api/list').then(r => r.text())" }
             ) {
                 li { "default" }
-            }
-        }
-        XCTAssertTrue(html.contains("const html = await fetch"))
-        XCTAssertTrue(html.contains(expected))
+            },
+            expected
+        )
     }
 
-    func testEmptyJsCommandUsesStaticTemplate() {
-        let html = renderToString {
+    func testEmptyJsCommandUsesStaticTemplate() throws {
+        let expected = try String(contentsOf: fixtureURL("morphbetween-empty-jscommand.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorphBetween(
                 trigger: "#btn",
                 startMarker: "<!--start-->",
@@ -146,18 +136,14 @@ final class ElementaryAlpineMorphBetweenTests: XCTestCase {
                 jsCommand: { "" }
             ) {
                 li { "new" }
-            }
-        }
-        XCTAssertTrue(
-            html.contains(
-                "Alpine.morphBetween(findMorphMarker('<!--start-->'), findMorphMarker('<!--end-->'), `<li>new</li>`)"
-            )
+            },
+            expected
         )
-        XCTAssertFalse(html.contains("const html"))
     }
 
-    func testLookaheadFalseNotIncluded() {
-        let html = renderToString {
+    func testLookaheadFalseNotIncluded() throws {
+        let expected = try String(contentsOf: fixtureURL("morphbetween-lookahead-false.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorphBetween(
                 trigger: "#btn",
                 startMarker: "<!--start-->",
@@ -166,60 +152,55 @@ final class ElementaryAlpineMorphBetweenTests: XCTestCase {
                 options: { .lookahead(false) }
             ) {
                 li { "new" }
-            }
-        }
-        XCTAssertFalse(html.contains("lookahead"))
+            },
+            expected
+        )
     }
 
-    func testNoTriggerMinimalOverload() {
-        let expected = "Alpine.morphBetween(findMorphMarker('<!--start-->'), findMorphMarker('<!--end-->'), `<li>new</li>`)"
-        let html = renderToString {
+    func testNoTriggerMinimalOverload() throws {
+        let expected = try String(contentsOf: fixtureURL("morphbetween-notrigger-minimal.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorphBetween(
                 startMarker: "<!--start-->",
                 endMarker: "<!--end-->"
             ) {
                 li { "new" }
-            }
-        }
-        XCTAssertTrue(html.contains("const findMorphMarker = (marker) => {"))
-        XCTAssertTrue(html.contains(expected))
+            },
+            expected
+        )
     }
 
-    func testNoTriggerOptionsOverload() {
-        let html = renderToString {
+    func testNoTriggerOptionsOverload() throws {
+        let expected = try String(contentsOf: fixtureURL("morphbetween-notrigger-options.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorphBetween(
                 startMarker: "<!--start-->",
                 endMarker: "<!--end-->",
                 options: { .added { "console.log('added')" } }
             ) {
                 li { "new" }
-            }
-        }
-        XCTAssertTrue(html.contains("added(el) { console.log('added') }"))
-        XCTAssertFalse(html.contains("addEventListener"))
+            },
+            expected
+        )
     }
 
-    func testNoTriggerJsCommandOverload() {
-        let expected =
-            "Alpine.morphBetween(findMorphMarker('<!--start-->'), findMorphMarker('<!--end-->'), html)"
-        let html = renderToString {
+    func testNoTriggerJsCommandOverload() throws {
+        let expected = try String(contentsOf: fixtureURL("morphbetween-notrigger-jscommand.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorphBetween(
                 startMarker: "<!--start-->",
                 endMarker: "<!--end-->",
                 jsCommand: { "const html = await fetch('/api/list').then(r => r.text())" }
             ) {
                 li { "default" }
-            }
-        }
-        XCTAssertTrue(html.contains("const html = await fetch('/api/list').then(r => r.text())"))
-        XCTAssertTrue(html.contains(expected))
-        XCTAssertFalse(html.contains("addEventListener"))
+            },
+            expected
+        )
     }
 
-    func testNoTriggerFullOverload() {
-        let expected =
-            "Alpine.morphBetween(findMorphMarker('<!--start-->'), findMorphMarker('<!--end-->'), html, { lookahead: true })"
-        let html = renderToString {
+    func testNoTriggerFullOverload() throws {
+        let expected = try String(contentsOf: fixtureURL("morphbetween-notrigger-full.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorphBetween(
                 startMarker: "<!--start-->",
                 endMarker: "<!--end-->",
@@ -227,11 +208,9 @@ final class ElementaryAlpineMorphBetweenTests: XCTestCase {
                 jsCommand: { "const html = await fetch('/api/list').then(r => r.text())" }
             ) {
                 li { "default" }
-            }
-        }
-        XCTAssertTrue(html.contains("const html = await fetch"))
-        XCTAssertTrue(html.contains(expected))
-        XCTAssertFalse(html.contains("addEventListener"))
+            },
+            expected
+        )
     }
 
     func testHTMLEscapingBacktick() {

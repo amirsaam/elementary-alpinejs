@@ -1,0 +1,14 @@
+<script>const findMorphMarker = (marker) => {
+    if (marker.startsWith('<!--') && marker.endsWith('-->')) {
+        const text = marker.slice(4, -3).trim();
+        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_COMMENT);
+        let node;
+        while ((node = walker.nextNode())) {
+            if (node.nodeValue && node.nodeValue.trim() === text) return node;
+        }
+        return null;
+    }
+    return document.querySelector(marker);
+};
+const html = await fetch('/api/list').then(r => r.text())
+Alpine.morphBetween(findMorphMarker('<!--start-->'), findMorphMarker('<!--end-->'), html, { lookahead: true })</script>

@@ -57,8 +57,9 @@ final class ElementaryAlpineMorphTests: XCTestCase {
         XCTAssertTrue(html.contains("key: (el) => el.id"))
     }
 
-    func testAllHooks() {
-        let html = renderToString {
+    func testAllHooks() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-all-hooks.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorph(
                 trigger: "#btn",
                 target: "#target",
@@ -75,19 +76,12 @@ final class ElementaryAlpineMorphTests: XCTestCase {
                 }
             ) {
                 div { "new" }
-            }
-        }
-        XCTAssertTrue(html.contains("updating(el, toEl, childrenOnly, skip) { console.log('u') }"))
-        XCTAssertTrue(html.contains("updated(el, toEl) { console.log('d') }"))
-        XCTAssertTrue(html.contains("removing(el, skip) { console.log('r') }"))
-        XCTAssertTrue(html.contains("removed(el) { console.log('rm') }"))
-        XCTAssertTrue(html.contains("adding(el, skip) { console.log('a') }"))
-        XCTAssertTrue(html.contains("added(el) { console.log('ad') }"))
-        XCTAssertTrue(html.contains("key: (el) => el.id"))
-        XCTAssertTrue(html.contains("lookahead: true"))
+            },
+            expected
+        )
     }
 
-    func testChildrenOnlyAndSkipInHook() {
+    func testChildrenOnlyAndSkipInHook() throws {
         let body = """
             if (el.dataset.frozen) {
                 childrenOnly()
@@ -96,7 +90,8 @@ final class ElementaryAlpineMorphTests: XCTestCase {
                 skip()
             }
             """
-        let html = renderToString {
+        let expected = try String(contentsOf: fixtureURL("morph-childrenonly-skip.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorph(
                 trigger: "#btn",
                 target: "#target",
@@ -104,10 +99,9 @@ final class ElementaryAlpineMorphTests: XCTestCase {
                 options: { .updating { body } }
             ) {
                 div { "new" }
-            }
-        }
-        XCTAssertTrue(html.contains("childrenOnly()"))
-        XCTAssertTrue(html.contains("skip()"))
+            },
+            expected
+        )
     }
 
     func testHTMLEscapingBacktick() {
@@ -147,8 +141,9 @@ final class ElementaryAlpineMorphTests: XCTestCase {
         XCTAssertEqual(outerScriptTags, 1, "Should have exactly one outer </script> tag, not multiple")
     }
 
-    func testJsCommand() {
-        let html = renderToString {
+    func testJsCommand() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-jscommand.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorph(
                 trigger: "#btn",
                 target: "#list",
@@ -156,14 +151,14 @@ final class ElementaryAlpineMorphTests: XCTestCase {
                 jsCommand: { "const html = await fetch('/api/list').then(r => r.text())" }
             ) {
                 div { "default" }
-            }
-        }
-        XCTAssertTrue(html.contains("const html = await fetch('/api/list').then(r => r.text())"))
-        XCTAssertTrue(html.contains("Alpine.morph(document.querySelector('#list'), html)"))
+            },
+            expected
+        )
     }
 
-    func testJsCommandWithOptions() {
-        let html = renderToString {
+    func testJsCommandWithOptions() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-jscommand-options.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorph(
                 trigger: "#btn",
                 target: "#list",
@@ -172,14 +167,14 @@ final class ElementaryAlpineMorphTests: XCTestCase {
                 jsCommand: { "const html = await fetch('/api/list').then(r => r.text())" }
             ) {
                 div { "default" }
-            }
-        }
-        XCTAssertTrue(html.contains("const html = await fetch"))
-        XCTAssertTrue(html.contains("Alpine.morph(document.querySelector('#list'), html, { lookahead: true })"))
+            },
+            expected
+        )
     }
 
-    func testEmptyJsCommandUsesStaticTemplate() {
-        let html = renderToString {
+    func testEmptyJsCommandUsesStaticTemplate() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-empty-jscommand.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorph(
                 trigger: "#btn",
                 target: "#target",
@@ -187,23 +182,24 @@ final class ElementaryAlpineMorphTests: XCTestCase {
                 jsCommand: { "" }
             ) {
                 div { "new" }
-            }
-        }
-        XCTAssertTrue(html.contains("Alpine.morph(document.querySelector('#target'), `<div>new</div>`)"))
-        XCTAssertFalse(html.contains("const html"))
+            },
+            expected
+        )
     }
 
-    func testNoOptionsProducesNoThirdArgument() {
-        let html = renderToString {
+    func testNoOptionsProducesNoThirdArgument() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-no-third-arg.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorph(trigger: "#btn", target: "#target", event: "click") {
                 div { "new" }
-            }
-        }
-        XCTAssertFalse(html.contains("undefined"))
+            },
+            expected
+        )
     }
 
-    func testLookaheadFalseNotIncluded() {
-        let html = renderToString {
+    func testLookaheadFalseNotIncluded() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-lookahead-false.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorph(
                 trigger: "#btn",
                 target: "#target",
@@ -211,9 +207,9 @@ final class ElementaryAlpineMorphTests: XCTestCase {
                 options: { .lookahead(false) }
             ) {
                 div { "new" }
-            }
-        }
-        XCTAssertFalse(html.contains("lookahead"))
+            },
+            expected
+        )
     }
 
     func testMinimalOverload() throws {
@@ -226,8 +222,9 @@ final class ElementaryAlpineMorphTests: XCTestCase {
         )
     }
 
-    func testOptionsOnlyOverload() {
-        let html = renderToString {
+    func testOptionsOnlyOverload() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-options-only.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorph(
                 trigger: "#btn",
                 target: "#target",
@@ -235,14 +232,14 @@ final class ElementaryAlpineMorphTests: XCTestCase {
                 options: { .added { "console.log('added')" } }
             ) {
                 div { "new" }
-            }
-        }
-        XCTAssertTrue(html.contains("added(el) { console.log('added') }"))
-        XCTAssertFalse(html.contains("const html"))
+            },
+            expected
+        )
     }
 
-    func testJsCommandOnlyOverload() {
-        let html = renderToString {
+    func testJsCommandOnlyOverload() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-jscommand-only.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorph(
                 trigger: "#btn",
                 target: "#list",
@@ -250,15 +247,14 @@ final class ElementaryAlpineMorphTests: XCTestCase {
                 jsCommand: { "const html = await fetch('/api/list').then(r => r.text())" }
             ) {
                 div { "default" }
-            }
-        }
-        XCTAssertTrue(html.contains("const html = await fetch('/api/list').then(r => r.text())"))
-        XCTAssertTrue(html.contains("Alpine.morph(document.querySelector('#list'), html)"))
-        XCTAssertFalse(html.contains("lookahead"))
+            },
+            expected
+        )
     }
 
-    func testFullOverload() {
-        let html = renderToString {
+    func testFullOverload() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-full.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorph(
                 trigger: "#btn",
                 target: "#list",
@@ -267,10 +263,9 @@ final class ElementaryAlpineMorphTests: XCTestCase {
                 jsCommand: { "const html = await fetch('/api/list').then(r => r.text())" }
             ) {
                 div { "default" }
-            }
-        }
-        XCTAssertTrue(html.contains("const html = await fetch"))
-        XCTAssertTrue(html.contains("Alpine.morph(document.querySelector('#list'), html, { lookahead: true })"))
+            },
+            expected
+        )
     }
 
     func testNoTriggerMinimalOverload() throws {
@@ -283,50 +278,44 @@ final class ElementaryAlpineMorphTests: XCTestCase {
         )
     }
 
-    func testNoTriggerOptionsOverload() {
-        let html = renderToString {
+    func testNoTriggerOptionsOverload() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-notrigger-options.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorph(
                 target: "#target",
                 options: { .added { "console.log('added')" } }
             ) {
                 div { "new" }
-            }
-        }
-        XCTAssertTrue(
-            html.contains(
-                "Alpine.morph(document.querySelector('#target'), `<div>new</div>`, { added(el) { console.log('added') } })"
-            )
+            },
+            expected
         )
-        XCTAssertFalse(html.contains("addEventListener"))
     }
 
-    func testNoTriggerJsCommandOverload() {
-        let html = renderToString {
+    func testNoTriggerJsCommandOverload() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-notrigger-jscommand.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorph(
                 target: "#list",
                 jsCommand: { "const html = await fetch('/api/list').then(r => r.text())" }
             ) {
                 div { "default" }
-            }
-        }
-        XCTAssertTrue(html.contains("const html = await fetch('/api/list').then(r => r.text())"))
-        XCTAssertTrue(html.contains("Alpine.morph(document.querySelector('#list'), html)"))
-        XCTAssertFalse(html.contains("addEventListener"))
+            },
+            expected
+        )
     }
 
-    func testNoTriggerFullOverload() {
-        let html = renderToString {
+    func testNoTriggerFullOverload() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-notrigger-full.html"), encoding: .utf8)
+        HTMLAssertEqual(
             setupMorph(
                 target: "#list",
                 options: { .lookahead() },
                 jsCommand: { "const html = await fetch('/api/list').then(r => r.text())" }
             ) {
                 div { "default" }
-            }
-        }
-        XCTAssertTrue(html.contains("const html = await fetch"))
-        XCTAssertTrue(html.contains("Alpine.morph(document.querySelector('#list'), html, { lookahead: true })"))
-        XCTAssertFalse(html.contains("addEventListener"))
+            },
+            expected
+        )
     }
 
     func testStaticFactoryUpdating() throws {
