@@ -17,19 +17,23 @@ private func generateMorphScript(
     let rawHtml: String = returning().render()
     let escaped = escapeForTemplateLiteral(rawHtml)
 
+    let escapedTarget = escapeForJSString(target)
+    let escapedTrigger = escapeForJSString(trigger)
+    let escapedEvent = escapeForJSString(event)
+
     let optionsJS = options().toJS()
     let optionsPart: String = optionsJS.isEmpty ? "" : ", \(optionsJS)"
     let command = jsCommand()
     let morphCall: String
     if command.isEmpty {
-        morphCall = "Alpine.morph(document.querySelector('\(target)'), `\(escaped)`\(optionsPart))"
+        morphCall = "Alpine.morph(document.querySelector('\(escapedTarget)'), `\(escaped)`\(optionsPart))"
     } else {
-        morphCall = "\(command)\nAlpine.morph(document.querySelector('\(target)'), html\(optionsPart))"
+        morphCall = "\(command)\nAlpine.morph(document.querySelector('\(escapedTarget)'), html\(optionsPart))"
     }
     if trigger.isEmpty {
         return script { HTMLRaw(morphCall) }
     }
-    let handler = "document.querySelector('\(trigger)').addEventListener('\(event)', async () => {\n    \(morphCall)\n})"
+    let handler = "document.querySelector('\(escapedTrigger)').addEventListener('\(escapedEvent)', async () => {\n    \(morphCall)\n})"
     return script { HTMLRaw(handler) }
 }
 

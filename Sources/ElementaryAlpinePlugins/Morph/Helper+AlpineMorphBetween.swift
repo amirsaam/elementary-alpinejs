@@ -22,8 +22,12 @@ private func generateMorphBetweenScript(
     let optionsJS = options().toJS()
     let optionsPart: String = optionsJS.isEmpty ? "" : ", \(optionsJS)"
     let command = jsCommand()
-    let startRef = "findMorphMarker('\(startMarker)')"
-    let endRef = "findMorphMarker('\(endMarker)')"
+    let escapedStartMarker = escapeForJSString(startMarker)
+    let escapedEndMarker = escapeForJSString(endMarker)
+    let escapedTrigger = escapeForJSString(trigger)
+    let escapedEvent = escapeForJSString(event)
+    let startRef = "findMorphMarker('\(escapedStartMarker)')"
+    let endRef = "findMorphMarker('\(escapedEndMarker)')"
     let morphCall: String
     if command.isEmpty {
         morphCall = "Alpine.morphBetween(\(startRef), \(endRef), `\(escaped)`\(optionsPart))"
@@ -47,7 +51,7 @@ private func generateMorphBetweenScript(
     if trigger.isEmpty {
         return script { HTMLRaw("\(helper)\n\(morphCall)") }
     }
-    let handler = "document.querySelector('\(trigger)').addEventListener('\(event)', async () => {\n    \(morphCall)\n})"
+    let handler = "document.querySelector('\(escapedTrigger)').addEventListener('\(escapedEvent)', async () => {\n    \(morphCall)\n})"
     return script { HTMLRaw("\(helper)\n\(handler)") }
 }
 
