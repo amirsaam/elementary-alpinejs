@@ -328,4 +328,84 @@ final class ElementaryAlpineMorphTests: XCTestCase {
         XCTAssertTrue(html.contains("Alpine.morph(document.querySelector('#list'), html, { lookahead: true })"))
         XCTAssertFalse(html.contains("addEventListener"))
     }
+
+    func testStaticFactoryUpdating() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-static-updating.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            setupMorph(trigger: "#btn", target: "#t", event: "click", options: { .updating { "log(el)" } }) {
+                div { "new" }
+            },
+            expected
+        )
+    }
+
+    func testStaticFactoryUpdated() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-static-updated.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            setupMorph(trigger: "#btn", target: "#t", event: "click", options: { .updated { "log(el)" } }) {
+                div { "new" }
+            },
+            expected
+        )
+    }
+
+    func testStaticFactoryRemoving() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-static-removing.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            setupMorph(trigger: "#btn", target: "#t", event: "click", options: { .removing { "log(el)" } }) {
+                div { "new" }
+            },
+            expected
+        )
+    }
+
+    func testStaticFactoryRemoved() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-static-removed.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            setupMorph(trigger: "#btn", target: "#t", event: "click", options: { .removed { "log(el)" } }) {
+                div { "new" }
+            },
+            expected
+        )
+    }
+
+    func testStaticFactoryAdding() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-static-adding.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            setupMorph(trigger: "#btn", target: "#t", event: "click", options: { .adding { "log(el)" } }) {
+                div { "new" }
+            },
+            expected
+        )
+    }
+
+    func testStaticFactoryAdded() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-static-added.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            setupMorph(trigger: "#btn", target: "#t", event: "click", options: { .added { "log(el)" } }) {
+                div { "new" }
+            },
+            expected
+        )
+    }
+
+    func testStaticFactoryKey() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-static-key.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            setupMorph(trigger: "#btn", target: "#t", event: "click", options: { .key { "(el) => el.id" } }) {
+                div { "new" }
+            },
+            expected
+        )
+    }
+
+    func testStaticFactoryLookahead() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-static-lookahead.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            setupMorph(trigger: "#btn", target: "#t", event: "click", options: { .lookahead() }) {
+                div { "new" }
+            },
+            expected
+        )
+    }
 }
