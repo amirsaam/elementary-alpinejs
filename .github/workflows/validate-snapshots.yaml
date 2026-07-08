@@ -1,0 +1,65 @@
+name: Validate Snapshots
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "Tests/ElementaryAlpinePluginsTests/**/*.html"
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Validate
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check fixture JavaScript syntax
+        run: |
+          node -e '
+          const fs = require("fs");
+          const path = require("path");
+          const cwd = process.cwd();
+
+          function walk(dir) {
+            const entries = fs.readdirSync(dir, { withFileTypes: true });
+            const files = [];
+            for (const e of entries) {
+              const p = path.join(dir, e.name);
+              if (e.isDirectory()) files.push(...walk(p));
+              else if (e.isFile() && e.name.endsWith(".html")) files.push(p);
+            }
+            return files;
+          }
+
+          const fixtures = walk(path.join(cwd, "Tests/ElementaryAlpinePluginsTests"));
+          let errors = 0;
+          for (const f of fixtures) {
+            const html = fs.readFileSync(f, "utf8");
+            const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)];
+            let ok = true;
+            for (const [i, m] of scripts.entries()) {
+              const body = m[1].trim();
+              if (!body) continue;
+              try {
+                new Function(body);
+              } catch (e) {
+                const rel = path.relative(cwd, f);
+                console.error("ERROR: " + rel + " (script #" + (i + 1) + "): " + e.message);
+                errors++;
+                ok = false;
+              }
+            }
+            if (ok) {
+              const rel = path.relative(cwd, f);
+              console.log("  OK: " + rel + " (" + scripts.length + " script(s))");
+            }
+          }
+          if (errors) {
+            console.error("\n" + errors + " script(s) with syntax errors");
+            process.exit(1);
+          }
+          console.log("\nAll scripts valid.");
+          '
