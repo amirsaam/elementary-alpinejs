@@ -52,9 +52,11 @@ public enum AlpineGlobals: String {
 public func registerGlobal(_ kind: AlpineGlobals, on: String, src: String) -> some HTML {
     let escapedOn = on.replacingOccurrences(of: "\\", with: "\\\\")
         .replacingOccurrences(of: "'", with: "\\'")
+    let escapedSrc = src.replacingOccurrences(of: "\\", with: "\\\\")
+        .replacingOccurrences(of: "'", with: "\\'")
     let body = """
         document.addEventListener('alpine:init', async () => {
-            const res = await fetch('\(src)')
+            const res = await fetch('\(escapedSrc)')
             const code = await res.text()
             const blob = new Blob([`export default ${code}`], { type: 'text/javascript' })
             const url = URL.createObjectURL(blob)
