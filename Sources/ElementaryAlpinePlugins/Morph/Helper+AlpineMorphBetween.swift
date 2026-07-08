@@ -32,8 +32,6 @@ private func generateMorphBetweenScript(
     }
     let helper = """
         const findMorphMarker = (marker) => {
-            let el = document.querySelector(marker);
-            if (el) return el;
             if (marker.startsWith('<!--') && marker.endsWith('-->')) {
                 const text = marker.slice(4, -3).trim();
                 const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_COMMENT);
@@ -41,8 +39,9 @@ private func generateMorphBetweenScript(
                 while ((node = walker.nextNode())) {
                     if (node.nodeValue && node.nodeValue.trim() === text) return node;
                 }
+                return null;
             }
-            return null;
+            return document.querySelector(marker);
         };
         """
     if trigger.isEmpty {
@@ -62,8 +61,6 @@ private func generateMorphBetweenScript(
 /// ```html
 /// <script>
 /// const findMorphMarker = (marker) => {
-///     let el = document.querySelector(marker);
-///     if (el) return el;
 ///     if (marker.startsWith('<!--') && marker.endsWith('-->')) {
 ///         const text = marker.slice(4, -3).trim();
 ///         const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_COMMENT);
@@ -71,8 +68,9 @@ private func generateMorphBetweenScript(
 ///         while ((node = walker.nextNode())) {
 ///             if (node.nodeValue && node.nodeValue.trim() === text) return node;
 ///         }
+///         return null;
 ///     }
-///     return null;
+///     return document.querySelector(marker);
 /// };
 /// document.querySelector('#refresh').addEventListener('click', async () => {
 ///     Alpine.morphBetween(findMorphMarker('<!--list-start-->'), findMorphMarker('<!--list-end-->'), `<li>new item</li>`)
