@@ -67,11 +67,10 @@ final class SetupTests: XCTestCase {
 
     func testAllPluginsEmitCorrectCDNURL() {
         for plugin in AlpinePlugin.allCases {
-            let html = renderToString { setupAlpine(plugins: [plugin]) }
-            let expectedScript = "https://cdn.jsdelivr.net/npm/@alpinejs/\(plugin.rawValue)@3.15.12/dist/cdn.min.js"
-            XCTAssertTrue(
-                html.contains(expectedScript),
-                "setupAlpine(plugins: [.\(plugin.rawValue)]) should emit CDN script '\(expectedScript)'"
+            let expected = try! String(contentsOf: fixtureURL("setup-plugin-\(plugin.rawValue).html"), encoding: .utf8)
+            HTMLAssertEqual(
+                setupAlpine(plugins: [plugin]),
+                expected
             )
         }
     }
