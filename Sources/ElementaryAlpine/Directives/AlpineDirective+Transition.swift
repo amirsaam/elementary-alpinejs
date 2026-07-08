@@ -67,7 +67,7 @@ extension HTMLAttribute.x {
     /// ```html
     /// <div x-transition>
     /// <div x-transition.opacity>
-    /// <div x-transition.scale.80.origin-top>
+    /// <div x-transition.scale.80.origin.top>
     /// <div x-transition.duration.500ms.delay.50ms>
     /// ```
     ///
