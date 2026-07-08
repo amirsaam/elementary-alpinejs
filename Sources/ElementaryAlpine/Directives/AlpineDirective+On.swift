@@ -21,7 +21,7 @@ public enum OnModifier: AlpineDirectiveModifier {
     case alt
     /// `.meta` — fires only when the Meta (Command/Windows) key is held.
     case meta
-    /// `.cmd` — alias for `.meta`.
+    /// `.cmd` — fires only when the Command (meta) key is held.
     case cmd
     /// `.enter` — keyboard modifier: fires only on the Enter key.
     case enter
