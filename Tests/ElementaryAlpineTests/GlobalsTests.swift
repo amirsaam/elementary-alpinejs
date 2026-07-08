@@ -35,4 +35,18 @@ final class GlobalsTests: XCTestCase {
             expected
         )
     }
+
+    func testRegisterEscapesOnWithQuoteAndBackslash() {
+        let html = renderToString {
+            registerGlobal(.data, on: "drop'down\\path") { "() => ({ open: false })" }
+        }
+        XCTAssertTrue(
+            html.contains("Alpine.data('drop\\'down\\\\path', () => ({ open: false }))"),
+            "registerGlobal should escape single quotes and backslashes in the `on:` name"
+        )
+        XCTAssertFalse(
+            html.contains("Alpine.data('drop'down\\path'"),
+            "unescaped single quote should not appear in the generated script"
+        )
+    }
 }
