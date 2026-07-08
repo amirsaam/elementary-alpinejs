@@ -174,7 +174,7 @@ final class ElementaryAlpineMorphBetweenTests: XCTestCase {
             setupMorphBetween(
                 startMarker: "<!--start-->",
                 endMarker: "<!--end-->",
-                jsCommand: { "const html = await fetch('/api/list').then(r => r.text())" }
+                jsCommand: { "const html = fetch('/api/list').then(r => r.text())" }
             ) {
                 li { "default" }
             },
@@ -184,6 +184,35 @@ final class ElementaryAlpineMorphBetweenTests: XCTestCase {
 
     func testNoTriggerFullOverload() throws {
         let expected = try String(contentsOf: fixtureURL("morphbetween-notrigger-full.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            setupMorphBetween(
+                startMarker: "<!--start-->",
+                endMarker: "<!--end-->",
+                options: { .lookahead() },
+                jsCommand: { "const html = fetch('/api/list').then(r => r.text())" }
+            ) {
+                li { "default" }
+            },
+            expected
+        )
+    }
+
+    func testNoTriggerJsCommandWithAwait() throws {
+        let expected = try String(contentsOf: fixtureURL("morphbetween-notrigger-jscommand-with-await.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            setupMorphBetween(
+                startMarker: "<!--start-->",
+                endMarker: "<!--end-->",
+                jsCommand: { "const html = await fetch('/api/list').then(r => r.text())" }
+            ) {
+                li { "default" }
+            },
+            expected
+        )
+    }
+
+    func testNoTriggerFullWithAwait() throws {
+        let expected = try String(contentsOf: fixtureURL("morphbetween-notrigger-full-with-await.html"), encoding: .utf8)
         HTMLAssertEqual(
             setupMorphBetween(
                 startMarker: "<!--start-->",

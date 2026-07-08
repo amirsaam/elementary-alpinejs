@@ -281,7 +281,7 @@ final class ElementaryAlpineMorphTests: XCTestCase {
         HTMLAssertEqual(
             setupMorph(
                 target: "#list",
-                jsCommand: { "const html = await fetch('/api/list').then(r => r.text())" }
+                jsCommand: { "const html = fetch('/api/list').then(r => r.text())" }
             ) {
                 div { "default" }
             },
@@ -291,6 +291,33 @@ final class ElementaryAlpineMorphTests: XCTestCase {
 
     func testNoTriggerFullOverload() throws {
         let expected = try String(contentsOf: fixtureURL("morph-notrigger-full.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            setupMorph(
+                target: "#list",
+                options: { .lookahead() },
+                jsCommand: { "const html = fetch('/api/list').then(r => r.text())" }
+            ) {
+                div { "default" }
+            },
+            expected
+        )
+    }
+
+    func testNoTriggerJsCommandWithAwait() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-notrigger-jscommand-with-await.html"), encoding: .utf8)
+        HTMLAssertEqual(
+            setupMorph(
+                target: "#list",
+                jsCommand: { "const html = await fetch('/api/list').then(r => r.text())" }
+            ) {
+                div { "default" }
+            },
+            expected
+        )
+    }
+
+    func testNoTriggerFullWithAwait() throws {
+        let expected = try String(contentsOf: fixtureURL("morph-notrigger-full-with-await.html"), encoding: .utf8)
         HTMLAssertEqual(
             setupMorph(
                 target: "#list",

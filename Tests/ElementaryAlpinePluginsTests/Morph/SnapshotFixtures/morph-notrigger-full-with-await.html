@@ -1,0 +1,4 @@
+<script>(async () => {
+const html = await fetch('/api/list').then(r => r.text())
+Alpine.morph(document.querySelector('#list'), html, { lookahead: true })
+})()</script>

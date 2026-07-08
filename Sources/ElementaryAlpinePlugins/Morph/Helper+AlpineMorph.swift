@@ -31,7 +31,10 @@ private func generateMorphScript(
         morphCall = "\(command)\nAlpine.morph(document.querySelector('\(escapedTarget)'), html\(optionsPart))"
     }
     if trigger.isEmpty {
-        return script { HTMLRaw(morphCall) }
+        if command.isEmpty || !command.contains("await") {
+            return script { HTMLRaw(morphCall) }
+        }
+        return script { HTMLRaw("(async () => {\n\(morphCall)\n})()") }
     }
     let handler = "document.querySelector('\(escapedTrigger)').addEventListener('\(escapedEvent)', async () => {\n    \(morphCall)\n})"
     return script { HTMLRaw(handler) }

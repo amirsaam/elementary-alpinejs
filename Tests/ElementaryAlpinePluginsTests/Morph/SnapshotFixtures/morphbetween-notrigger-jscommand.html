@@ -10,5 +10,5 @@
     }
     return document.querySelector(marker);
 };
-const html = await fetch('/api/list').then(r => r.text())
+const html = fetch('/api/list').then(r => r.text())
 Alpine.morphBetween(findMorphMarker('<!--start-->'), findMorphMarker('<!--end-->'), html)</script>

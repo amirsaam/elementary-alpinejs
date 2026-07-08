@@ -1,2 +1,2 @@
-<script>const html = await fetch('/api/list').then(r => r.text())
+<script>const html = fetch('/api/list').then(r => r.text())
 Alpine.morph(document.querySelector('#list'), html, { lookahead: true })</script>

@@ -10,5 +10,7 @@
     }
     return document.querySelector(marker);
 };
-const html = fetch('/api/list').then(r => r.text())
-Alpine.morphBetween(findMorphMarker('<!--start-->'), findMorphMarker('<!--end-->'), html, { lookahead: true })</script>
+(async () => {
+const html = await fetch('/api/list').then(r => r.text())
+Alpine.morphBetween(findMorphMarker('<!--start-->'), findMorphMarker('<!--end-->'), html, { lookahead: true })
+})()</script>

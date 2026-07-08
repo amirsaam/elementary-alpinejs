@@ -49,7 +49,10 @@ private func generateMorphBetweenScript(
         };
         """
     if trigger.isEmpty {
-        return script { HTMLRaw("\(helper)\n\(morphCall)") }
+        if command.isEmpty || !command.contains("await") {
+            return script { HTMLRaw("\(helper)\n\(morphCall)") }
+        }
+        return script { HTMLRaw("\(helper)\n(async () => {\n\(morphCall)\n})()") }
     }
     let handler = "document.querySelector('\(escapedTrigger)').addEventListener('\(escapedEvent)', async () => {\n    \(morphCall)\n})"
     return script { HTMLRaw("\(helper)\n\(handler)") }
