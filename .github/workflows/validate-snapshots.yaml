@@ -3,6 +3,8 @@ name: Validate Snapshots
 on:
   push:
     branches: [main]
+    paths:
+      - "Tests/ElementaryAlpinePluginsTests/**/*.html"
   pull_request:
     branches: [main]
   workflow_dispatch:
