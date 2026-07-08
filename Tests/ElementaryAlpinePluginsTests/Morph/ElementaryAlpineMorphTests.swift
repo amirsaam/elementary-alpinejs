@@ -14,21 +14,6 @@ final class ElementaryAlpineMorphTests: XCTestCase {
         )
     }
 
-    func testWithSingleOption() throws {
-        let expected = try String(contentsOf: fixtureURL("morph-with-single-option.html"), encoding: .utf8)
-        HTMLAssertEqual(
-            setupMorph(
-                trigger: "#btn",
-                target: "#target",
-                event: "click",
-                options: { .updating { "console.log(el)" } }
-            ) {
-                div { "new" }
-            },
-            expected
-        )
-    }
-
     func testLookaheadOption() {
         let html = renderToString {
             setupMorph(

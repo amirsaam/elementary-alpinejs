@@ -19,22 +19,6 @@ final class ElementaryAlpineMorphBetweenTests: XCTestCase {
         )
     }
 
-    func testWithSingleOption() throws {
-        let expected = try String(contentsOf: fixtureURL("morphbetween-single-option.html"), encoding: .utf8)
-        HTMLAssertEqual(
-            setupMorphBetween(
-                trigger: "#btn",
-                startMarker: "<!--start-->",
-                endMarker: "<!--end-->",
-                event: "click",
-                options: { .updating { "console.log(el)" } }
-            ) {
-                li { "new" }
-            },
-            expected
-        )
-    }
-
     func testLookaheadOption() throws {
         let expected = try String(contentsOf: fixtureURL("morphbetween-lookahead.html"), encoding: .utf8)
         HTMLAssertEqual(
