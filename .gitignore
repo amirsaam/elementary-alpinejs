@@ -61,5 +61,11 @@ fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
 
+# OpenCode
+.opencode/
+graphify-out/
+.agents/
+skills-lock.json
+
 # macOS
 .DS_Store
