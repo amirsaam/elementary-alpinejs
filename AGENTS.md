@@ -13,10 +13,12 @@ Two products:
 ## Commands
 
 ```bash
-swift test                    # 142 tests, ~3s
-swift build --build-tests     # CI build
-swift format lint -prs .      # CI lint (parallel + recursive — the flags are required)
-swift package clean           # clear stale .build if duplicate-source errors appear
+swift test                                         # 196 tests, ~0.1s
+swift test --filter EventHandlingTests             # single test class
+swift test --parallel                               # parallel execution
+swift build --build-tests                           # CI build
+swift format lint -prs .                           # CI lint (parallel + recursive — flags required)
+swift package clean                                 # stale .build fix
 ```
 
 ## Architecture
@@ -24,18 +26,34 @@ swift package clean           # clear stale .build if duplicate-source errors ap
 ```
 Sources/ElementaryAlpine/
 ├── AlpineJS.swift                           # HTMLAttribute.x namespace + AlpinePlugin + setupAlpine
+├── AlpineModifier.swift                     # AlpineDirectiveModifier protocol + alpineDirective helpers
 ├── Directives/AlpineDirective+<Name>.swift   # 18 per-directive files (one per directive)
 ├── Globals/AlpineGlobals+Registry.swift      # AlpineGlobals enum + registerGlobal
-└── Magics/                                    # placeholder for future JS-magic helpers
+├── Helper+Escape.swift                       # escapeForJSString / escapeForTemplateLiteral (shared across targets)
+└── Magics/                                    # placeholder (empty; magics are JS strings in directive values)
 
-Sources/ElementaryAlpinePlugins/<Plugin>/
-├── HTMLAttribute+Alpine<Plugin>.swift   # directive factory
-└── Modifier+<Plugin>.swift              # modifier enum (none for Mask)
+Sources/ElementaryAlpinePlugins/
+├── AlpinePluginModifier.swift               # AlpinePluginDirectiveModifier + alpinePluginDirective helpers
+├── <Plugin>/
+│   ├── HTMLAttribute+Alpine<Plugin>.swift   # directive factory
+│   └── Modifier+<Plugin>.swift              # modifier enum (none for Mask)
+└── Morph/
+    ├── Helper+AlpineMorph.swift              # setupMorph factory
+    ├── Helper+AlpineMorphBetween.swift       # setupMorphBetween factory
+    └── Helper+MorphOptions.swift              # MorphOptions builder
+
+Tests/TestUtilities/
+└── Utilities.swift                          # HTMLAssertEqual, fixtureURL, renderToString
+
+Tests/ElementaryAlpineTests/                    # mirrors Sources/ElementaryAlpine/
+Tests/ElementaryAlpinePluginsTests/<Plugin>/    # mirrors Sources/ElementaryAlpinePlugins/
 ```
 
-Plugin target has **no compile-time dependency** on `ElementaryAlpine` — the link is at the Alpine.js runtime level (plugin CDN scripts hook into Alpine core).
+Plugin target has **no compile-time dependency** on `ElementaryAlpine` — both only depend on `Elementary`. The Alpine.js runtime link happens via CDN plugin scripts hooking into core.
 
-`Tests/ElementaryAlpinePluginsTests/<Plugin>/` mirrors the source layout one-to-one.
+Two separate modifier protocols (same shape, different targets):
+- `AlpineDirectiveModifier` in `ElementaryAlpine` (core directives)
+- `AlpinePluginDirectiveModifier` in `ElementaryAlpinePlugins` (plugin directives)
 
 ## File Naming Convention
 
@@ -97,6 +115,7 @@ Plugins with no directive surface ship separately:
 ## Build Quirks
 
 - **Swift 6.0** with `StrictConcurrency=complete` enabled — concurrency violations are real errors.
+- `ExistentialAny` upcoming feature is also enabled globally.
 - macOS only (CI uses `macos-latest`); no Linux support tested.
 - If you see `multiple producers` errors, run `swift package clean` — stale `.build` cache from a folder move.
 
@@ -105,6 +124,8 @@ Plugins with no directive surface ship separately:
 - `Tests/ElementaryAlpinePluginsTests/<Plugin>/` mirrors the source structure.
 - `Tests/TestUtilities/Utilities.swift` holds the `HTMLAttributeAssertEqual` helper.
 - Verify both: rendered HTML matches AlpineJS expectations AND modifier chaining works for value types.
+- **Snapshot tests** use `fixtureURL("name.html")` to load expected HTML from `SnapshotFixtures/` directories, compared via `HTMLAssertEqual`. To add a snapshot: write the expected HTML file first, then write the test that reads it.
+- There's a **separate `TestUtilities` target** in `Package.swift` (lives at `Tests/TestUtilities/`, depends only on `Elementary`).
 
 ## Conventions
 
@@ -124,6 +145,7 @@ Plugins with no directive surface ship separately:
 
 - `.github/workflows/ci.yaml` — `swift build --build-tests` + `swift test` on `macos-latest`
 - `.github/workflows/format.yaml` — `swift format lint -prs .` on `**.swift` changes
+- `.github/workflows/validate-snapshots.yaml` — validates JS syntax in plugin HTML snapshot fixtures using Node.js `new Function()`
 
 ## Dependencies
 
