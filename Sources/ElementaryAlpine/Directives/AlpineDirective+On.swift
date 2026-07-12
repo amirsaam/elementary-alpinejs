@@ -59,9 +59,9 @@ public enum OnModifier: AlpineDirectiveModifier {
     case passive
     /// `.passive.false` — marks the listener as explicitly non-passive.
     case passiveFalse
-    /// `.camel` — converts the bound attribute name to camelCase (useful for `x-bind`).
+    /// `.camel` — converts the event name to camelCase (e.g. `custom-event` becomes `customEvent`).
     case camel
-    /// `.dot` — converts the bound attribute name to dot-notation (useful for `x-bind`).
+    /// `.dot` — converts the event name to dot-notation (e.g. `custom-event` becomes `custom.event`).
     case dot
     /// `.debounce.MSms` — debounces the handler by the given number of milliseconds.
     case debounce(Int)

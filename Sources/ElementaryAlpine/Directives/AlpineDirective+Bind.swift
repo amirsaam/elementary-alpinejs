@@ -1,7 +1,7 @@
 import Elementary
 
 public extension HTMLAttributeValue {
-    /// A namespace for AlpineJS-specific attribute value types.
+    /// A namespace for AlpineJS-specific attribute value types (e.g. `BindClass`, `BindStyle`).
     /// See the [AlpineJS reference](https://alpinejs.dev/) for more information.
     enum Alpine {}
 }
