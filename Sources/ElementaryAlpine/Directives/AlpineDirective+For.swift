@@ -21,6 +21,6 @@ extension HTMLAttribute.x {
     /// **Notes:**
     /// Named `.loop` because `for` is a Swift keyword.
     public static func loop(_ value: String) -> HTMLAttribute {
-        .init(name: "x-for", value: value)
+        alpineDirective("x-for", value: value)
     }
 }

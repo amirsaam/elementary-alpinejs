@@ -50,10 +50,8 @@ public enum AlpineGlobals: String {
 /// registerGlobal(.data, on: "dropdown", src: "/js/dropdown.js")
 /// ```
 public func registerGlobal(_ kind: AlpineGlobals, on: String, src: String) -> some HTML {
-    let escapedOn = on.replacingOccurrences(of: "\\", with: "\\\\")
-        .replacingOccurrences(of: "'", with: "\\'")
-    let escapedSrc = src.replacingOccurrences(of: "\\", with: "\\\\")
-        .replacingOccurrences(of: "'", with: "\\'")
+    let escapedOn = escapeForJSString(on)
+    let escapedSrc = escapeForJSString(src)
     let body = """
         document.addEventListener('alpine:init', async () => {
             const res = await fetch('\(escapedSrc)')
@@ -117,8 +115,7 @@ public func registerGlobal(_ kind: AlpineGlobals, on: String, src: String) -> so
 /// }
 /// ```
 public func registerGlobal(_ kind: AlpineGlobals, on: String, action: () -> String) -> some HTML {
-    let escapedOn = on.replacingOccurrences(of: "\\", with: "\\\\")
-        .replacingOccurrences(of: "'", with: "\\'")
+    let escapedOn = escapeForJSString(on)
     let body = """
         document.addEventListener('alpine:init', () => {
             Alpine.\(kind.rawValue)('\(escapedOn)', \(action()))

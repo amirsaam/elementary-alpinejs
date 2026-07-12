@@ -24,14 +24,30 @@ public enum TransitionModifier: AlpineDirectiveModifier {
 
         var rawValue: String {
             switch self {
-            case .top: "top"
-            case .bottom: "bottom"
-            case .left: "left"
-            case .right: "right"
-            case .topLeft: "top.left"
-            case .topRight: "top.right"
-            case .bottomLeft: "bottom.left"
-            case .bottomRight: "bottom.right"
+            case .top:
+                /// `top` — origin at the top center.
+                "top"
+            case .bottom:
+                /// `bottom` — origin at the bottom center.
+                "bottom"
+            case .left:
+                /// `left` — origin at the left center.
+                "left"
+            case .right:
+                /// `right` — origin at the right center.
+                "right"
+            case .topLeft:
+                /// `top.left` — origin at the top-left corner.
+                "top.left"
+            case .topRight:
+                /// `top.right` — origin at the top-right corner.
+                "top.right"
+            case .bottomLeft:
+                /// `bottom.left` — origin at the bottom-left corner.
+                "bottom.left"
+            case .bottomRight:
+                /// `bottom.right` — origin at the bottom-right corner.
+                "bottom.right"
             }
         }
     }
@@ -89,7 +105,7 @@ extension HTMLAttribute.x {
     /// <div x-transition:enter="transition ease-out duration-300">
     /// ```
     public static func transitionEnter(_ value: String) -> HTMLAttribute {
-        .init(name: "x-transition:enter", value: value)
+        alpineDirective("x-transition:enter", value: value)
     }
 
     /// Generates an `x-transition:enter-start` attribute that applies a CSS class at the start of the enter phase.
@@ -101,7 +117,7 @@ extension HTMLAttribute.x {
     /// <div x-transition:enter-start="opacity-0 transform translate-x-full">
     /// ```
     public static func transitionEnterStart(_ value: String) -> HTMLAttribute {
-        .init(name: "x-transition:enter-start", value: value)
+        alpineDirective("x-transition:enter-start", value: value)
     }
 
     /// Generates an `x-transition:enter-end` attribute that applies a CSS class at the end of the enter phase.
@@ -113,7 +129,7 @@ extension HTMLAttribute.x {
     /// <div x-transition:enter-end="opacity-100 transform translate-x-0">
     /// ```
     public static func transitionEnterEnd(_ value: String) -> HTMLAttribute {
-        .init(name: "x-transition:enter-end", value: value)
+        alpineDirective("x-transition:enter-end", value: value)
     }
 
     /// Generates an `x-transition:leave` attribute that applies a CSS class during the leave phase.
@@ -125,7 +141,7 @@ extension HTMLAttribute.x {
     /// <div x-transition:leave="transition ease-in duration-200">
     /// ```
     public static func transitionLeave(_ value: String) -> HTMLAttribute {
-        .init(name: "x-transition:leave", value: value)
+        alpineDirective("x-transition:leave", value: value)
     }
 
     /// Generates an `x-transition:leave-start` attribute that applies a CSS class at the start of the leave phase.
@@ -137,7 +153,7 @@ extension HTMLAttribute.x {
     /// <div x-transition:leave-start="opacity-100 transform translate-x-0">
     /// ```
     public static func transitionLeaveStart(_ value: String) -> HTMLAttribute {
-        .init(name: "x-transition:leave-start", value: value)
+        alpineDirective("x-transition:leave-start", value: value)
     }
 
     /// Generates an `x-transition:leave-end` attribute that applies a CSS class at the end of the leave phase.
@@ -149,6 +165,6 @@ extension HTMLAttribute.x {
     /// <div x-transition:leave-end="opacity-0 transform -translate-x-full">
     /// ```
     public static func transitionLeaveEnd(_ value: String) -> HTMLAttribute {
-        .init(name: "x-transition:leave-end", value: value)
+        alpineDirective("x-transition:leave-end", value: value)
     }
 }

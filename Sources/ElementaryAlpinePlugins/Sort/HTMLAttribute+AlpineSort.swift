@@ -50,7 +50,7 @@ extension HTMLAttribute.xSort {
     /// <ul x-sort>
     /// ```
     public static var sort: HTMLAttribute {
-        .init(name: "x-sort", value: nil)
+        alpinePluginDirective("x-sort", value: nil)
     }
 
     /// Generates a bare `x-sort` attribute with modifiers but no handler.
@@ -71,7 +71,7 @@ extension HTMLAttribute.xSort {
     /// <li x-sort:item="1">foo</li>
     /// ```
     public static func item(_ value: String) -> HTMLAttribute {
-        .init(name: "x-sort:item", value: value)
+        alpinePluginDirective("x-sort:item", value: value)
     }
 
     /// Generates an `x-sort:group` attribute that lets items be dragged between lists sharing the same group name.
@@ -83,7 +83,7 @@ extension HTMLAttribute.xSort {
     /// <ul x-sort="handle" x-sort:group="todos">
     /// ```
     public static func group(_ value: String) -> HTMLAttribute {
-        .init(name: "x-sort:group", value: value)
+        alpinePluginDirective("x-sort:group", value: value)
     }
 
     /// Generates an `x-sort:handle` attribute that marks an element as a drag handle (only the handle initiates drag).
@@ -93,7 +93,7 @@ extension HTMLAttribute.xSort {
     /// <span x-sort:handle> - </span>
     /// ```
     public static var handle: HTMLAttribute {
-        .init(name: "x-sort:handle", value: nil)
+        alpinePluginDirective("x-sort:handle", value: nil)
     }
 
     /// Generates an `x-sort:ignore` attribute that marks an element as not draggable (e.g., a button inside an item).
@@ -103,7 +103,7 @@ extension HTMLAttribute.xSort {
     /// <button x-sort:ignore>Edit</button>
     /// ```
     public static var ignore: HTMLAttribute {
-        .init(name: "x-sort:ignore", value: nil)
+        alpinePluginDirective("x-sort:ignore", value: nil)
     }
 
     /// Generates an `x-sort:config` attribute that passes a custom SortableJS options object.
@@ -116,6 +116,6 @@ extension HTMLAttribute.xSort {
     /// <ul x-sort x-sort:config="{ animation: 0 }">
     /// ```
     public static func config(_ value: String) -> HTMLAttribute {
-        .init(name: "x-sort:config", value: value)
+        alpinePluginDirective("x-sort:config", value: value)
     }
 }

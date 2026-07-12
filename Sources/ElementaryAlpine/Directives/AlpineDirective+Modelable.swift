@@ -15,6 +15,6 @@ extension HTMLAttribute.x {
     /// div(.x.modelable("value")) { ... }
     /// ```
     public static func modelable(_ value: String) -> HTMLAttribute {
-        .init(name: "x-modelable", value: value)
+        alpineDirective("x-modelable", value: value)
     }
 }

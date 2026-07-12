@@ -7,7 +7,11 @@ final class TransitionsTests: XCTestCase {
     // MARK: - Bare transition
 
     func testTransitionBare() throws {
-        HTMLAttributeAssertEqual(.x.transition(), "x-transition", nil)
+        HTMLAttributeAssertEqual(
+            .x.transition(),
+            "x-transition",
+            nil
+        )
     }
 
     // MARK: - Sub-directives
@@ -63,20 +67,40 @@ final class TransitionsTests: XCTestCase {
     // MARK: - Modifiers
 
     func testTransitionOpacity() throws {
-        HTMLAttributeAssertEqual(.x.transition(modifiers: [.opacity]), "x-transition.opacity", nil)
+        HTMLAttributeAssertEqual(
+            .x.transition(modifiers: [.opacity]),
+            "x-transition.opacity",
+            nil
+        )
     }
 
     func testTransitionScale() throws {
-        HTMLAttributeAssertEqual(.x.transition(modifiers: [.scale()]), "x-transition.scale", nil)
-        HTMLAttributeAssertEqual(.x.transition(modifiers: [.scale(80)]), "x-transition.scale.80", nil)
+        HTMLAttributeAssertEqual(
+            .x.transition(modifiers: [.scale()]),
+            "x-transition.scale",
+            nil
+        )
+        HTMLAttributeAssertEqual(
+            .x.transition(modifiers: [.scale(80)]),
+            "x-transition.scale.80",
+            nil
+        )
     }
 
     func testTransitionDuration() throws {
-        HTMLAttributeAssertEqual(.x.transition(modifiers: [.duration(500)]), "x-transition.duration.500ms", nil)
+        HTMLAttributeAssertEqual(
+            .x.transition(modifiers: [.duration(500)]),
+            "x-transition.duration.500ms",
+            nil
+        )
     }
 
     func testTransitionDelay() throws {
-        HTMLAttributeAssertEqual(.x.transition(modifiers: [.delay(50)]), "x-transition.delay.50ms", nil)
+        HTMLAttributeAssertEqual(
+            .x.transition(modifiers: [.delay(50)]),
+            "x-transition.delay.50ms",
+            nil
+        )
     }
 
     func testTransitionOrigin() throws {

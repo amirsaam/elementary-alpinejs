@@ -138,6 +138,7 @@ public struct MorphOptions {
         return opts
     }
 
+    /// Converts the options to a JavaScript object literal string for embedding in `<script>` tags.
     func toJS() -> String {
         var parts: [String] = []
         if let updating = updating {

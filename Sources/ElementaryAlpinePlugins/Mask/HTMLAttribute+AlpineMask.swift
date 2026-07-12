@@ -23,7 +23,7 @@ extension HTMLAttribute.xMask {
     /// input(.xMask.pattern("(999) 999-9999"), .x.model("phone"))
     /// ```
     public static func pattern(_ value: String) -> HTMLAttribute {
-        .init(name: "x-mask", value: value)
+        alpinePluginDirective("x-mask", value: value)
     }
 
     /// Generates an `x-mask:dynamic` attribute that uses a JavaScript expression or function reference to format input.
@@ -43,6 +43,6 @@ extension HTMLAttribute.xMask {
     /// input(.xMask.dynamic("creditCardMask"), .x.model("card"))
     /// ```
     public static func dynamic(_ value: String) -> HTMLAttribute {
-        .init(name: "x-mask:dynamic", value: value)
+        alpinePluginDirective("x-mask:dynamic", value: value)
     }
 }

@@ -16,6 +16,6 @@ extension HTMLAttribute.x {
     /// div(.x.html("richContent")) { ... }
     /// ```
     public static func html(_ value: String) -> HTMLAttribute {
-        .init(name: "x-html", value: value)
+        alpineDirective("x-html", value: value)
     }
 }

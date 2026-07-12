@@ -18,6 +18,6 @@ extension HTMLAttribute.x {
     /// }
     /// ```
     public static func data(_ value: String) -> HTMLAttribute {
-        .init(name: "x-data", value: value)
+        alpineDirective("x-data", value: value)
     }
 }

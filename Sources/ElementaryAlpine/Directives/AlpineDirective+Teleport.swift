@@ -17,6 +17,6 @@ extension HTMLAttribute.x {
     /// }
     /// ```
     public static func teleport(_ value: String) -> HTMLAttribute {
-        .init(name: "x-teleport", value: value)
+        alpineDirective("x-teleport", value: value)
     }
 }

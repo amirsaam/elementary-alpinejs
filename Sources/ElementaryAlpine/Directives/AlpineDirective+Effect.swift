@@ -15,6 +15,6 @@ extension HTMLAttribute.x {
     /// div(.x.effect("console.log(count)")) { ... }
     /// ```
     public static func effect(_ value: String) -> HTMLAttribute {
-        .init(name: "x-effect", value: value)
+        alpineDirective("x-effect", value: value)
     }
 }

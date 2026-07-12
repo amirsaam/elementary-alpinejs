@@ -65,7 +65,7 @@ extension HTMLAttribute.x {
     /// img(.x.bind("src", "user.avatar"), .alt("avatar"))
     /// ```
     public static func bind(_ attribute: String, _ value: String) -> HTMLAttribute {
-        .init(name: "x-bind:\(attribute)", value: value)
+        alpineDirective("x-bind:\(attribute)", value: value)
     }
 
     /// Generates a bare `x-bind` attribute (used with `Alpine.bind` globals to bind a set of attributes).
@@ -85,7 +85,7 @@ extension HTMLAttribute.x {
     /// button(.x.bind("primaryButton")) { "Click" }
     /// ```
     public static func bind(_ value: String) -> HTMLAttribute {
-        .init(name: "x-bind", value: value)
+        alpineDirective("x-bind", value: value)
     }
 
     /// Generates an `x-bind:class` attribute that sets the element's `class` reactively.
@@ -104,7 +104,7 @@ extension HTMLAttribute.x {
     /// div(.x.bindClass("'btn btn-' + variant"))
     /// ```
     public static func bindClass(_ value: HTMLAttributeValue.Alpine.BindClass) -> HTMLAttribute {
-        .init(name: "x-bind:class", value: value.rawValue)
+        alpineDirective("x-bind:class", value: value.rawValue)
     }
 
     /// Generates an `x-bind:style` attribute that sets the element's inline `style` reactively.
@@ -121,6 +121,6 @@ extension HTMLAttribute.x {
     /// div(.x.bindStyle("{ color: 'red', fontSize: size + 'px' }"))
     /// ```
     public static func bindStyle(_ value: HTMLAttributeValue.Alpine.BindStyle) -> HTMLAttribute {
-        .init(name: "x-bind:style", value: value.rawValue)
+        alpineDirective("x-bind:style", value: value.rawValue)
     }
 }

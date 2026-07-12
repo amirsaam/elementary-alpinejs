@@ -5,7 +5,10 @@ import XCTest
 
 final class ElementaryAlpineMaskTests: XCTestCase {
     func testPattern() throws {
-        HTMLAssertEqual(input(.xMask.pattern("99/99/9999")), try String(contentsOf: fixtureURL("mask-pattern.html"), encoding: .utf8))
+        HTMLAssertEqual(
+            input(.xMask.pattern("99/99/9999")),
+            try String(contentsOf: fixtureURL("mask-pattern.html"), encoding: .utf8)
+        )
     }
 
     func testPatternPhone() throws {
@@ -17,7 +20,10 @@ final class ElementaryAlpineMaskTests: XCTestCase {
     }
 
     func testDynamic() throws {
-        HTMLAssertEqual(input(.xMask.dynamic("creditCardMask")), try String(contentsOf: fixtureURL("mask-dynamic.html"), encoding: .utf8))
+        HTMLAssertEqual(
+            input(.xMask.dynamic("creditCardMask")),
+            try String(contentsOf: fixtureURL("mask-dynamic.html"), encoding: .utf8)
+        )
     }
 
     func testDynamicConditional() throws {

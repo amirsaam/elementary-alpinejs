@@ -14,6 +14,6 @@ extension HTMLAttribute.x {
     /// div(.x.data("{}"), .x.cloak) { ... }
     /// ```
     public static var cloak: HTMLAttribute {
-        .init(name: "x-cloak", value: nil)
+        alpineDirective("x-cloak", value: nil)
     }
 }

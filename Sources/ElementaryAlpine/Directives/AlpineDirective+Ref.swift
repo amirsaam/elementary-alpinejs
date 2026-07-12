@@ -16,6 +16,6 @@ extension HTMLAttribute.x {
     /// button(.x.on("click", "$refs.myInput.focus()")) { "Focus" }
     /// ```
     public static func ref(_ value: String) -> HTMLAttribute {
-        .init(name: "x-ref", value: value)
+        alpineDirective("x-ref", value: value)
     }
 }

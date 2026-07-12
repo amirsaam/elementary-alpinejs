@@ -18,3 +18,11 @@ internal func alpinePluginDirective<Tag, M: AlpinePluginDirectiveModifier>(
     return HTMLAttribute<Tag>(name: "\(baseName).\(modifiers.map { $0.rawValue }.joined(separator: "."))", value: value)
 
 }
+
+/// Returns an `HTMLAttribute` with the given `baseName` and no modifiers.
+internal func alpinePluginDirective<Tag>(
+    _ baseName: String,
+    value: String?
+) -> HTMLAttribute<Tag> where Tag: HTMLTrait.Attributes.Global {
+    HTMLAttribute<Tag>(name: baseName, value: value)
+}

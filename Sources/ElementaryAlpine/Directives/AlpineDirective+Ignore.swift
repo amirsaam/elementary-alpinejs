@@ -13,6 +13,6 @@ extension HTMLAttribute.x {
     /// div(.x.ignore) { "unchanged by Alpine" }
     /// ```
     public static var ignore: HTMLAttribute {
-        .init(name: "x-ignore", value: nil)
+        alpineDirective("x-ignore", value: nil)
     }
 }

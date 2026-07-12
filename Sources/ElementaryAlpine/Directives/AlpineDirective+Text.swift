@@ -16,6 +16,6 @@ extension HTMLAttribute.x {
     /// span(.x.text("count")) { "" }
     /// ```
     public static func text(_ value: String) -> HTMLAttribute {
-        .init(name: "x-text", value: value)
+        alpineDirective("x-text", value: value)
     }
 }
