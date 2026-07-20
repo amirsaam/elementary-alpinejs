@@ -1,4 +1,4 @@
-// swift-tools-version: 6.0
+// swift-tools-version: 6.1
 import PackageDescription
 
 let featureFlags: [SwiftSetting] = [
@@ -19,7 +19,7 @@ let package = Package(
         .library(name: "ElementaryAlpinePlugins", targets: ["ElementaryAlpinePlugins"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/elementary-swift/elementary.git", from: "0.6.0")
+        .package(url: "https://github.com/elementary-swift/elementary.git", from: "0.8.0")
     ],
     targets: [
         .target(
