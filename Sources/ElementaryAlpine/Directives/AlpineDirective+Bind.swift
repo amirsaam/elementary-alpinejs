@@ -64,7 +64,7 @@ extension HTMLAttribute.x {
     /// input(.x.bind("placeholder", "text"), .type(.text))
     /// img(.x.bind("src", "user.avatar"), .alt("avatar"))
     /// ```
-    public static func bind(_ attribute: String, _ value: String) -> HTMLAttribute {
+    public static func bind(_ attribute: String, _ value: String) -> HTMLAttribute<Tag> {
         alpineDirective("x-bind:\(attribute)", value: value)
     }
 
@@ -84,7 +84,7 @@ extension HTMLAttribute.x {
     /// }
     /// button(.x.bind("primaryButton")) { "Click" }
     /// ```
-    public static func bind(_ value: String) -> HTMLAttribute {
+    public static func bind(_ value: String) -> HTMLAttribute<Tag> {
         alpineDirective("x-bind", value: value)
     }
 
@@ -103,7 +103,7 @@ extension HTMLAttribute.x {
     /// div(.x.bindClass("{ 'hidden': !open, 'active': selected }"))
     /// div(.x.bindClass("'btn btn-' + variant"))
     /// ```
-    public static func bindClass(_ value: HTMLAttributeValue.Alpine.BindClass) -> HTMLAttribute {
+    public static func bindClass(_ value: HTMLAttributeValue.Alpine.BindClass) -> HTMLAttribute<Tag> {
         alpineDirective("x-bind:class", value: value.rawValue)
     }
 
@@ -120,7 +120,7 @@ extension HTMLAttribute.x {
     /// ```swift
     /// div(.x.bindStyle("{ color: 'red', fontSize: size + 'px' }"))
     /// ```
-    public static func bindStyle(_ value: HTMLAttributeValue.Alpine.BindStyle) -> HTMLAttribute {
+    public static func bindStyle(_ value: HTMLAttributeValue.Alpine.BindStyle) -> HTMLAttribute<Tag> {
         alpineDirective("x-bind:style", value: value.rawValue)
     }
 }

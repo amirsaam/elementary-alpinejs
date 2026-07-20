@@ -35,7 +35,7 @@ extension HTMLAttribute.xAnchor {
     public static func anchor(
         _ value: String,
         modifiers: [AnchorModifier] = []
-    ) -> HTMLAttribute {
+    ) -> HTMLAttribute<Tag> {
         alpinePluginDirective("x-anchor", modifiers: modifiers, value: value)
     }
 }

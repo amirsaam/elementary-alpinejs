@@ -13,7 +13,7 @@ extension HTMLAttribute.x {
     /// ```swift
     /// div(.x.data("{}"), .x.cloak) { ... }
     /// ```
-    public static var cloak: HTMLAttribute {
+    public static var cloak: HTMLAttribute<Tag> {
         alpineDirective("x-cloak", value: nil)
     }
 }

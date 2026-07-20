@@ -37,7 +37,7 @@ extension HTMLAttribute.xSort {
     public static func sort(
         _ value: String,
         modifiers: [SortModifier] = []
-    ) -> HTMLAttribute {
+    ) -> HTMLAttribute<Tag> {
         alpinePluginDirective("x-sort", modifiers: modifiers, value: value)
     }
 
@@ -49,7 +49,7 @@ extension HTMLAttribute.xSort {
     /// ```html
     /// <ul x-sort>
     /// ```
-    public static var sort: HTMLAttribute {
+    public static var sort: HTMLAttribute<Tag> {
         alpinePluginDirective("x-sort", value: nil)
     }
 
@@ -58,7 +58,7 @@ extension HTMLAttribute.xSort {
     /// - Parameter modifiers: Optional modifiers.
     public static func sort(
         modifiers: [SortModifier]
-    ) -> HTMLAttribute {
+    ) -> HTMLAttribute<Tag> {
         alpinePluginDirective("x-sort", modifiers: modifiers, value: nil)
     }
 
@@ -70,7 +70,7 @@ extension HTMLAttribute.xSort {
     /// ```html
     /// <li x-sort:item="1">foo</li>
     /// ```
-    public static func item(_ value: String) -> HTMLAttribute {
+    public static func item(_ value: String) -> HTMLAttribute<Tag> {
         alpinePluginDirective("x-sort:item", value: value)
     }
 
@@ -82,7 +82,7 @@ extension HTMLAttribute.xSort {
     /// ```html
     /// <ul x-sort="handle" x-sort:group="todos">
     /// ```
-    public static func group(_ value: String) -> HTMLAttribute {
+    public static func group(_ value: String) -> HTMLAttribute<Tag> {
         alpinePluginDirective("x-sort:group", value: value)
     }
 
@@ -92,7 +92,7 @@ extension HTMLAttribute.xSort {
     /// ```html
     /// <span x-sort:handle> - </span>
     /// ```
-    public static var handle: HTMLAttribute {
+    public static var handle: HTMLAttribute<Tag> {
         alpinePluginDirective("x-sort:handle", value: nil)
     }
 
@@ -102,7 +102,7 @@ extension HTMLAttribute.xSort {
     /// ```html
     /// <button x-sort:ignore>Edit</button>
     /// ```
-    public static var ignore: HTMLAttribute {
+    public static var ignore: HTMLAttribute<Tag> {
         alpinePluginDirective("x-sort:ignore", value: nil)
     }
 
@@ -115,7 +115,7 @@ extension HTMLAttribute.xSort {
     /// ```html
     /// <ul x-sort x-sort:config="{ animation: 0 }">
     /// ```
-    public static func config(_ value: String) -> HTMLAttribute {
+    public static func config(_ value: String) -> HTMLAttribute<Tag> {
         alpinePluginDirective("x-sort:config", value: value)
     }
 }

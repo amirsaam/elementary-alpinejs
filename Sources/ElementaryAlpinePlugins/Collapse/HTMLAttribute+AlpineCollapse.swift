@@ -24,7 +24,7 @@ extension HTMLAttribute.xCollapse {
     /// p(.x.show("expanded"), .xCollapse.collapse(modifiers: [.duration(1000)])) { ... }
     /// p(.x.show("expanded"), .xCollapse.collapse(modifiers: [.duration(500), .min(50)])) { ... }
     /// ```
-    public static func collapse(modifiers: [CollapseModifier] = []) -> HTMLAttribute {
+    public static func collapse(modifiers: [CollapseModifier] = []) -> HTMLAttribute<Tag> {
         alpinePluginDirective("x-collapse", modifiers: modifiers, value: nil)
     }
 }

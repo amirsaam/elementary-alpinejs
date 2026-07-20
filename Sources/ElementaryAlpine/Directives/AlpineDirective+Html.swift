@@ -15,7 +15,7 @@ extension HTMLAttribute.x {
     /// ```swift
     /// div(.x.html("richContent")) { ... }
     /// ```
-    public static func html(_ value: String) -> HTMLAttribute {
+    public static func html(_ value: String) -> HTMLAttribute<Tag> {
         alpineDirective("x-html", value: value)
     }
 }

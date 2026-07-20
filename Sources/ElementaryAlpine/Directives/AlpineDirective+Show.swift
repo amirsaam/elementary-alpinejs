@@ -31,7 +31,7 @@ extension HTMLAttribute.x {
     /// div(.x.show("open")) { ... }
     /// div(.x.show("open", modifiers: [.important])) { ... }
     /// ```
-    public static func show(_ value: String, modifiers: [ShowModifier] = []) -> HTMLAttribute {
+    public static func show(_ value: String, modifiers: [ShowModifier] = []) -> HTMLAttribute<Tag> {
         alpineDirective("x-show", modifiers: modifiers, value: value)
     }
 }

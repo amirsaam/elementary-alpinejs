@@ -5,7 +5,7 @@ internal protocol AlpinePluginDirectiveModifier {
     var rawValue: String { get }
 }
 
-/// Returns an `HTMLAttribute` whose name is `baseName` dot-joined with the
+/// Returns an `HTMLAttribute<Tag>` whose name is `baseName` dot-joined with the
 /// `rawValue` of each modifier, or `baseName` alone when `modifiers` is empty.
 internal func alpinePluginDirective<Tag, M: AlpinePluginDirectiveModifier>(
     _ baseName: String,
@@ -19,7 +19,7 @@ internal func alpinePluginDirective<Tag, M: AlpinePluginDirectiveModifier>(
 
 }
 
-/// Returns an `HTMLAttribute` with the given `baseName` and no modifiers.
+/// Returns an `HTMLAttribute<Tag>` with the given `baseName` and no modifiers.
 internal func alpinePluginDirective<Tag>(
     _ baseName: String,
     value: String?

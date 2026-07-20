@@ -28,7 +28,7 @@ extension HTMLAttribute.xFocus {
     public static func trap(
         _ value: String,
         modifiers: [FocusModifier] = []
-    ) -> HTMLAttribute {
+    ) -> HTMLAttribute<Tag> {
         alpinePluginDirective("x-trap", modifiers: modifiers, value: value)
     }
 }

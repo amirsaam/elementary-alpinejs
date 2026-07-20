@@ -11,7 +11,7 @@ internal enum NoModifier: AlpineDirectiveModifier {
     var rawValue: String { "" }
 }
 
-/// Returns an `HTMLAttribute` whose name is `baseName` dot-joined with the
+/// Returns an `HTMLAttribute<Tag>` whose name is `baseName` dot-joined with the
 /// `rawValue` of each modifier, or `baseName` alone when `modifiers` is empty.
 internal func alpineDirective<Tag, M: AlpineDirectiveModifier>(
     _ baseName: String,
@@ -25,7 +25,7 @@ internal func alpineDirective<Tag, M: AlpineDirectiveModifier>(
 
 }
 
-/// Returns an `HTMLAttribute` with the given `baseName` and no modifiers.
+/// Returns an `HTMLAttribute<Tag>` with the given `baseName` and no modifiers.
 internal func alpineDirective<Tag>(
     _ baseName: String,
     value: String?

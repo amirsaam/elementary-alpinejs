@@ -128,7 +128,7 @@ extension HTMLAttribute.x {
     /// form(.x.on("submit", "handleSubmit()", modifiers: [.prevent])) { ... }
     /// input(.x.on("keyup", "submit()", modifiers: [.enter]))
     /// ```
-    public static func on(_ event: String, _ value: String, modifiers: [OnModifier] = []) -> HTMLAttribute {
+    public static func on(_ event: String, _ value: String, modifiers: [OnModifier] = []) -> HTMLAttribute<Tag> {
         alpineDirective("x-on:\(event)", modifiers: modifiers, value: value)
     }
 }

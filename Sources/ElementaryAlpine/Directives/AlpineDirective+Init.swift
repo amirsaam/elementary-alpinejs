@@ -17,7 +17,7 @@ extension HTMLAttribute.x {
     ///
     /// **Notes:**
     /// Named `.setup` because `init` is a Swift keyword.
-    public static func setup(_ value: String) -> HTMLAttribute {
+    public static func setup(_ value: String) -> HTMLAttribute<Tag> {
         alpineDirective("x-init", value: value)
     }
 }

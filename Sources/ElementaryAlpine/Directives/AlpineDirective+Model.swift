@@ -60,7 +60,7 @@ extension HTMLAttribute.x {
     /// input(.x.model("query", modifiers: [.number, .debounce(300)]))
     /// input(.x.model("search", modifiers: [.throttle(750)]))
     /// ```
-    public static func model(_ value: String, modifiers: [ModelModifier] = []) -> HTMLAttribute {
+    public static func model(_ value: String, modifiers: [ModelModifier] = []) -> HTMLAttribute<Tag> {
         alpineDirective("x-model", modifiers: modifiers, value: value)
     }
 }

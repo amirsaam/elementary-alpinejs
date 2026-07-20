@@ -16,7 +16,7 @@ extension HTMLAttribute.x {
     ///     div { "Modal" }
     /// }
     /// ```
-    public static func teleport(_ value: String) -> HTMLAttribute {
+    public static func teleport(_ value: String) -> HTMLAttribute<Tag> {
         alpineDirective("x-teleport", value: value)
     }
 }

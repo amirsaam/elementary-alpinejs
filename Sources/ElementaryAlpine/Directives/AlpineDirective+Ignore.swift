@@ -12,7 +12,7 @@ extension HTMLAttribute.x {
     /// ```swift
     /// div(.x.ignore) { "unchanged by Alpine" }
     /// ```
-    public static var ignore: HTMLAttribute {
+    public static var ignore: HTMLAttribute<Tag> {
         alpineDirective("x-ignore", value: nil)
     }
 }

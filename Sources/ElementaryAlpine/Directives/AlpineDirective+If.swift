@@ -19,7 +19,7 @@ extension HTMLAttribute.x {
     ///
     /// **Notes:**
     /// Named `.when` because `if` is a Swift keyword.
-    public static func when(_ value: String) -> HTMLAttribute {
+    public static func when(_ value: String) -> HTMLAttribute<Tag> {
         alpineDirective("x-if", value: value)
     }
 }

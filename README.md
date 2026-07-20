@@ -324,7 +324,7 @@ Directives that support modifiers take a `modifiers:` array parameter with a typ
 
 ### Custom multi-phase transitions
 
-For full control over the `x-transition:phase` classes (e.g., Tailwind utilities in a Pines-style component), use the per-phase functions. Each takes a `String` of CSS classes and returns a single `HTMLAttribute` that can be passed inline with other attributes:
+For full control over the `x-transition:phase` classes (e.g., Tailwind utilities in a Pines-style component), use the per-phase functions. Each takes a `String` of CSS classes and returns a single `HTMLAttribute<Tag>` that can be passed inline with other attributes:
 
 ```swift
 div(.x.show("open"),

@@ -92,7 +92,7 @@ extension HTMLAttribute.x {
     /// div(.x.show("open"), .x.transition(modifiers: [.opacity])) { ... }
     /// div(.x.show("open"), .x.transition(modifiers: [.scale(80), .origin(.top)])) { ... }
     /// ```
-    public static func transition(modifiers: [TransitionModifier] = []) -> HTMLAttribute {
+    public static func transition(modifiers: [TransitionModifier] = []) -> HTMLAttribute<Tag> {
         alpineDirective("x-transition", modifiers: modifiers, value: nil)
     }
 
@@ -104,7 +104,7 @@ extension HTMLAttribute.x {
     /// ```html
     /// <div x-transition:enter="transition ease-out duration-300">
     /// ```
-    public static func transitionEnter(_ value: String) -> HTMLAttribute {
+    public static func transitionEnter(_ value: String) -> HTMLAttribute<Tag> {
         alpineDirective("x-transition:enter", value: value)
     }
 
@@ -116,7 +116,7 @@ extension HTMLAttribute.x {
     /// ```html
     /// <div x-transition:enter-start="opacity-0 transform translate-x-full">
     /// ```
-    public static func transitionEnterStart(_ value: String) -> HTMLAttribute {
+    public static func transitionEnterStart(_ value: String) -> HTMLAttribute<Tag> {
         alpineDirective("x-transition:enter-start", value: value)
     }
 
@@ -128,7 +128,7 @@ extension HTMLAttribute.x {
     /// ```html
     /// <div x-transition:enter-end="opacity-100 transform translate-x-0">
     /// ```
-    public static func transitionEnterEnd(_ value: String) -> HTMLAttribute {
+    public static func transitionEnterEnd(_ value: String) -> HTMLAttribute<Tag> {
         alpineDirective("x-transition:enter-end", value: value)
     }
 
@@ -140,7 +140,7 @@ extension HTMLAttribute.x {
     /// ```html
     /// <div x-transition:leave="transition ease-in duration-200">
     /// ```
-    public static func transitionLeave(_ value: String) -> HTMLAttribute {
+    public static func transitionLeave(_ value: String) -> HTMLAttribute<Tag> {
         alpineDirective("x-transition:leave", value: value)
     }
 
@@ -152,7 +152,7 @@ extension HTMLAttribute.x {
     /// ```html
     /// <div x-transition:leave-start="opacity-100 transform translate-x-0">
     /// ```
-    public static func transitionLeaveStart(_ value: String) -> HTMLAttribute {
+    public static func transitionLeaveStart(_ value: String) -> HTMLAttribute<Tag> {
         alpineDirective("x-transition:leave-start", value: value)
     }
 
@@ -164,7 +164,7 @@ extension HTMLAttribute.x {
     /// ```html
     /// <div x-transition:leave-end="opacity-0 transform -translate-x-full">
     /// ```
-    public static func transitionLeaveEnd(_ value: String) -> HTMLAttribute {
+    public static func transitionLeaveEnd(_ value: String) -> HTMLAttribute<Tag> {
         alpineDirective("x-transition:leave-end", value: value)
     }
 }

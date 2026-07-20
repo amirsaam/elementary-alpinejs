@@ -22,7 +22,7 @@ extension HTMLAttribute.xMask {
     /// input(.xMask.pattern("99/99/9999"), .x.model("date"))
     /// input(.xMask.pattern("(999) 999-9999"), .x.model("phone"))
     /// ```
-    public static func pattern(_ value: String) -> HTMLAttribute {
+    public static func pattern(_ value: String) -> HTMLAttribute<Tag> {
         alpinePluginDirective("x-mask", value: value)
     }
 
@@ -42,7 +42,7 @@ extension HTMLAttribute.xMask {
     /// input(.xMask.dynamic("$money($input)"), .x.model("amount"))
     /// input(.xMask.dynamic("creditCardMask"), .x.model("card"))
     /// ```
-    public static func dynamic(_ value: String) -> HTMLAttribute {
+    public static func dynamic(_ value: String) -> HTMLAttribute<Tag> {
         alpinePluginDirective("x-mask:dynamic", value: value)
     }
 }

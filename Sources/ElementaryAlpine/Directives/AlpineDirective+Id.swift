@@ -17,7 +17,7 @@ extension HTMLAttribute.x {
     ///     input(.x.bind("id", "$id('input-id')"), .type(.text))
     /// }
     /// ```
-    public static func id(_ value: String) -> HTMLAttribute {
+    public static func id(_ value: String) -> HTMLAttribute<Tag> {
         alpineDirective("x-id", value: value)
     }
 }

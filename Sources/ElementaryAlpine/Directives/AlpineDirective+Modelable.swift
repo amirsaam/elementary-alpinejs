@@ -14,7 +14,7 @@ extension HTMLAttribute.x {
     /// ```swift
     /// div(.x.modelable("value")) { ... }
     /// ```
-    public static func modelable(_ value: String) -> HTMLAttribute {
+    public static func modelable(_ value: String) -> HTMLAttribute<Tag> {
         alpineDirective("x-modelable", value: value)
     }
 }

@@ -30,7 +30,7 @@ extension HTMLAttribute.xResize {
     public static func resize(
         _ value: String,
         modifiers: [ResizeModifier] = []
-    ) -> HTMLAttribute {
+    ) -> HTMLAttribute<Tag> {
         alpinePluginDirective("x-resize", modifiers: modifiers, value: value)
     }
 }

@@ -28,7 +28,7 @@ extension HTMLAttribute.xIntersect {
     public static func intersect(
         _ value: String,
         modifiers: [IntersectModifier] = []
-    ) -> HTMLAttribute {
+    ) -> HTMLAttribute<Tag> {
         alpinePluginDirective("x-intersect", modifiers: modifiers, value: value)
     }
 
@@ -45,7 +45,7 @@ extension HTMLAttribute.xIntersect {
     public static func enter(
         _ value: String,
         modifiers: [IntersectModifier] = []
-    ) -> HTMLAttribute {
+    ) -> HTMLAttribute<Tag> {
         alpinePluginDirective("x-intersect:enter", modifiers: modifiers, value: value)
     }
 
@@ -62,7 +62,7 @@ extension HTMLAttribute.xIntersect {
     public static func leave(
         _ value: String,
         modifiers: [IntersectModifier] = []
-    ) -> HTMLAttribute {
+    ) -> HTMLAttribute<Tag> {
         alpinePluginDirective("x-intersect:leave", modifiers: modifiers, value: value)
     }
 }
