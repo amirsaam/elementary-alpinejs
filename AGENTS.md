@@ -114,7 +114,7 @@ Plugins with no directive surface ship separately:
 
 ## Build Quirks
 
-- **Swift 6.0** with `StrictConcurrency=complete` enabled — concurrency violations are real errors.
+- **Swift 6.1** with `StrictConcurrency=complete` enabled — concurrency violations are real errors.
 - `ExistentialAny` upcoming feature is also enabled globally.
 - macOS only (CI uses `macos-latest`); no Linux support tested.
 - If you see `multiple producers` errors, run `swift package clean` — stale `.build` cache from a folder move.
@@ -149,5 +149,5 @@ Plugins with no directive surface ship separately:
 
 ## Dependencies
 
-- `elementary` ≥ 0.6.0 (underlying HTML rendering library)
+- `elementary` ≥ 0.8.0 (underlying HTML rendering library)
 - No other external dependencies
